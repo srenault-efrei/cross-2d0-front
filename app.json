@@ -2,6 +2,7 @@
   "expo": {
     "name": "trocify-front",
     "slug": "trocify-front",
+    "entryPoint": "./src/App.js",
     "platforms": [
       "ios",
       "android",
