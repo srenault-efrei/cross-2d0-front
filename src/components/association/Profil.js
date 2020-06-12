@@ -12,8 +12,8 @@ export default class Profil extends Component {
  
  render() {
     return (
-      <View style={{ backgroundColor: "blue"}}>
-       <Text style={{ fontSize: 34, textAlign: "center", color: "white" }}>Association</Text>
+      <View style={{alignItems:"center", justifyContent:"center", flex:1}}>
+       <Text style={{ fontSize: 34}}>Profil Association</Text>
       </View>
     )
   }

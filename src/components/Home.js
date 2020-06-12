@@ -13,7 +13,7 @@ export default class Home extends Component {
  render() {
     return (
       <View style={{alignItems:"center", justifyContent:"center", flex:1}}>
-       <Text style={{ fontSize: 34}}>Go to Profil</Text>
+       <Text style={{ fontSize: 34}}>Page proximité</Text>
       </View>
     )
   }

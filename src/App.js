@@ -12,7 +12,7 @@ const Drawer = createDrawerNavigator()
 function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home" screenOptions={{ gestureEnabled: false}}>
+      <Drawer.Navigator initialRouteName="ProfilCusto" screenOptions={{ gestureEnabled: false}}>
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="ProfilAsso" component={ProfilAsso} />
         <Drawer.Screen name="ProfilCusto" component={ProfilCusto} />
