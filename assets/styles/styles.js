@@ -26,14 +26,35 @@ export default StyleSheet.create({
     alignItems: "center",
     marginHorizontal: 30
   },
-
+  inputView: {
+    width: '95%',
+    padding: 20,
+    borderWidth: 1,
+    borderRadius: 15
+  },
+  lowLoginView: {
+    marginTop: 40,
+    width: '100%',
+    alignItems: "center"
+  },
+  splitter: {
+    width: '95%',
+    height: 1,
+    borderBottomWidth: 1,
+    marginBottom: 15
+  },
   bottomView: {
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 10
   },
+  textInput: {
+    width: "100%",
+    marginVertical: 5,
+    alignItems: 'center'
+  },
   title: {
-    fontSize: 60,
+    fontSize: 40,
     color: "#000"
   },
   button: {
@@ -41,8 +62,10 @@ export default StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "row",
     backgroundColor: colors.customLightGreen,
-    borderRadius: 10,
+    borderRadius: 45,
+    marginTop: 10
   },
   halfButton: {
     height: 40,
@@ -63,14 +86,19 @@ export default StyleSheet.create({
     height: 40,
     marginBottom: 5,
     paddingHorizontal: 10,
-    borderWidth: 1.0,
-    borderRadius: 10
+    borderBottomWidth: 1,
+    paddingHorizontal: 0
   },
   inputRow: {
     width: "100%",
     flexDirection: 'row',
     alignItems: "center",
     justifyContent: 'center'
+  },
+  icon: {
+    textAlign: 'left',
+    paddingHorizontal: 15,
+    color: 'white'
   },
   error: {
     height: 'auto',
