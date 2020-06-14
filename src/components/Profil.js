@@ -5,13 +5,17 @@ import {
   TouchableOpacity,
   Image
 } from 'react-native'
-import styles from '../../../assets/styles/profilCusto'
-
+import styles from '../../assets/styles/profilCusto'
 
 export default class Profil extends Component {
 
+  constructor(props) {
+    super(props)
+  }
+
 
   render() {
+    const { navigation } = this.props
     return (
       <View style={styles.safeArea}>
 
@@ -33,7 +37,7 @@ export default class Profil extends Component {
           <View style={styles.card}>
             <Image
               style={styles.cardLogo}
-              source={require('../../../assets/img/yen.png')}
+              source={require('../../assets/img/yen.png')}
             />
             <TouchableOpacity>
               <Text>MES TROCS</Text>
@@ -43,7 +47,7 @@ export default class Profil extends Component {
           <View style={styles.card}>
             <Image
               style={styles.cardLogo}
-              source={require('../../../assets/img/gift.png')}
+              source={require('../../assets/img/gift.png')}
             />
             <TouchableOpacity>
               <Text>MES DONS</Text>
@@ -53,7 +57,7 @@ export default class Profil extends Component {
           <View style={styles.card}>
             <Image
               style={styles.cardLogo}
-              source={require('../../../assets/img/cup.png')}
+              source={require('../../assets/img/cup.png')}
             />
             <TouchableOpacity>
               <Text>MON RANK</Text>
@@ -63,9 +67,11 @@ export default class Profil extends Component {
           <View style={styles.card}>
             <Image
               style={styles.cardLogoClock}
-              source={require('../../../assets/img/clock.png')}
+              source={require('../../assets/img/clock.png')}
             />
-            <TouchableOpacity>
+            <TouchableOpacity
+             onPress={() => navigation.navigate('History')}
+            >
               <Text>HISTORIQUE</Text>
             </TouchableOpacity>
           </View>
@@ -73,20 +79,28 @@ export default class Profil extends Component {
           <View style={styles.card}>
             <Image
               style={styles.cardLogoRelation}
-              source={require('../../../assets/img/relationship.png')}
+              source={require('../../assets/img/relationship.png')}
             />
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Associations')}
+            >
               <Text>LES ASSOCIATIONS</Text>
             </TouchableOpacity>
           </View>
-          
-          <View style={styles.param}>
-            <TouchableOpacity>
+        </View>
+
+        <View style={styles.viewEnd}>
+          <View style={styles.end}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Parameter')}
+            >
               <Text>PARAMETRES</Text>
             </TouchableOpacity>
 
           </View>
+
         </View>
+
 
         {/* Footer  */}
 
