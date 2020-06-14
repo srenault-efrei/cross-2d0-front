@@ -47,19 +47,15 @@ export default class Paremeter extends Component {
                         <TouchableOpacity>
                             <Text>DECONNEXION</Text>
                         </TouchableOpacity>
-
                     </View>
 
                     <View style={styles.endRow}>
                         <TouchableOpacity>
                             <Text>SUPPRIMER MON COMPTE</Text>
                         </TouchableOpacity>
-
                     </View>
 
                 </View>
-
-
                 {/* Footer  */}
 
                 <View style={styles.footer}>
