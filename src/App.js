@@ -15,20 +15,15 @@ import ForgotPassword from './components/ForgotPassword';
 import Preference from './components/Preference';
 import Home from './components/Home';
 import Search from './components/Recherche'
-import Header from './components/headers/Header'
-import Footer from './components/footers/Footer'
-import Filters from './components/Filters'
 
 const Drawer = createDrawerNavigator()
 function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home" screenOptions={{ gestureEnabled: false }}>
+      <Drawer.Navigator initialRouteName="SignIn" screenOptions={{ gestureEnabled: false }}>
+        <Drawer.Screen name="SignIn" component={SignIn} />
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen name="Search" component={Search} />
-        <Drawer.Screen name="Header" component={Header} />
-        <Drawer.Screen name="Footer" component={Footer} />
-        <Drawer.Screen name="Filters" component={Filters} />
         <Drawer.Screen name="SignUpIndividual" component={SignUpIndividual} />
         <Drawer.Screen name="SignUpAssociation" component={SignUpAssociation} />
         <Drawer.Screen name="ForgotPassword" component={ForgotPassword} />
