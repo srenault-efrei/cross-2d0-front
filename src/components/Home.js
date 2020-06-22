@@ -5,7 +5,7 @@ import MyFooter from './footers/Footer'
 import Filters from './Filters'
 import styles from '../../assets/css/home.js'
 import global from '../../assets/css/global.js'
-import {Card} from 'react-native-elements'
+import { Card } from 'react-native-elements'
 
 
 
@@ -14,11 +14,11 @@ export default class Home extends React.Component {
     super(props)
     this.state = {}
     this.navigation = this.props.navigation
-    
+
   }
   static navigationOptions = {
     header: {
-    visible: false
+      visible: false
     }
   }
 
@@ -41,37 +41,41 @@ export default class Home extends React.Component {
   ]
 
   render() {
-  return (
-    <SafeAreaView style={styles.bdy}>
-      <MyHeader type='Profile' />
-      <View style={global.circle}>
-        <Text>IMG</Text>
-        <Text>Profile</Text>
-      </View>
-      <View style={styles.container}>
-        <FlatList
-          data={this.DATA}
-          renderItem={({ item }) => (
+    const { navigation } = this.props
+    return (
+      <SafeAreaView style={styles.bdy}>
+        <MyHeader type='Home' navigation={navigation}/>
+        <View style={global.circle}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Profil")} >
+            <Text>IMG</Text>
+            <Text>Profile</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.container}>
+          <FlatList
+            data={this.DATA}
+            renderItem={({ item }) => (
               <TouchableOpacity>
-                  <Card>
-                      <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                          <Image
-                            style={{width: 100, height: 100, borderRadius: 50}}
-                            resizeMode="cover"
-                            source={require('../../assets/img/logo.png')}
-                          />
-                          <Text>Hello</Text>
-                      </View>
-                  </Card>
+                <Card>
+                  <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Image
+                      style={{ width: 100, height: 100, borderRadius: 50 }}
+                      resizeMode="cover"
+                      source={require('../../assets/img/logo.png')}
+                    />
+                    <Text>Hello</Text>
+                  </View>
+                </Card>
               </TouchableOpacity>
-          )}
-          keyExtractor={item => item.id}
-          horizontal={false}
-          numColumns={2}
-        />
-      </View>
-      <MyFooter type='classic' />
-    </SafeAreaView>
-  )
+            )}
+            keyExtractor={item => item.id}
+            horizontal={false}
+            numColumns={2}
+          />
+        </View>
+        <MyFooter type='classic' navigation={navigation} />
+      </SafeAreaView>
+    )
   }
 }

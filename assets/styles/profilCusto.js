@@ -10,8 +10,8 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 30
   },
-
 
   viewEnd: {
     flexDirection: "row",
@@ -20,29 +20,24 @@ export default StyleSheet.create({
     alignItems: "center",
   },
 
-
-  footer: {
-    width: "100%",
-    height: '10%',
-    backgroundColor: "#65a7ed",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-
-  header: {
-    width: "100%",
-    height: '15%',
-    backgroundColor: "#65a7ed",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-
   card: {
     width: "95%",
     height: "10%",
     backgroundColor: "#f2f2f2",
     borderRadius: 5,
     marginBottom: "3%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+
+
+  cardAsso: {
+    width: "95%",
+    height: "10%",
+    backgroundColor: "#f2f2f2",
+    borderRadius: 5,
+    marginBottom: 250,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
@@ -83,7 +78,7 @@ export default StyleSheet.create({
   },
 
   infosProfile: {
-    marginBottom: "4%",
+    marginBottom: "10%",
     justifyContent: "center",
     alignItems: "center"
   },
