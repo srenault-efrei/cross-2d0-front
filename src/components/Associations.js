@@ -20,9 +20,27 @@ export default class Associations extends Component {
         }
     }
 
+    async componentDidMount() {
+        this.unsubscribe()
+    }
+
+    unsubscribe = () => {
+        this.props.navigation.addListener('focus', () => {
+            this.setState({
+                associations: this.props.route.params.associations
+            })
+        })
+    }
+
+    async componentWillUnmount() {
+        this.unsubscribe();
+      }
+
     render() {
+       
         const { navigation } = this.props
         const { associations } = this.state
+        console.log(associations["association"])
         return (
             <SafeAreaView style={styles.safeArea}>
 

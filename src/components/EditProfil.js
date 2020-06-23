@@ -15,15 +15,15 @@ export default class EditProfile extends React.Component {
       checked: false,
       user: {},
       typeUser: "customer",
-      firstname:'',
-      lastname:'',
-      gender:'',
-      email:'',
-      name:'',
-      description:'',
-      password: '',
+      firstname: '',
+      lastname: '',
+      gender: '',
+      email: '',
+      name: '',
+      description: '',
+      password: 'xxxxxxxxxx',
       token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IlN0ZXZlbiIsImlhdCI6MTU5MjQxODAzOX0.lyTW0f0cJrMoiqc4yUn8xQe9Ap865_KMC_2CK-wDeoU"
-  
+
     }
     this.navigation = this.props.navigation
   }
@@ -34,6 +34,28 @@ export default class EditProfile extends React.Component {
 
   }
 
+  isValidForm(type) {
+    let regex = /^.+@.+['.']com|^.+@.+['.']fr|^.+@.+['.']net/g
+    let isValid = true
+    if (type === 'association') {
+      if (this.state.name === '' || this.state.description === '' || this.state.email === '' || this.state.password === '') {
+        isValid = false
+        alert('Tous les champs doivent être remplis.')
+      } else if (!this.state.email.match(regex)) {
+        isValid = false
+        alert("L'email n'est pas valide.")
+      }
+    } else {
+      if (this.state.lastname === '' || this.state.firstname === '' || this.state.email === '' || this.state.password === '') {
+        isValid = false
+        alert('Tous les champs doivent être remplis.')
+      } else if (!this.state.email.match(regex)) {
+        isValid = false
+        alert("L'email n'est pas valide.")
+      }
+    }
+    return isValid
+  }
 
   fetchUser = async () => {
 
@@ -49,11 +71,11 @@ export default class EditProfile extends React.Component {
       const response = await fetch("https://trocify.herokuapp.com/api/customers/1f38ec56-7757-42d7-8f13-cca1df2f780c", settings);
       const json = await response.json();
       const customer = json.data.customer
-      this.setState({  user: customer, firstname: customer.firstname, lastname: customer.lastname, gender: customer.gender, email: customer.email})
-      if(json.data.customer.gender === 'homme'){
+      this.setState({ user: customer, firstname: customer.firstname, lastname: customer.lastname, gender: customer.gender, email: customer.email })
+      if (json.data.customer.gender === 'homme') {
         this.setState({ checked: true })
       }
-        // console.log(this.state.user)
+      // console.log(this.state.user)
     } catch (e) {
       console.log(e)
     }
@@ -74,22 +96,136 @@ export default class EditProfile extends React.Component {
       const response = await fetch("https://trocify.herokuapp.com/api/associations/5f38ec56-7757-42d7-8f13-cca1df2f780c", settings);
       const json = await response.json();
       const association = json.data.association
-      this.setState({  user: association, name: association.name, email: association.email, description: association.description})
-      if(json.data.customer.gender === 'homme'){
-        this.setState({ checked: true })
-      }
-        console.log(this.state.user)
+      this.setState({ user: association, name: association.name, email: association.email, description: association.description })
+      // console.log(this.state.user)
     } catch (e) {
       console.log(e)
     }
   }
 
 
+  uploadAssociation = async () => {
+
+    if (this.isValidForm(this.state.typeUser)) {
+      let jsonBody = {}
+
+      if (this.state.password === 'xxxxxxxxxx') {
+        jsonBody = {
+          name: this.strUcFirst(this.state.name),
+          filePath: this.state.user.filePath,
+          email: this.state.email,
+          description: this.state.description,
+          geolocalisation: true,
+
+        }
+      } else {
+        jsonBody = {
+          name: this.strUcFirst(this.state.name),
+          filePath: this.state.user.filePath,
+          email: this.state.email,
+          description: this.state.description,
+          geolocalisation: true,
+          password: this.state.password
+
+        }
+      }
+      try {
+        const response = await fetch("https://trocify.herokuapp.com/api/associations/5f38ec56-7757-42d7-8f13-cca1df2f780c", {
+
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + this.state.token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(jsonBody),
+          method: 'PUT',
+
+        });
+        const json = await response.json();
+        // console.log(json)
+        if (json.err === undefined) {
+          alert("Modification réussie.")
+          this.props.navigation.navigate("Profil")
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+  }
+
+
+  uploadCustomer = async () => {
+
+    if (this.isValidForm(this.state.typeUser)) {
+      let jsonBody = {}
+
+      if (this.state.password === 'xxxxxxxxxx') {
+        jsonBody = {
+          firstname: this.strUcFirst(this.state.firstname),
+          lastname: this.strUcFirst(this.state.lastname),
+          email: this.state.email,
+          gender: this.state.gender,
+          geolocalisation: true,
+          rank: this.state.user.rank.id,
+
+        }
+      } else {
+        jsonBody = {
+          firstname: this.strUcFirst(this.state.firstname),
+          lastname: this.strUcFirst(this.state.lastname),
+          email: this.state.email,
+          gender: this.state.gender,
+          geolocalisation: true,
+          rank: this.state.user.rank.id,
+          password: this.state.password
+
+        }
+      }
+      try {
+        const response = await fetch("https://trocify.herokuapp.com/api/customers/1f38ec56-7757-42d7-8f13-cca1df2f780c", {
+
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + this.state.token,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(jsonBody),
+          method: 'PUT',
+
+        });
+        const json = await response.json();
+        // console.log(json)
+        if (json.err === undefined) {
+          alert("Modification réussie.")
+          this.props.navigation.navigate("Profil")
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+  }
+
+  changeGender(bool) {
+    this.setState({ checked: !bool })
+    if (bool) {
+      this.setState({ gender: "femme" })
+    } else {
+      this.setState({ gender: "homme" })
+    }
+  }
+
+strUcFirst(str){
+  str = str.toLowerCase()
+  return (str+'').charAt(0).toUpperCase()+str.substr(1)
+}
+
 
   render() {
     const { navigation } = this.props
     const { typeUser, checked } = this.state
-    console.log(this.state.user)
+    // console.log(this.state.user)
 
     return (
       <SafeAreaView style={styles.bdy}>
@@ -107,13 +243,13 @@ export default class EditProfile extends React.Component {
             <TextInput
               mode='outlined'
               label='FIRST NAME'
-              value={this.state.firstname.toLocaleUpperCase()}
+              value={this.state.firstname.toUpperCase()}
               onChangeText={text => this.setState({ firstname: text })}
             />
             <TextInput
               mode='outlined'
               label='LAST NAME'
-              value={this.state.lastname.toLocaleUpperCase()}
+              value={this.state.lastname.toUpperCase()}
               onChangeText={text => this.setState({ lastname: text })}
               style={{ marginTop: 10 }}
             />
@@ -136,7 +272,7 @@ export default class EditProfile extends React.Component {
               checkedIcon='dot-circle-o'
               uncheckedIcon='circle-o'
               checked={this.state.checked}
-              onPress={() => this.setState({ checked: true })}
+              onPress={() => this.changeGender(checked)}
               containerStyle={{
                 backgroundColor: '#F2F2F2',
               }}
@@ -147,7 +283,7 @@ export default class EditProfile extends React.Component {
               checkedIcon='dot-circle-o'
               uncheckedIcon='circle-o'
               checked={!this.state.checked}
-              onPress={() => this.setState({ checked: !this.state.checked })}
+              onPress={() => this.changeGender(checked)}
               containerStyle={{
                 backgroundColor: '#F2F2F2',
               }}
@@ -173,20 +309,24 @@ export default class EditProfile extends React.Component {
             mode='outlined'
             secureTextEntry={true}
             label='PASSWORD'
-            value={'password'}
+            value={this.state.password}
             onChangeText={text => this.setState({ password: text })}
             style={{ marginTop: 10 }}
           />
-
-          <Button style={{ marginTop: 25 }} icon="camera" mode="contained" onPress={() => console.log('Pressed')} color='rgb(63, 81, 181)'>
-            ENREGISTRER
+          {typeUser === 'association' ?
+            <Button style={{ marginTop: 25 }} icon="camera" mode="contained" onPress={() => this.uploadAssociation()} color='rgb(63, 81, 181)'>
+              ENREGISTRER
+        </Button> : <Button style={{ marginTop: 25 }} icon="camera" mode="contained" onPress={() => this.uploadCustomer()} color='rgb(63, 81, 181)'>
+              ENREGISTRER
         </Button>
+          }
+
+
         </View>
 
         {typeUser === 'customer' ?
-          <MyFooter type='classic' navigation={navigation} /> : <View></View>}
-        {typeUser === 'association' ?
-          <MyFooter type='Association' navigation={navigation} /> : <View></View>}
+          <MyFooter type='classic' navigation={navigation} /> : <MyFooter type='Association' navigation={navigation} />
+        }
 
       </SafeAreaView>
     )

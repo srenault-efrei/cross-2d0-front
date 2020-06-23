@@ -33,6 +33,10 @@ export default class DetailAssociation extends Component {
         })
     }
 
+   async componentWillUnmount() {
+        this.unsubscribe();
+      }
+
     render() {
 
         const { navigation } = this.props

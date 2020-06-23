@@ -17,7 +17,7 @@ export default class Profil extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      typeUser: "",
+      typeUser: "customer",
       user: {},
       tickets: {},
       associations: {},
@@ -27,10 +27,22 @@ export default class Profil extends Component {
     }
   }
 
-  componentDidMount() {
-    this.fetchUser();
-    this.fetchAllAsso();
+ async componentDidMount() {
+  this.unsubscribe()
+  }
 
+
+  unsubscribe = () => {
+    this.props.navigation.addListener('focus', () => {
+      this.fetchUser();
+      this.fetchAllAsso();
+
+    })
+  }
+
+
+  async componentWillUnmount() {
+    this.unsubscribe();
   }
 
   fetchUser = async () => {
@@ -46,7 +58,7 @@ export default class Profil extends Component {
     try {
       const response = await fetch("https://trocify.herokuapp.com/api/customers/1f38ec56-7757-42d7-8f13-cca1df2f780c", settings);
       const json = await response.json();
-      this.setState({ user: json.data.customer, tickets: json.data.customer["tickets"], rank: json.data.customer["rank"], typeUser: "customer" })
+      this.setState({ user: json.data.customer, tickets: json.data.customer["tickets"], rank: json.data.customer["rank"] })
       // console.log(this.state.user)
     } catch (e) {
       console.log(e)
@@ -73,16 +85,16 @@ export default class Profil extends Component {
     }
   }
 
-    
+
 
   render() {
     const { navigation } = this.props
-    const { user, rank, associations, tickets,typeUser } = this.state
+    const { user, rank, associations, tickets, typeUser } = this.state
     return (
       <SafeAreaView style={styles.safeArea}>
 
         {/* Header */}
-        <MyHeader type='Profile' navigation={navigation}  />
+        <MyHeader type='Profile' navigation={navigation} />
         <View style={global.circle}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Profil")} >
@@ -96,8 +108,8 @@ export default class Profil extends Component {
           {typeUser == 'customer' ?
             <View style={styles.infosProfile}
             >
-              <Text>{user.firstname} {user.lastname}</Text>
-              <Text>{rank.title}</Text>
+              <Text style={{fontSize:20}}>{user.firstname} <Text style={{fontWeight:"bold"}}>{user.lastname}</Text></Text>
+              <Text style={{fontSize:18, color:"gray"}}>{rank.title}</Text>
               {/* <Text>Note</Text>
               <Text>4/5</Text> */}
             </View>
@@ -170,7 +182,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/relationship.png')}
               />
               <TouchableOpacity
-                onPress={() => navigation.navigate('Associations', { associations })}
+                onPress={() => navigation.navigate('Associations', { associations: associations })}
               >
                 <Text>LES ASSOCIATIONS</Text>
               </TouchableOpacity>
@@ -188,9 +200,8 @@ export default class Profil extends Component {
         </View>
 
         {typeUser === 'customer' ?
-            <MyFooter type='classic' navigation={navigation} /> : <View></View>}
-      {typeUser === 'association' ?
-            <MyFooter type='Association' navigation={navigation} /> : <View></View>}
+          <MyFooter type='classic' navigation={navigation} /> : <MyFooter type='Association' navigation={navigation} />
+        }
       </SafeAreaView >
     )
   }
