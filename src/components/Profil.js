@@ -9,7 +9,7 @@ import {
 import styles from '../../assets/styles/profilCusto'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
-import global from '../../assets/css/global.js'
+import { Avatar } from 'react-native-elements'
 
 
 export default class Profil extends Component {
@@ -27,8 +27,8 @@ export default class Profil extends Component {
     }
   }
 
- async componentDidMount() {
-  this.unsubscribe()
+  async componentDidMount() {
+    this.unsubscribe()
   }
 
 
@@ -90,17 +90,25 @@ export default class Profil extends Component {
   render() {
     const { navigation } = this.props
     const { user, rank, associations, tickets, typeUser } = this.state
+    let avatar = this.state.user.avatarFile === null ? "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg" : this.state.user.avatarFile
+    
     return (
       <SafeAreaView style={styles.safeArea}>
 
         {/* Header */}
         <MyHeader type='Profile' navigation={navigation} />
-        <View style={global.circle}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Profil")} >
-            <Text>IMG</Text>
-            <Text>Profile</Text>
-          </TouchableOpacity>
+
+
+        <View style={{ alignItems: "center", top: 30, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
+          <Avatar
+            rounded
+            size={100}
+            onPress={() => navigation.navigate("Profil")}
+            source={{
+              uri:
+                avatar,
+            }}
+          />
         </View>
 
         <View style={styles.view}>
@@ -108,8 +116,8 @@ export default class Profil extends Component {
           {typeUser == 'customer' ?
             <View style={styles.infosProfile}
             >
-              <Text style={{fontSize:20}}>{user.firstname} <Text style={{fontWeight:"bold"}}>{user.lastname}</Text></Text>
-              <Text style={{fontSize:18, color:"gray"}}>{rank.title}</Text>
+              <Text style={{ fontSize: 20 }}>{user.firstname} <Text style={{ fontWeight: "bold" }}>{user.lastname}</Text></Text>
+              <Text style={{ fontSize: 18, color: "gray" }}>{rank.title}</Text>
               {/* <Text>Note</Text>
               <Text>4/5</Text> */}
             </View>

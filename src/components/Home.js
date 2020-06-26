@@ -44,7 +44,7 @@ export default class Home extends React.Component {
     const { navigation } = this.props
     return (
       <SafeAreaView style={styles.bdy}>
-        <MyHeader type='Home' navigation={navigation}/>
+        <MyHeader type='Home' navigation={navigation} />
         <View style={global.circle}>
           <TouchableOpacity
             onPress={() => navigation.navigate("Profil")} >

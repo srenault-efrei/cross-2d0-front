@@ -1,11 +1,13 @@
 import React from 'react'
-import { View, SafeAreaView, TouchableOpacity } from 'react-native'
+import { View, SafeAreaView, TouchableOpacity, Image } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
-import { Text, CheckBox } from 'react-native-elements'
+import { CheckBox, Avatar } from 'react-native-elements'
 import styles from '../../assets/css/search.js'
 import global from '../../assets/css/global.js'
 import { TextInput, Button } from 'react-native-paper';
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 export default class EditProfile extends React.Component {
@@ -20,6 +22,9 @@ export default class EditProfile extends React.Component {
       gender: '',
       email: '',
       name: '',
+      avatarFile: null,
+      filename:'',
+      key:'',
       description: '',
       password: 'xxxxxxxxxx',
       token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IlN0ZXZlbiIsImlhdCI6MTU5MjQxODAzOX0.lyTW0f0cJrMoiqc4yUn8xQe9Ap865_KMC_2CK-wDeoU"
@@ -34,7 +39,7 @@ export default class EditProfile extends React.Component {
 
   }
 
-  isValidForm(type) {
+  isValidForm = (type) => {
     let regex = /^.+@.+['.']com|^.+@.+['.']fr|^.+@.+['.']net/g
     let isValid = true
     if (type === 'association') {
@@ -71,7 +76,16 @@ export default class EditProfile extends React.Component {
       const response = await fetch("https://trocify.herokuapp.com/api/customers/1f38ec56-7757-42d7-8f13-cca1df2f780c", settings);
       const json = await response.json();
       const customer = json.data.customer
-      this.setState({ user: customer, firstname: customer.firstname, lastname: customer.lastname, gender: customer.gender, email: customer.email })
+      this.setState({
+        user: customer,
+        firstname: customer.firstname,
+        lastname: customer.lastname,
+        gender: customer.gender,
+        email: customer.email,
+      })
+      if (customer.avatarFile !== null) {
+        this.setState({ avatarFile: customer.avatarFile })
+      }
       if (json.data.customer.gender === 'homme') {
         this.setState({ checked: true })
       }
@@ -96,7 +110,18 @@ export default class EditProfile extends React.Component {
       const response = await fetch("https://trocify.herokuapp.com/api/associations/5f38ec56-7757-42d7-8f13-cca1df2f780c", settings);
       const json = await response.json();
       const association = json.data.association
-      this.setState({ user: association, name: association.name, email: association.email, description: association.description })
+      this.setState({
+        user: association,
+        name: association.name,
+        email: association.email,
+        description: association.description,
+        avatarFile: association.avatarFile
+      })
+      if (association.avatarFile !== null) {
+        this.setState({
+          avatarFile: association.avatarFile
+        })
+      }
       // console.log(this.state.user)
     } catch (e) {
       console.log(e)
@@ -116,7 +141,8 @@ export default class EditProfile extends React.Component {
           email: this.state.email,
           description: this.state.description,
           geolocalisation: true,
-
+          // filename: this.state.filename,
+          // key: `profil_${this.state.user.id}.png`
         }
       } else {
         jsonBody = {
@@ -125,7 +151,9 @@ export default class EditProfile extends React.Component {
           email: this.state.email,
           description: this.state.description,
           geolocalisation: true,
-          password: this.state.password
+          password: this.state.password,
+          // filename: this.state.filename,
+          // key: `profil_${this.state.user.id}.png`
 
         }
       }
@@ -168,6 +196,8 @@ export default class EditProfile extends React.Component {
           gender: this.state.gender,
           geolocalisation: true,
           rank: this.state.user.rank.id,
+          // filename: this.state.filename,
+          // key: `profil_${this.state.user.id}.png`
 
         }
       } else {
@@ -178,7 +208,9 @@ export default class EditProfile extends React.Component {
           gender: this.state.gender,
           geolocalisation: true,
           rank: this.state.user.rank.id,
-          password: this.state.password
+          password: this.state.password,
+          // filename: this.state.filename,
+          // key: `profil_${this.state.user.id}.png`
 
         }
       }
@@ -195,7 +227,7 @@ export default class EditProfile extends React.Component {
 
         });
         const json = await response.json();
-        // console.log(json)
+        console.log(json)
         if (json.err === undefined) {
           alert("Modification réussie.")
           this.props.navigation.navigate("Profil")
@@ -207,7 +239,7 @@ export default class EditProfile extends React.Component {
 
   }
 
-  changeGender(bool) {
+  changeGender = (bool) => {
     this.setState({ checked: !bool })
     if (bool) {
       this.setState({ gender: "femme" })
@@ -216,27 +248,60 @@ export default class EditProfile extends React.Component {
     }
   }
 
-strUcFirst(str){
-  str = str.toLowerCase()
-  return (str+'').charAt(0).toUpperCase()+str.substr(1)
-}
+  strUcFirst = (str) => {
+    str = str.toLowerCase()
+    return (str + '').charAt(0).toUpperCase() + str.substr(1)
+  }
 
+  uploadAvatar = async () => {
+
+
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    // console.log(pickerResult);
+
+
+    if (pickerResult.cancelled === true) {
+      return;
+    } else {
+      this.setState({ 
+        filename: pickerResult.uri,
+        avatarFile: pickerResult.uri 
+      })
+    }
+
+
+
+  }
 
   render() {
     const { navigation } = this.props
-    const { typeUser, checked } = this.state
-    // console.log(this.state.user)
+    const { typeUser, checked, filename } = this.state
+    let avatar = this.state.avatarFile === null ? "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg" : this.state.avatarFile
+    console.log(avatar)
 
     return (
       <SafeAreaView style={styles.bdy}>
         <MyHeader type='Profile' />
-        <View style={global.circle}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("Profil")} >
-            <Text>IMG</Text>
-            <Text>Profile</Text>
-          </TouchableOpacity>
+        <View style={{alignItems:"center", top:30, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent:'center', alignItems: 'center'}}>
+          <Avatar
+            rounded
+            size={100}
+            onPress={() => this.uploadAvatar()}
+            source={{
+              uri:
+              avatar,
+            }}
+            showAccessory
+          />
         </View>
+
         <View style={styles.container}>
 
           {typeUser === 'customer' ? <View>
