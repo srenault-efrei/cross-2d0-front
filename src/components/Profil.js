@@ -156,7 +156,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/cup.png')}
               />
               <TouchableOpacity
-              onPress={() => navigation.navigate('Rank')}
+              onPress={() => navigation.navigate('Rank', { user: user})}
               >
                 <Text>MON RANK</Text>
               </TouchableOpacity>
