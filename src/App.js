@@ -17,6 +17,7 @@ import Home from './components/Home';
 import Search from './components/Recherche';
 import Header from './components/headers/Header';
 import EditProfile from './components/EditProfil'
+import Rank from './components/Rank'
 
 const Drawer = createDrawerNavigator()
 function App() {
@@ -37,6 +38,8 @@ function App() {
         <Drawer.Screen name="Parameter" component={Parameter} />
         <Drawer.Screen name="History" component={Hisotry} />
         <Drawer.Screen name="EditProfile" component={EditProfile} />
+        <Drawer.Screen name="Rank" component={Rank} />
+
       </Drawer.Navigator>
     </NavigationContainer>
   );

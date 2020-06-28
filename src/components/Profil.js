@@ -155,7 +155,9 @@ export default class Profil extends Component {
                 style={styles.cardLogo}
                 source={require('../../assets/img/cup.png')}
               />
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={() => navigation.navigate('Rank')}
+              >
                 <Text>MON RANK</Text>
               </TouchableOpacity>
             </View> : <View></View>}

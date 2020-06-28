@@ -4,7 +4,7 @@ export default StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#FFF",
-    paddingTop: Platform.OS === 'android' ? 40 : 0
+    // paddingTop: Platform.OS === 'android' ? 40 : 0
   },
   view: {
     flex: 1,
@@ -12,6 +12,8 @@ export default StyleSheet.create({
     alignItems: "center",
     marginTop: 30
   },
+
+  
 
   viewEnd: {
     flexDirection: "row",
@@ -28,7 +30,18 @@ export default StyleSheet.create({
     marginBottom: "3%",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
+    flexDirection: "row",    
+  },
+  cardRank: {
+    width: "95%",
+    height: 70,
+    backgroundColor: "#f2f2f2",
+    borderRadius: 5,
+    marginBottom: "3%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",   
+     
   },
 
 
@@ -137,6 +150,15 @@ export default StyleSheet.create({
     borderRadius: 10,
     marginBottom: "10%",
 
+  },
+
+  lineRank: {
+    height: 2,
+    width: "100%",
+    backgroundColor: "black",
+    borderRadius: 10,
+    marginTop:2,
+    marginBottom:2
   },
 
   description: {
