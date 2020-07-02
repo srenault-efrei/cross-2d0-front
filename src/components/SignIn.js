@@ -35,22 +35,30 @@ export default class Signin extends Component {
             body: JSON.stringify({ email: this.state.email.trim(), password: this.state.password.trim() })
         })
         try {
-            const json = await req.json()
+            const json = await req.json();
             if (json.err) {
-                this.setState({ error: json.err.description })
+                this.setState({ error: json.err.description });
             } else {
                 console.log(json.data);
-                //await this._storeData(json.data.meta.token, json.data.user)
+                await this._storeData(json.data);
                 if (json.data.customer) {
-                    console.log("Log succesfully : ", UserType.CUSTOMER)
+                    console.log("Log succesfully : ", UserType.CUSTOMER);
                 } else if (json.data.association) {
-                    console.log("Log succesfully : ", UserType.ASSOCIATION)
+                    console.log("Log succesfully : ", UserType.ASSOCIATION);
                 } else {
-                    console.log('Error: no user type')
+                    console.log('Error: no user type');
                 }
             }
         } catch (error) {
             console.error(error);
+        }
+    }
+
+    _storeData = async (data) => {
+        try {
+            await AsyncStorage.setItem('data', JSON.stringify(data));
+        } catch (error) {
+            console.log('Local storage data Error : ', error);
         }
     }
 

@@ -23,8 +23,14 @@ export default class SignUpAssociation extends Component {
         };
     }
 
-    componentDidMount() {
-        this.isThereError();
+    getLocation() {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                this.setState({ longitude: position.coords.longitude, latitude: position.coords.latitude })
+            },
+            error => alert(error.message),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+        );
     }
 
     async signUp() {
@@ -40,17 +46,19 @@ export default class SignUpAssociation extends Component {
                     name: this.state.name.trim(),
                     email: this.state.email.trim(),
                     password: this.state.password.trim(),
-                    passwordConfirmation: this.state.passwordConfirmation.trim()
+                    passwordConfirmation: this.state.passwordConfirmation.trim(),
+                    longitude: this.state.longitude.trim(),
+                    latitude: this.state.latitude.trim()
                 })
             })
             try {
-                const json = await req.json()
+                const json = await req.json();
                 if (json.err) {
-                    this.setState({ error: json.err.description })
+                    this.setState({ error: json.err.description });
                 } else {
                     console.log(json.data);
-                    //await this._storeData(json.data.meta.token, json.data.user)
-                    //GoTo
+                    await this._storeData(json.data);
+                    this.props.navigation.navigate('Home');
                 }
             } catch (error) {
                 console.error(error);
@@ -64,8 +72,16 @@ export default class SignUpAssociation extends Component {
         return (password.trim() === passwordConfirmation.trim()) ? true : false;
     }
 
+    _storeData = async (data) => {
+        try {
+            await AsyncStorage.setItem('data', JSON.stringify(data));
+        } catch (error) {
+            console.log('Local storage data Error : ', error);
+        }
+    }
+
     render() {
-        const { navigation } = this.props
+        const { navigation } = this.props;
         console.disableYellowBox = true;
 
         return (
