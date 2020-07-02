@@ -41,10 +41,9 @@ export default class Signin extends Component {
             } else {
                 console.log(json.data);
                 await this._storeData(json.data);
-                if (json.data.customer) {
-                    console.log("Log succesfully : ", UserType.CUSTOMER);
-                } else if (json.data.association) {
-                    console.log("Log succesfully : ", UserType.ASSOCIATION);
+                if (json.data.customer || json.data.association) {
+                    this.props.navigation.navigate('Home');
+                    console.log("Log succesfully : ", json.data.customer ? UserType.CUSTOMER : UserType.ASSOCIATION);
                 } else {
                     console.log('Error: no user type');
                 }
