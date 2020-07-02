@@ -6,8 +6,6 @@ import {
     TextInput,
     Image
 } from 'react-native';
-import DatePicker from 'react-native-datepicker';
-import moment from 'moment';
 import styles from '../../assets/styles/styles'
 
 
@@ -19,11 +17,9 @@ export default class SignUpIndividual extends Component {
         this.state = {
             firstname: '',
             lastname: '',
-            birthday: '',
             email: '',
             password: '',
             passwordConfirmation: '',
-            phone: '',
             type: '',
             error: ''
         };
@@ -33,19 +29,10 @@ export default class SignUpIndividual extends Component {
         this.isThereError();
     }
 
-    isThereError() {
-        if (this.props.error) {
-            console.log(`${this.props.error.screen} sreen return error : ${this.props.error.text}`);
-        }
-        if (this.props.route) {
-            console.log(this.props.route)
-        }
-    }
-
     async signUp() {
         if (this.isSamePasswords(this.state.password, this.state.passwordConfirmation)) {
 
-            const req = await fetch('https://eazybiff-server.herokuapp.com/api/authenticate/signup', {
+            const req = await fetch('https://trocify.herokuapp.com/api/authenticate/signup', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -54,27 +41,23 @@ export default class SignUpIndividual extends Component {
                 body: JSON.stringify({
                     firstname: this.state.firstname.trim(),
                     lastname: this.state.lastname.trim(),
-                    birthday: this.state.birthday,
                     email: this.state.email.trim(),
                     password: this.state.password.trim(),
-                    passwordConfirmation: this.state.passwordConfirmation.trim(),
-                    phone: this.state.phone.trim()
+                    passwordConfirmation: this.state.passwordConfirmation.trim()
                 })
             })
             try {
-                const responseJson = await req.json()
-
-                if (responseJson.err) {
-                    this.setState({ error: responseJson.err.description })
+                const json = await req.json()
+                if (json.err) {
+                    this.setState({ error: json.err.description })
                 } else {
-                    console.log(responseJson);
-                    await this._storeData(responseJson.data.meta.token, responseJson.data.user);
-                    this.props.navigation.navigate('Preference');
+                    console.log(json.data);
+                    //await this._storeData(json.data.meta.token, json.data.user)
+                    //GoTo
                 }
-            }
-            catch (error) {
+            } catch (error) {
                 console.error(error);
-            };
+            }
         } else {
             this.setState({ error: 'Attention,\nLes mots de passe saisis ne correspondent pas' });
         }
@@ -85,7 +68,9 @@ export default class SignUpIndividual extends Component {
     }
 
     render() {
+        const { navigation } = this.props
         console.disableYellowBox = true;
+
         return (
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.topView}>
@@ -104,28 +89,6 @@ export default class SignUpIndividual extends Component {
                             style={styles.input}
                             placeholder="Nom"
                             onChangeText={lastname => this.setState({ lastname })}
-                        />
-                        <DatePicker
-                            style={styles.input}
-                            date={this.state.birthday}
-                            mode="date"
-                            placeholder="Date de naissance"
-                            format="DD-MM-YYYY"
-                            minDate="01-01-1900"
-                            maxDate={moment(new Date()).format('DD-MM-YYYY')}
-                            confirmBtnText="Valider"
-                            cancelBtnText="Annuler"
-                            customStyles={{
-                                dateIcon: styles.dateIcon,
-                                dateInput: styles.dateInput
-                            }}
-                            onDateChange={(birthday) => { this.setState({ birthday }) }}
-                        />
-                        <TextInput
-                            autoCapitalize='none'
-                            style={styles.input}
-                            placeholder="Numéro de téléphone"
-                            onChangeText={phone => this.setState({ phone })}
                         />
                         <TextInput
                             caretHidden
@@ -153,7 +116,7 @@ export default class SignUpIndividual extends Component {
                     <Text style={styles.error}>{this.state.error}</Text>
                 </View>
                 <View style={styles.bottomView}>
-                    <Text onPress={() => this.props.navigation.navigate('Connexion')}>Déjà inscrit ? Clique ici !</Text>
+                    <Text onPress={() => navigation.navigate('SignIn')}>Déjà inscrit ? Clique ici !</Text>
                 </View>
             </SafeAreaView>
         );
