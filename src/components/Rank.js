@@ -25,23 +25,21 @@ export default class Rank extends Component {
 
 
     async componentDidMount() {
-        this.fetchCustomers()
-        this.setState({
-            user: this.props.route.params.user
-        })
+        this.unsubscribe()
     }
 
-    //     unsubscribe = () => {
-    //         this.props.navigation.addListener('focus', () => {
-    //             this.setState({
-    //                 user: this.props.route.params.user
-    //             })
-    //         })
-    //     }
+        unsubscribe = () => {
+            this.props.navigation.addListener('focus', () => {
+                this.setState({
+                    user: this.props.route.params.user
+                })
+                this.fetchCustomers()
+            })
+        }
 
-    //    async componentWillUnmount() {
-    //         this.unsubscribe();
-    //       }
+       async componentWillUnmount() {
+            this.unsubscribe();
+          }
 
     fetchCustomers = async () => {
 
@@ -96,7 +94,7 @@ export default class Rank extends Component {
                 </View>
                 <View style={styles.view}>
 
-                    <View style={styles.infosProfile}>
+                    <View style={{marginBottom:20}}>
                         <View style={styles.lineRank}></View>
                         <Text> MEILLEURS RANK </Text>
                         <View style={styles.lineRank}></View>
@@ -117,7 +115,7 @@ export default class Rank extends Component {
                                     </View>
                              
 
-                                <View style={{ flexDirection: "column", paddingLeft: 30, paddingRight: 30 }}>
+                                <View style={{ flexDirection: "column", paddingLeft: 30, paddingRight: 30, width:200 }}>
                                     <Text style={{ color: "gray" }}>{customer.firstname} {customer.lastname}</Text>
                                     <Text style={{ fontWeight: "bold" }}>{customer.rank.title} </Text>
                                 </View>
@@ -148,13 +146,13 @@ export default class Rank extends Component {
                                         <Text>Dons : {this.howManyTickets(customer.tickets).donnation}</Text>
                                     </View>
 
-                                <View style={{ flexDirection: "column", paddingLeft: 30, paddingRight: 30 }}>
+                                <View style={{ flexDirection: "column", paddingLeft: 30, paddingRight: 30, width:200 }}>
                                     <Text style={{ color: "gray" }}>Steven Renault</Text>
                                     <Text style={{ fontWeight: "bold" }}>Fruit du Dragon </Text>
                                 </View>
 
                                 <View style={{ flexDirection: "column", paddingLeft: 30 }}>
-                                    <Text style={{ fontSize: 35, color: "gray", fontWeight: "bold" }}>#1</Text>
+                                    <Text style={{ fontSize: 35, color: "gray", fontWeight: "bold" }}>#{idCustoEnd + 1}</Text>
 
                                 </View>
 

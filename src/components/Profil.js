@@ -29,6 +29,7 @@ export default class Profil extends Component {
 
   async componentDidMount() {
     this.unsubscribe()
+
   }
 
 
@@ -133,7 +134,9 @@ export default class Profil extends Component {
                 style={styles.cardLogo}
                 source={require('../../assets/img/yen.png')}
               />
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('MyBarters', {tickets: tickets})}
+              >
                 <Text>MES TROCS</Text>
               </TouchableOpacity>
             </View> : <View></View>}
@@ -144,7 +147,9 @@ export default class Profil extends Component {
                 style={styles.cardLogo}
                 source={require('../../assets/img/gift.png')}
               />
-              <TouchableOpacity>
+              <TouchableOpacity
+               onPress={() => navigation.navigate('MyDonations', {tickets: tickets})}
+              >
                 <Text>MES DONS</Text>
               </TouchableOpacity>
             </View> : <View></View>}

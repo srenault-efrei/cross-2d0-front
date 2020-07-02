@@ -40,7 +40,6 @@ export default class Associations extends Component {
        
         const { navigation } = this.props
         const { associations } = this.state
-        console.log(associations["association"])
         return (
             <SafeAreaView style={styles.safeArea}>
 

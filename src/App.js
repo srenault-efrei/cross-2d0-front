@@ -18,6 +18,9 @@ import Search from './components/Recherche';
 import Header from './components/headers/Header';
 import EditProfile from './components/EditProfil'
 import Rank from './components/Rank'
+import MyBarters from './components/MyBarters'
+import MyDonations from './components/MyDonations'
+
 
 const Drawer = createDrawerNavigator()
 function App() {
@@ -39,6 +42,10 @@ function App() {
         <Drawer.Screen name="History" component={Hisotry} />
         <Drawer.Screen name="EditProfile" component={EditProfile} />
         <Drawer.Screen name="Rank" component={Rank} />
+        <Drawer.Screen name="MyBarters" component={MyBarters} />
+        <Drawer.Screen name="MyDonations" component={MyDonations} />
+
+
 
       </Drawer.Navigator>
     </NavigationContainer>

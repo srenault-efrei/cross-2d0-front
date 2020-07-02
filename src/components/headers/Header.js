@@ -185,7 +185,7 @@ profileAssoHeader =
   render() {
     const type = this.type
     let HeaderComponent
-    if (type === 'Home') {
+    if (type === 'Classic') {
       HeaderComponent = this.homeHeader
     } else if ( type === "Profile") {
       HeaderComponent = this.profileHeader
