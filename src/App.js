@@ -20,13 +20,16 @@ import EditProfile from './components/EditProfil'
 import Rank from './components/Rank'
 import MyBarters from './components/MyBarters'
 import MyDonations from './components/MyDonations'
+import Add from './components/Add'
+import Product from './components/ProductDetails'
+import Map from './components/Map'
 
 
 const Drawer = createDrawerNavigator()
 function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="SignIn" screenOptions={{ gestureEnabled: false }}>
+      <Drawer.Navigator initialRouteName="Add" screenOptions={{ gestureEnabled: false }}>
         <Drawer.Screen name="SignIn" component={SignIn} />
         <Drawer.Screen name="Header" component={Header} />
         <Drawer.Screen name="Home" component={Home} />
@@ -44,9 +47,9 @@ function App() {
         <Drawer.Screen name="Rank" component={Rank} />
         <Drawer.Screen name="MyBarters" component={MyBarters} />
         <Drawer.Screen name="MyDonations" component={MyDonations} />
-
-
-
+        <Drawer.Screen name="Add" component={Add} />
+        <Drawer.Screen name="Map" component={Map} />
+        <Drawer.Screen name="ProductDetails" component={Product} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

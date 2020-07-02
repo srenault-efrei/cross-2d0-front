@@ -1,10 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-    hidden: {
-        display: 'none'
+    textWhite: {
+        color: '#fff',
     },
-    show: {
-        display: 'flex'
-    }
   });

@@ -1,11 +1,22 @@
 import React from 'react'
-import { View, SafeAreaView, FlatList } from 'react-native'
+import { View, SafeAreaView, FlatList, YellowBox } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import {CheckBox, Text, Slider } from 'react-native-elements'
 import styles from '../../assets/css/search.js'
 import global from '../../assets/css/global.js'
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper'
+import _ from 'lodash'
+import { Dropdown } from 'react-native-material-dropdown'
+
+YellowBox.ignoreWarnings(['componentWillReceiveProps'])
+YellowBox.ignoreWarnings(['componentWillUpdate'])
+const _console = _.clone(console)
+console.warn = message => {
+  if (message.indexOf('componentWillReceiveProps') <= -1) {
+  _console.warn(message);
+  } 
+}
 
 
 export default class Search extends React.Component {
@@ -39,14 +50,27 @@ export default class Search extends React.Component {
     },
   ];
 
+
+  Dropdown = [
+    {
+      value: '',
+    },
+    {
+      value: 'Banana',
+    }, 
+    {
+      value: 'Mango',
+    }, 
+    {
+      value: 'Pear',
+    }
+  ]
+
+
   render() {
   return (
     <SafeAreaView style={styles.bdy}>
       <MyHeader type='Profile' />
-      <View style={global.circle}>
-        <Text>IMG</Text>
-        <Text>Profile</Text>
-      </View>
       <View style={styles.container}>
         <TextInput
           mode='outlined'
@@ -61,25 +85,24 @@ export default class Search extends React.Component {
           onChangeText={text => this.setState({ text })}
           style={{marginTop:10}}
         />
-        <TextInput
-          mode='outlined'
+        <Dropdown
           label='Catégorie'
-          value={this.state.text}
-          onChangeText={text => this.setState({ text })}
-          style={{marginTop:10}}
+          data={this.Dropdown}
+          onChangeText={(item) => console.log(item)}
         />
-        <View style={{marginTop:40}}>
+        <View style={{marginTop:10}}>
           <FlatList
+              contentContainerStyle={styles.filters}
               data={this.DATA}
               renderItem={({ item }) => (
-                  <View style={global.filters}>
+                  <View style={styles.filters}>
                       <CheckBox
                           center
                           checkedIcon='dot-circle-o'
                           uncheckedIcon='circle-o'
                           checked={this.state.checked}
                       />
-                      <Text style={global.filterText}>{item.title}</Text>
+                      <Text>{item.title}</Text>
                   </View>
               )}
               keyExtractor={item => item.id}
@@ -99,6 +122,7 @@ export default class Search extends React.Component {
           Rechercher
         </Button>
       </View>
+      <MyFooter type='classic' navigation={this.navigation}/>
     </SafeAreaView>
   )
   }

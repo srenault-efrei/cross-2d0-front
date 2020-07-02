@@ -1,11 +1,18 @@
 import React from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Button } from 'react-native'
+import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, YellowBox  } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/home.js'
 import {Card} from 'react-native-elements'
-import global from '../../assets/css/global.js'
+import _ from 'lodash'
 
+YellowBox.ignoreWarnings(['componentWillReceiveProps'])
+const _console = _.clone(console)
+console.warn = message => {
+  if (message.indexOf('componentWillReceiveProps') <= -1) {
+  _console.warn(message);
+  } 
+}
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -16,7 +23,7 @@ export default class Home extends React.Component {
 
   static navigationOptions = {
     header: {
-    visible: false
+      visible: false
     }
   }
 
@@ -57,14 +64,7 @@ export default class Home extends React.Component {
   render() {
   return (
     <SafeAreaView style={styles.bdy}>
-      <MyHeader type='Classic' navigation={this.navigation} />
-      <View style={global.circle}>
-                    <TouchableOpacity
-                        onPress={() => this.navigation.navigate("Profil")} >
-                        <Text>IMG</Text>
-                        <Text>Profile</Text>
-                    </TouchableOpacity>
-                </View>
+      <MyHeader type='classic' navigation={this.navigation}/>
       <View style={styles.container}>
         <FlatList
           data={this.state.trocs}
