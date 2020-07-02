@@ -63,7 +63,7 @@ export default class ForgotPassword extends Component {
                 <Text style={styles.error}>{this.state.error}</Text>
                 
                 <View style={styles.bottomView}>
-                    <Text onPress={() => this.props.navigation.navigate('Inscription')}>Retour</Text>
+                    <Text onPress={() => this.props.navigation.navigate('SignIn')}>Retour</Text>
                 </View>
             </SafeAreaView>
         );

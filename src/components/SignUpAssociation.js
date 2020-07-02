@@ -19,7 +19,6 @@ export default class SignUpAssociation extends Component {
             email: '',
             password: '',
             passwordConfirmation: '',
-            file: '',
             error: ''
         };
     }
@@ -28,48 +27,34 @@ export default class SignUpAssociation extends Component {
         this.isThereError();
     }
 
-    isThereError() {
-        if (this.props.error) {
-            console.log(`${this.props.error.screen} sreen return error : ${this.props.error.text}`);
-        }
-        if (this.props.route) {
-            console.log(this.props.route)
-        }
-    }
-
     async signUp() {
         if (this.isSamePasswords(this.state.password, this.state.passwordConfirmation)) {
 
-            const req = await fetch('https://eazybiff-server.herokuapp.com/api/authenticate/signup', {
+            const req = await fetch('https://trocify.herokuapp.com/api/authenticate/signup', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    firstname: this.state.firstname.trim(),
-                    lastname: this.state.lastname.trim(),
-                    birthday: this.state.birthday,
+                    name: this.state.name.trim(),
                     email: this.state.email.trim(),
                     password: this.state.password.trim(),
-                    passwordConfirmation: this.state.passwordConfirmation.trim(),
-                    phone: this.state.phone.trim()
+                    passwordConfirmation: this.state.passwordConfirmation.trim()
                 })
             })
             try {
-                const responseJson = await req.json()
-
-                if (responseJson.err) {
-                    this.setState({ error: responseJson.err.description })
+                const json = await req.json()
+                if (json.err) {
+                    this.setState({ error: json.err.description })
                 } else {
-                    console.log(responseJson);
-                    await this._storeData(responseJson.data.meta.token, responseJson.data.user);
-                    this.props.navigation.navigate('Preference');
+                    console.log(json.data);
+                    //await this._storeData(json.data.meta.token, json.data.user)
+                    //GoTo
                 }
-            }
-            catch (error) {
+            } catch (error) {
                 console.error(error);
-            };
+            }
         } else {
             this.setState({ error: 'Attention,\nLes mots de passe saisis ne correspondent pas' });
         }
@@ -80,7 +65,9 @@ export default class SignUpAssociation extends Component {
     }
 
     render() {
+        const { navigation } = this.props
         console.disableYellowBox = true;
+
         return (
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.topView}>
@@ -113,14 +100,14 @@ export default class SignUpAssociation extends Component {
                             placeholder="Confirmation du mot de passe"
                             onChangeText={passwordConfirmation => this.setState({ passwordConfirmation })}
                         />
-                        <View style={styles.button}>
-                            <Text style={styles.textButton} onPress={() => this.signUp()}>S'inscrire</Text>
+                        <View style={styles.bottomView}>
+                            <Text onPress={() => navigation.navigate('SignIn')}>Déjà inscrit ? Clique ici !</Text>
                         </View>
                     </View>
                     <Text style={styles.error}>{this.state.error}</Text>
                 </View>
                 <View style={styles.bottomView}>
-                    <Text onPress={() => this.props.navigation.navigate('Connexion')}>Déjà inscrit ? Clique ici !</Text>
+                    <Text onPress={() => navigation.navigate('SignIn')}>Déjà inscrit ? Clique ici !</Text>
                 </View>
             </SafeAreaView>
         );

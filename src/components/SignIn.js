@@ -9,8 +9,8 @@ import {
 import styles from '../../assets/styles/styles';
 
 export const UserType = {
-    PROVIDER: "provider",
-    CUSTOMER: "customer"
+    CUSTOMER: "customer",
+    ASSOCIATION: "association"
 }
 
 export default class Signin extends Component {
@@ -26,7 +26,7 @@ export default class Signin extends Component {
     }
 
     async signIn() {
-        const req = await fetch('', {
+        const req = await fetch('https://trocify.herokuapp.com/api/authenticate/signin', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -34,15 +34,29 @@ export default class Signin extends Component {
             },
             body: JSON.stringify({ email: this.state.email.trim(), password: this.state.password.trim() })
         })
-        const json = await req.json()
-        if (json.err) {
-            this.setState({ error: json.err.description })
-        } else {
-
+        try {
+            const json = await req.json()
+            if (json.err) {
+                this.setState({ error: json.err.description })
+            } else {
+                console.log(json.data);
+                //await this._storeData(json.data.meta.token, json.data.user)
+                if (json.data.customer) {
+                    console.log("Log succesfully : ", UserType.CUSTOMER)
+                } else if (json.data.association) {
+                    console.log("Log succesfully : ", UserType.ASSOCIATION)
+                } else {
+                    console.log('Error: no user type')
+                }
+            }
+        } catch (error) {
+            console.error(error);
         }
     }
 
     render() {
+        const { navigation } = this.props
+
         return (
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.topView}>
@@ -69,18 +83,11 @@ export default class Signin extends Component {
                     </View>
                     <Text style={styles.error}>{this.state.error}</Text>
                     <View style={styles.textInput}>
-                        <Text onPress={() => this.goTo('ForgotPassword')}>Mot de passe oublié</Text>
-                    </View>
-                    <View style={styles.lowLoginView}>
-                        <View style={styles.splitter} />
-                        <View style={styles.textInput}>
-                            <Text>Connexion Google</Text>
-                            <Text>Connexion Facebook</Text>
-                        </View>
+                        <Text onPress={() => navigation.navigate('ForgotPassword')}>Mot de passe oublié</Text>
                     </View>
                 </View>
                 <View style={styles.bottomView}>
-                    <Text onPress={() => this.props.navigation.navigate('Inscription')}>Pas encore inscrit ? Clique ici !</Text>
+                    <Text onPress={() => navigation.navigate('Preference')}>Pas encore inscrit ? Clique ici !</Text>
                 </View>
             </SafeAreaView>
         );
