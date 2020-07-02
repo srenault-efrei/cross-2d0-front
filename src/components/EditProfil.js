@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, SafeAreaView, TouchableOpacity, Image } from 'react-native'
+import { View, SafeAreaView, TouchableOpacity, Image, AsyncStorage } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import { CheckBox, Avatar } from 'react-native-elements'
@@ -16,28 +16,51 @@ export default class EditProfile extends React.Component {
     this.state = {
       checked: false,
       user: {},
-      typeUser: "customer",
+
       firstname: '',
       lastname: '',
       gender: '',
       email: '',
       name: '',
       avatarFile: null,
-      filename:'',
-      key:'',
+      filename: '',
+      key: '',
       description: '',
       password: 'xxxxxxxxxx',
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IlN0ZXZlbiIsImlhdCI6MTU5MjQxODAzOX0.lyTW0f0cJrMoiqc4yUn8xQe9Ap865_KMC_2CK-wDeoU"
-
+      token: "",
+      id: -1
     }
     this.navigation = this.props.navigation
   }
 
-  componentDidMount() {
+
+  async componentDidMount() {
+    await this.setDataStorage()
     this.fetchUser();
-    // this.fetchUserAsso();
 
   }
+
+  async setDataStorage() {
+    let data = await AsyncStorage.getItem('data')
+    data = JSON.parse(data)
+
+    this.setState({
+      token: data.meta.token,
+    })
+    data.customer ? this.setState({ typeUser: "customer", id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
+  }
+
+  unsubscribe = () => {
+    this.props.navigation.addListener('focus', () => {
+      this.fetchUser()
+    })
+  }
+
+  async componentWillUnmount() {
+    this.unsubscribe();
+
+  }
+
 
   isValidForm = (type) => {
     let regex = /^.+@.+['.']com|^.+@.+['.']fr|^.+@.+['.']net/g
@@ -73,60 +96,47 @@ export default class EditProfile extends React.Component {
     };
 
     try {
-      const response = await fetch("https://trocify.herokuapp.com/api/customers/1f38ec56-7757-42d7-8f13-cca1df2f780c", settings);
+      const response = await fetch(`https://trocify.herokuapp.com/api/${this.state.typeUser}s/${this.state.id}`, settings);
       const json = await response.json();
-      const customer = json.data.customer
-      this.setState({
-        user: customer,
-        firstname: customer.firstname,
-        lastname: customer.lastname,
-        gender: customer.gender,
-        email: customer.email,
-      })
-      if (customer.avatarFile !== null) {
-        this.setState({ avatarFile: customer.avatarFile })
-      }
-      if (json.data.customer.gender === 'homme') {
-        this.setState({ checked: true })
-      }
-      // console.log(this.state.user)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+      
 
-
-  fetchUserAsso = async () => {
-
-    const settings = {
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + this.state.token,
-        'Content-Type': 'application/json',
-      }
-    };
-
-    try {
-      const response = await fetch("https://trocify.herokuapp.com/api/associations/5f38ec56-7757-42d7-8f13-cca1df2f780c", settings);
-      const json = await response.json();
-      const association = json.data.association
-      this.setState({
-        user: association,
-        name: association.name,
-        email: association.email,
-        description: association.description,
-        avatarFile: association.avatarFile
-      })
-      if (association.avatarFile !== null) {
+      if (this.state.typeUser === 'customer') {
+        const customer = json.data.customer
         this.setState({
+          user: customer,
+          firstname: customer.firstname,
+          lastname: customer.lastname,
+          gender: customer.gender,
+          email: customer.email,
+        })
+        if (customer.avatarFile !== null) {
+          this.setState({ avatarFile: customer.avatarFile })
+        }
+        if (json.data.customer.gender === 'homme' || json.data.customer.gender === null || json.data.customer.gender === undefined) {
+          this.setState({ checked: true })
+        }
+      } else {
+        const association = json.data.association
+        this.setState({
+          user: association,
+          name: association.name,
+          email: association.email,
+          description: association.description,
           avatarFile: association.avatarFile
         })
+        if (association.avatarFile !== null) {
+          this.setState({
+            avatarFile: association.avatarFile
+          })
+        }
       }
+
       // console.log(this.state.user)
     } catch (e) {
       console.log(e)
     }
   }
+
 
 
   uploadAssociation = async () => {
@@ -140,7 +150,7 @@ export default class EditProfile extends React.Component {
           filePath: this.state.user.filePath,
           email: this.state.email,
           description: this.state.description,
-          geolocalisation: true,
+          // geolocalisation: true,
           // filename: this.state.filename,
           // key: `profil_${this.state.user.id}.png`
         }
@@ -150,7 +160,7 @@ export default class EditProfile extends React.Component {
           filePath: this.state.user.filePath,
           email: this.state.email,
           description: this.state.description,
-          geolocalisation: true,
+          // geolocalisation: true,
           password: this.state.password,
           // filename: this.state.filename,
           // key: `profil_${this.state.user.id}.png`
@@ -158,7 +168,7 @@ export default class EditProfile extends React.Component {
         }
       }
       try {
-        const response = await fetch("https://trocify.herokuapp.com/api/associations/5f38ec56-7757-42d7-8f13-cca1df2f780c", {
+        const response = await fetch(`https://trocify.herokuapp.com/api/associations/${this.state.id}`, {
 
           headers: {
             'Accept': 'application/json',
@@ -215,7 +225,7 @@ export default class EditProfile extends React.Component {
         }
       }
       try {
-        const response = await fetch("https://trocify.herokuapp.com/api/customers/1f38ec56-7757-42d7-8f13-cca1df2f780c", {
+        const response = await fetch(`https://trocify.herokuapp.com/api/customers/${this.state.id}`, {
 
           headers: {
             'Accept': 'application/json',
@@ -270,9 +280,9 @@ export default class EditProfile extends React.Component {
     if (pickerResult.cancelled === true) {
       return;
     } else {
-      this.setState({ 
+      this.setState({
         filename: pickerResult.uri,
-        avatarFile: pickerResult.uri 
+        avatarFile: pickerResult.uri
       })
     }
 
@@ -284,19 +294,19 @@ export default class EditProfile extends React.Component {
     const { navigation } = this.props
     const { typeUser, checked, filename } = this.state
     let avatar = this.state.avatarFile === null ? "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg" : this.state.avatarFile
-    console.log(avatar)
+    // console.log(avatar)
 
     return (
       <SafeAreaView style={styles.bdy}>
         <MyHeader type='Profile' />
-        <View style={{alignItems:"center", top:30, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent:'center', alignItems: 'center'}}>
+        <View style={{ alignItems: "center", top: 30, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
           <Avatar
             rounded
             size={100}
             onPress={() => this.uploadAvatar()}
             source={{
               uri:
-              avatar,
+                avatar,
             }}
             showAccessory
           />
@@ -390,9 +400,12 @@ export default class EditProfile extends React.Component {
         </View>
 
         {typeUser === 'customer' ?
-          <MyFooter type='classic' navigation={navigation} /> : <MyFooter type='Association' navigation={navigation} />
+          <MyFooter type='classic' navigation={navigation} /> : <View></View>
         }
-
+          {typeUser === 'association' ?
+          <MyFooter type='association' navigation={navigation} /> : <View></View>
+        }
+        
       </SafeAreaView>
     )
   }

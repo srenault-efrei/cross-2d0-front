@@ -97,7 +97,7 @@ export default class MyFooter extends React.Component {
         let FooterComponent
         if (type === 'classic') {
             FooterComponent = this.classicFooter
-        } else if (type == "Association") {
+        } else if (type == "association") {
             FooterComponent = this.associationFooter
 
         }

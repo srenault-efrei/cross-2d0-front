@@ -4,7 +4,8 @@ import {
     View,
     Text,
     TextInput,
-    Image
+    Image,
+    AsyncStorage
 } from 'react-native';
 import styles from '../../assets/styles/styles';
 
