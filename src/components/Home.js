@@ -1,12 +1,10 @@
 import React from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image } from 'react-native'
+import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, Button } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
-import Filters from './Filters'
 import styles from '../../assets/css/home.js'
-import global from '../../assets/css/global.js'
 import {Card} from 'react-native-elements'
-
+import global from '../../assets/css/global.js'
 
 
 export default class Home extends React.Component {
@@ -14,45 +12,66 @@ export default class Home extends React.Component {
     super(props)
     this.state = {}
     this.navigation = this.props.navigation
-    
   }
+
   static navigationOptions = {
     header: {
     visible: false
     }
   }
 
-  DATA = [
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'First Item',
+  componentDidMount = async () => {
+    this.fetchTrocs()
+  }
 
-    },
-    {
-      id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-      title: 'Second Item',
+  redirect(page, data){
+    if (data !=  ''){
+      this.navigation.navigate(page, data)
+    } else {
+      this.navigation.navigate(page)
+    }
+  }
 
-    },
-    {
-      id: '58694a0f-3da1-471f-bd96-145571e29d72',
-      title: 'Third Item',
-
-    },
-  ]
+  fetchTrocs = async () => {
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IkZhYmlhbiIsImlhdCI6MTU5Mjc2NTQ5NX0.PM01TGuPKYB3AW2mEJYRrjna9LhggRp1w-oZsLx-8ZA'
+    return fetch(`https://trocify.herokuapp.com/api/tickets`, {
+      method: 'GET',
+      headers: 
+      new Headers({
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      })
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({
+          trocs: json.data.ticket
+        })
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 
   render() {
   return (
     <SafeAreaView style={styles.bdy}>
-      <MyHeader type='Profile' />
+      <MyHeader type='Classic' navigation={this.navigation} />
       <View style={global.circle}>
-        <Text>IMG</Text>
-        <Text>Profile</Text>
-      </View>
+                    <TouchableOpacity
+                        onPress={() => this.navigation.navigate("Profil")} >
+                        <Text>IMG</Text>
+                        <Text>Profile</Text>
+                    </TouchableOpacity>
+                </View>
       <View style={styles.container}>
         <FlatList
-          data={this.DATA}
+          data={this.state.trocs}
+          showsVerticalScrollIndicator ={false}
+          showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => this.redirect('ProductDetails', {product: item})}>
                   <Card>
                       <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
                           <Image
@@ -60,7 +79,7 @@ export default class Home extends React.Component {
                             resizeMode="cover"
                             source={require('../../assets/img/logo.png')}
                           />
-                          <Text>Hello</Text>
+                          <Text>{item.title}</Text>
                       </View>
                   </Card>
               </TouchableOpacity>
@@ -70,7 +89,7 @@ export default class Home extends React.Component {
           numColumns={2}
         />
       </View>
-      <MyFooter type='classic' />
+      <MyFooter type='classic' navigation={this.navigation}/>
     </SafeAreaView>
   )
   }

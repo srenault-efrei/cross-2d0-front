@@ -5,75 +5,78 @@ import {
     TouchableOpacity,
     SafeAreaView,
     ScrollView,
-    
-
 } from 'react-native'
 import styles from '../../assets/styles/profilCusto'
+import MyHeader from './headers/Header'
+import MyFooter from './footers/Footer'
+import global from '../../assets/css/global.js'
 
 
 export default class Associations extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
+        this.state = {
+            associations: this.props.route.params.associations
+        }
     }
 
+    async componentDidMount() {
+        this.unsubscribe()
+    }
+
+    unsubscribe = () => {
+        this.props.navigation.addListener('focus', () => {
+            this.setState({
+                associations: this.props.route.params.associations
+            })
+        })
+    }
+
+    async componentWillUnmount() {
+        this.unsubscribe();
+      }
+
     render() {
+       
         const { navigation } = this.props
+        const { associations } = this.state
         return (
-            <View style={styles.safeArea}>
+            <SafeAreaView style={styles.safeArea}>
 
                 {/* Header */}
-
-                <View style={styles.header}>
-                    <Text style={{ color: "white" }}>Header</Text>
+                <MyHeader type='Association' navigation={navigation} />
+                <View style={global.circle}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Profil")} >
+                        <Text>IMG</Text>
+                        <Text>Profile</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <SafeAreaView style={styles.container}>
                     {/* View */}
-                    <View style={{ height: "90%"}} >
-                        <ScrollView  contentContainerStyle={styles.contentContainer}>
-                            <View style={styles.card}>
-                                <TouchableOpacity
-                                 onPress={() => navigation.navigate('DetailsAssociation')}
-                                >
-                                    <Text>ASSOCIATION 1</Text>
-                                </TouchableOpacity>
-                            </View>
+                    <View style={{ height: "90%" }} >
+                        <ScrollView contentContainerStyle={styles.contentContainer}>
+                            {associations["association"].map((asso, idAsso) => (
 
-                            <View style={styles.card}>
-                                <TouchableOpacity
-                                 onPress={() => navigation.navigate('DetailsAssociation')}
+                                <View key={idAsso} style={styles.card}>
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('DetailsAssociation', {asso} )}
+                                    >
+                                        <Text>{asso.name}</Text>
+                                    </TouchableOpacity>
+                                </View>
 
-                                >
-                                    <Text>ASSOCIATION 2</Text>
-                                </TouchableOpacity>
-                            </View>
+                            ))}
 
-                            <View style={styles.card}>
-                                <TouchableOpacity
-                                onPress={() => navigation.navigate('DetailsAssociation')}
-                                >
-                                    <Text>ASSOCIATION 3</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={styles.card}>
-                                <TouchableOpacity
-                                onPress={() => navigation.navigate('DetailsAssociation')}
-                                >
-                                    <Text>ASSOCIATION 4</Text>
-                                </TouchableOpacity>
-                            </View>
                         </ScrollView>
                     </View>
                 </SafeAreaView>
 
                 {/* Footer  */}
+                <MyFooter type='classic' navigation={navigation}/>
 
-                <View style={styles.footer}>
-                    <Text style={{ color: "white" }}>Footer</Text>
-                </View>
-
-            </View>
+            </SafeAreaView>
         )
     }
 }

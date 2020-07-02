@@ -3,23 +3,33 @@ import {
     Text,
     View,
     TouchableOpacity,
+    SafeAreaView
 
 } from 'react-native'
 import styles from '../../assets/styles/profilCusto'
-
+import MyHeader from './headers/Header'
+import MyFooter from './footers/Footer'
+import global from '../../assets/css/global.js'
 
 export default class Paremeter extends Component {
 
 
     render() {
+        const { navigation } = this.props
+
         return (
-            <View style={styles.safeArea}>
+            <SafeAreaView style={styles.safeArea}>
 
                 {/* Header */}
-
-                <View style={styles.header}>
-                    <Text style={{ color: "white" }}>Header</Text>
+                <MyHeader type='Return' navigation={navigation} />
+                <View style={global.circle}>
+                    <TouchableOpacity
+                        onPress={() =>  navigation.navigate("Profil")} >
+                        <Text>IMG</Text>
+                        <Text>Profile</Text>
+                    </TouchableOpacity>
                 </View>
+
 
                 <View style={styles.view}>
                     <View style={styles.card}>
@@ -44,25 +54,27 @@ export default class Paremeter extends Component {
 
                 <View style={styles.viewEnd}>
                     <View style={styles.endRow}>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={() =>  navigation.navigate("SignIn")}
+                        >
                             <Text>DECONNEXION</Text>
                         </TouchableOpacity>
                     </View>
 
                     <View style={styles.endRow}>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={() =>  navigation.navigate("SignIn")}
+                        >
                             <Text>SUPPRIMER MON COMPTE</Text>
                         </TouchableOpacity>
                     </View>
 
                 </View>
+
                 {/* Footer  */}
+                <MyFooter type='classic'navigation={navigation} />
 
-                <View style={styles.footer}>
-                    <Text style={{ color: "white" }}>Footer</Text>
-                </View>
-
-            </View>
+            </SafeAreaView>
         )
     }
 }

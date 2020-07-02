@@ -3,34 +3,63 @@ import {
     Text,
     View,
     TouchableOpacity,
+    SafeAreaView
+
 
 } from 'react-native'
 import styles from '../../assets/styles/profilCusto'
-
+import MyHeader from './headers/Header'
+import MyFooter from './footers/Footer'
+import global from '../../assets/css/global.js'
 
 export default class DetailAssociation extends Component {
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            association: {}
+        }
+    }
+
+    async componentDidMount() {
+        this.unsubscribe()
+    }
+
+    unsubscribe = () => {
+        this.props.navigation.addListener('focus', () => {
+            this.setState({
+                association: this.props.route.params.asso
+            })
+        })
+    }
+
+   async componentWillUnmount() {
+        this.unsubscribe();
+      }
 
     render() {
+
+        const { navigation } = this.props
+        const { association } = this.state
         return (
-            <View style={styles.safeArea}>
+            <SafeAreaView style={styles.safeArea}>
 
                 {/* Header */}
-
-                <View style={styles.header}>
-                    <Text style={{ color: "white" }}>Header</Text>
+                <MyHeader type='Return' navigation={navigation} />
+                <View style={global.circle}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Profil")} >
+                        <Text>IMG</Text>
+                        <Text>Profile</Text>
+                    </TouchableOpacity>
                 </View>
 
+
                 <View style={styles.view}>
-                    <Text style={styles.title}>ASSOCIATION EXAMPLE</Text>
+                    <Text style={styles.title}>{association.name}</Text>
                     <View style={styles.line}></View>
-                    <Text style={styles.description}>Illud tamen te esse admonitum volo,
-                    primum ut qualis es talem te esse omnes existiment ut, quantum a
-                    rerum turpitudine abes, tantum te a verborum libertate seiungas; deinde ut
-                    ea in alterum ne dicas, quae cum tibi falso responsa sint, erubescas. Quis est enim,
-                    cui via ista non pateat, qui isti aetati atque etiam isti dignitati non possit quam velit petulanter,
-                    etiamsi sine ulla suspicione, at non sine argumento male dicere? Sed istarum partium culpa est eorum, qui te
-                    agere voluerunt; laus pudoris tui, quod ea te invitum dicere videbamus, ingenii, quod ornate politeque dixisti .
+                    <Text style={styles.description}>
+                        {association.description}
                     </Text>
                 </View>
 
@@ -44,12 +73,9 @@ export default class DetailAssociation extends Component {
                 </View>
 
                 {/* Footer  */}
+                <MyFooter type='classic' navigation={navigation}/>
 
-                <View style={styles.footer}>
-                    <Text style={{ color: "white" }}>Footer</Text>
-                </View>
-
-            </View>
+            </SafeAreaView>
         )
     }
 }

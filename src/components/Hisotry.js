@@ -5,36 +5,43 @@ import {
     TouchableOpacity,
     SafeAreaView,
     ScrollView,
-    
+
 
 } from 'react-native'
 import styles from '../../assets/styles/profilCusto'
-
+import MyHeader from './headers/Header'
+import MyFooter from './footers/Footer'
+import global from '../../assets/css/global.js'
 
 export default class History extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
     }
 
     render() {
         const { navigation } = this.props
         return (
-            <View style={styles.safeArea}>
+            <SafeAreaView style={styles.safeArea}>
 
                 {/* Header */}
-
-                <View style={styles.header}>
-                    <Text style={{ color: "white" }}>Header</Text>
+                <MyHeader type='Return' navigation={navigation} />
+                <View style={global.circle}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Profil")} >
+                        <Text>IMG</Text>
+                        <Text>Profile</Text>
+                    </TouchableOpacity>
                 </View>
+
 
                 <SafeAreaView style={styles.container}>
                     {/* View */}
-                    <View style={{ height: "90%"}} >
-                        <ScrollView  contentContainerStyle={styles.content}>
+                    <View style={{ height: "90%" }} >
+                        <ScrollView contentContainerStyle={styles.content}>
                             <View style={styles.historyCard}>
-                            <View style={styles.cercle}>
-                            <Text>Image produit</Text>
-                            </View>
+                                <View style={styles.cercle}>
+                                    <Text>Image produit</Text>
+                                </View>
                                 <TouchableOpacity>
                                     <Text>TABLE EN BOIS</Text>
                                 </TouchableOpacity>
@@ -43,16 +50,12 @@ export default class History extends Component {
                         </ScrollView>
                     </View>
 
-
                 </SafeAreaView>
 
                 {/* Footer  */}
+                <MyFooter type='classic' navigation={navigation} />
 
-                <View style={styles.footer}>
-                    <Text style={{ color: "white" }}>Footer</Text>
-                </View>
-
-            </View>
+            </SafeAreaView>
         )
     }
 }
