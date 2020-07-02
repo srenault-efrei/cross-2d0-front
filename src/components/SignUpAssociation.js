@@ -23,9 +23,7 @@ export default class SignUpAssociation extends Component {
         };
     }
 
-    componentDidMount() {
-        this.isThereError();
-    }
+   
 
     async signUp() {
         if (this.isSamePasswords(this.state.password, this.state.passwordConfirmation)) {
