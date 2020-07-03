@@ -26,7 +26,7 @@ export default class MyFooter extends React.Component {
                             name='ios-funnel'
                             type='ionicon'
                             size={20}
-                            color='none'
+                            color='transparent'
                         />
                     </View>
                     <Text style={styles.blankText, { position: 'absolute', top: 35, color: 'white' }}>A proximité</Text>
@@ -38,7 +38,7 @@ export default class MyFooter extends React.Component {
                             name='ios-add-circle'
                             type='ionicon'
                             size={25}
-                            color='none'
+                            color='transparent'
                         />
                     </View>
                     <Text style={styles.blankText, { position: 'absolute', top: 38, color: 'white' }}>Ajouter</Text>
@@ -50,7 +50,7 @@ export default class MyFooter extends React.Component {
                             name='comment'
                             type='octicon'
                             size={20}
-                            color='none'
+                            color='transparent'
                         />
                     </View>
                     <Text style={styles.blankText, { position: 'absolute', top: 35, color: 'white' }}>Message</Text>
@@ -71,7 +71,7 @@ export default class MyFooter extends React.Component {
                             name='ios-funnel'
                             type='ionicon'
                             size={20}
-                            color='none'
+                            color='transparent'
                         />
                     </View>
                     <Text style={styles.blankText, { position: 'absolute', top: 35, color: 'white' }}>A proximité</Text>
@@ -83,7 +83,7 @@ export default class MyFooter extends React.Component {
                             name='comment'
                             type='octicon'
                             size={20}
-                            color='none'
+                            color='transparent'
                         />
                     </View>
                     <Text style={styles.blankText, { position: 'absolute', top: 35, color: 'white' }}>Message</Text>
