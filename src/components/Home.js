@@ -17,9 +17,12 @@ console.warn = message => {
 export default class Home extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = { search: '', data: [] }
     this.navigation = this.props.navigation
+    this.searchHandler = this.searchHandler.bind(this)
   }
+
+  dataSave = []
 
   static navigationOptions = {
     header: {
@@ -31,12 +34,67 @@ export default class Home extends React.Component {
     this.fetchTrocs()
   }
 
+  componentWillReceiveProps() {
+    this.getTickets()
+  }
+
+  /* Handlers */
+  getTickets = () => {
+    if (this.props.route.params){
+      /* this.search(this.props.route.params) */
+      console.log(this.props.route.params)
+    } else {
+      console.log(this.props.route.params)
+    }
+  }
+
+  searchHandler(text) {
+    const newData = this.dataSave.filter(item => {
+      const itemData = item.title.toLowerCase()
+      const textData = text.toLowerCase()
+      return itemData.indexOf(textData) > -1
+    })
+
+    this.setState({
+      data: newData
+    })
+  }
+  /*  */
+
+  async setDataStorage() {
+    let user = await AsyncStorage.getItem('user')
+    let token = await AsyncStorage.getItem('token')
+    if (!user) {
+      this.props.navigation.navigate("SignIn")
+    } 
+    else if (user && token) {
+        this.setState({ user, token })
+    }
+  }
+
   redirect(page, data){
     if (data !=  ''){
       this.navigation.navigate(page, data)
     } else {
       this.navigation.navigate(page)
     }
+  }
+
+  search = (data) => {
+    const newData = this.dataSave.filter(item => {
+      const itemTitle = item.title.toLowerCase()
+      const itemCategory = item.category.title.toLowerCase()
+      const itemType = item.type.toLowerCase()
+      const itemLocation = item.localisation.toLowerCase()
+      const textData = text.toLowerCase()
+      if (itemTitle.indexOf(data.keyword.toLowerCase()) || itemCategory === data.category.id || itemType === data.type.toLowerCase() || itemLocation === data.location.toLowerCase()){
+        return item
+      }
+    })
+
+    this.setState({
+      data: newData
+    })
   }
 
   fetchTrocs = async () => {
@@ -53,8 +111,9 @@ export default class Home extends React.Component {
       .then((response) => response.json())
       .then((json) => {
         this.setState({
-          trocs: json.data.ticket
+          data: json.data.ticket
         })
+        this.dataSave = json.data.ticket
       })
       .catch((error) => {
         console.error(error);
@@ -64,10 +123,10 @@ export default class Home extends React.Component {
   render() {
   return (
     <SafeAreaView style={styles.bdy}>
-      <MyHeader type='classic' navigation={this.navigation}/>
+      <MyHeader type='classic' navigation={this.navigation} search={this.searchHandler}/>
       <View style={styles.container}>
         <FlatList
-          data={this.state.trocs}
+          data={this.state.data}
           showsVerticalScrollIndicator ={false}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (

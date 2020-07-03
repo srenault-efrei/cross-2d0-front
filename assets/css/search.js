@@ -26,5 +26,26 @@ export default StyleSheet.create({
     },
     check: {
         backgroundColor: 'red'
+    },
+    buttonsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop:5
+    },
+    search: {
+        width: 150,
+        height: 40,
+        backgroundColor: 'rgb(63, 81, 181)',
+    },
+    reset: {
+        width: 150,
+        height: 40,
+        borderWidth: 0.2,
+        borderColor: '#000',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)'
+    },
+    resetLabel: {
+        color: 'rgb(63, 81, 181)',
     }
   });

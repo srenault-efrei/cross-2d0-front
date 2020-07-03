@@ -23,13 +23,13 @@ import MyDonations from './components/MyDonations'
 import Add from './components/Add'
 import Product from './components/ProductDetails'
 import Map from './components/Map'
-
+import Callouts from './components/Callout'
 
 const Drawer = createDrawerNavigator()
 function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Add" screenOptions={{ gestureEnabled: false }}>
+      <Drawer.Navigator initialRouteName="Home" screenOptions={{ gestureEnabled: false }}>
         <Drawer.Screen name="SignIn" component={SignIn} />
         <Drawer.Screen name="Header" component={Header} />
         <Drawer.Screen name="Home" component={Home} />
@@ -50,6 +50,7 @@ function App() {
         <Drawer.Screen name="Add" component={Add} />
         <Drawer.Screen name="Map" component={Map} />
         <Drawer.Screen name="ProductDetails" component={Product} />
+        <Drawer.Screen name="Callout" component={Callouts} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

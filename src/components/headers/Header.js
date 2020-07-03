@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { Header, Icon } from 'react-native-elements'
 import { TouchableOpacity, Text } from 'react-native'
@@ -18,6 +17,7 @@ export default class MyHeader extends React.Component {
         this.navigation = this.props.navigation
         this.handlerNotifs = this.handlerNotifs.bind(this)
         this.handlerFilters = this.handlerFilters.bind(this)
+        this.search = this.props.search
     }
 
     // handlers
@@ -158,7 +158,7 @@ export default class MyHeader extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => this.navigation.navigate('Map')}
+              onPress={() => this.navigation.navigate('Search')}
             >
             <Icon
               reverse
@@ -292,7 +292,7 @@ export default class MyHeader extends React.Component {
         <View style={this.state.search}>
         <Searchbar
           placeholder="Type Here..."
-          onChangeText={this.updateSearch}
+          onChangeText={text => this.search(text)}
           clearIcon={() => <Icon name='ios-close' type='ionicon' onPress={() => console.log('clear')}/> }
         />
         </View>

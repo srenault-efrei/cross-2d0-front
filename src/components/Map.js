@@ -1,16 +1,60 @@
 import React from 'react'
-import { View, SafeAreaView } from 'react-native'
+import { View, SafeAreaView, Text, Image, StyleSheet } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/map.js'
-import MapView from 'react-native-maps'
-
-
+import MapView, {
+    Marker,
+    Callout,
+    CalloutSubview,
+    ProviderPropType,
+  } from 'react-native-maps'
+import CustomCallout from './callout/CustomCallout'
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper'
 
 export default class Map extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            region: {
+                latitude: 48.8566969,
+                longitude: 2.3514616,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            },
+            markers: [
+                {   
+                    id: 1,
+                    latlng: {
+                        latitude: 48.8582602,
+                        longitude: 2.2944991
+                    },
+                    title: 'Tour Eiffel',
+                    description: 'Monument de Paris.',
+                    image: 'https://images-na.ssl-images-amazon.com/images/I/81OIkKAb7DL._AC_SL1500_.jpg'
+                },
+                {
+                    id: 2,
+                    latlng: {
+                        latitude: 48.8925645,
+                        longitude: 2.2358742
+                    },
+                    title: 'La Défense Grande Arche',
+                    description: 'Tête de la Défense.',
+                    image: 'https://images-na.ssl-images-amazon.com/images/I/71d3fpcwCJL._AC_SL1500_.jpg'
+                },
+                {
+                    id: 3,
+                    latlng: {
+                        latitude: 48.8707573,
+                        longitude: 2.3053312
+                    },
+                    title: 'Champs Élysées',
+                    description: 'En plein Paris.',
+                    image: 'https://images-na.ssl-images-amazon.com/images/I/61jYuX2sokL._AC_SL1500_.jpg'
+                }
+            ]
+        }
         this.navigation = this.props.navigation
         
     }
@@ -21,15 +65,134 @@ export default class Map extends React.Component {
         }
     }
 
+    componentDidMount = async () => {
+        this.fetchTrocs()
+      }
+
+    async setDataStorage() {
+        let user = await AsyncStorage.getItem('user')
+        let token = await AsyncStorage.getItem('token')
+        if (!user) {
+          this.props.navigation.navigate("Connexion")
+        } 
+        else if (user && token) {
+            this.setState({ user, token })
+        }
+    }
+
+    fetchTrocs = async () => {
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IkZhYmlhbiIsImlhdCI6MTU5Mjc2NTQ5NX0.PM01TGuPKYB3AW2mEJYRrjna9LhggRp1w-oZsLx-8ZA'
+        return fetch(`https://trocify.herokuapp.com/api/tickets`, {
+          method: 'GET',
+          headers: 
+          new Headers({
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          })
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            this.setState({
+              trocs: json.data.ticket
+            })
+            console.log(this.state.trocs)
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+    
+    mapStyle=[
+        {"elementType": "geometry", "stylers": [{"color": "#242f3e"}]},
+        {"elementType": "labels.text.fill","stylers": [{"color": "#746855"}]},
+        {"elementType": "labels.text.stroke","stylers": [{"color": "#242f3e"}]},
+        {"featureType": "administrative.locality","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},
+        {"featureType": "poi","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},
+        {"featureType": "poi.park","elementType": "geometry","stylers": [{"color": "#263c3f"}]},
+        {"featureType": "poi.park","elementType": "labels.text.fill","stylers": [{"color": "#6b9a76"}]},
+        {"featureType": "road","elementType": "geometry","stylers": [{"color": "#38414e"}]},
+        {"featureType": "road","elementType": "geometry.stroke","stylers": [{"color": "#212a37"}]},
+        {"featureType": "road","elementType": "labels.text.fill","stylers": [{"color": "#9ca5b3"}]},
+        {"featureType": "road.highway","elementType": "geometry","stylers": [{"color": "#746855"}]},
+        {"featureType": "road.highway","elementType": "geometry.stroke","stylers": [{"color": "#1f2835"}]},
+        {"featureType": "road.highway","elementType": "labels.text.fill","stylers": [{"color": "#f3d19c"}]},
+        {"featureType": "transit","elementType": "geometry","stylers": [{"color": "#2f3948"}]},
+        {"featureType": "transit.station","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},
+        {"featureType": "water","elementType": "geometry","stylers": [{"color": "#17263c"}]},
+        {"featureType": "water","elementType": "labels.text.fill","stylers": [{"color": "#515c6d"}]},
+        {"featureType": "water","elementType": "labels.text.stroke","stylers": [{"color": "#17263c"}]}]
+    
+
     render() {
         return (
             <SafeAreaView style={styles.bdy}>
                 <MyHeader type='back' navigation={this.navigation}/>
                 <View style={styles.container}>
-                    <MapView style={styles.mapStyle} />
+                    <MapView 
+                        style={styles.mapStyle} 
+                        region={this.state.region}
+                        customMapStyle={this.mapStyle}
+                    >
+                        {this.state.markers.map(marker => (
+                            <Marker
+                            key={marker.id}
+                            draggable
+                            coordinate={marker.latlng}
+                            onDragEnd={(e) => alert(JSON.stringify(e.nativeEvent.coordinate))}
+                            title={marker.title}
+                            description={marker.description}
+                            >
+                                <View style={styles.markView}>
+                                    <Image
+                                        style={styles.tinyLogo}
+                                        source={{uri: marker.image}}
+                                    />
+                                </View>
+                            <Callout
+                            >
+                                <CustomCallout>
+                                    <Card>
+                                        <Card.Title title="Card Title" subtitle="Card Subtitle"/>
+                                        <Card.Content>
+                                        <Title>Card title</Title>
+                                        <Paragraph>Card content</Paragraph>
+                                        </Card.Content>
+                                        <Image
+                                        style={styles.tinyLogo}
+                                        source={{uri: marker.image}}
+                                    />
+                                        <Card.Actions>
+                                        <Button>Cancel</Button>
+                                        <Button>Ok</Button>
+                                        </Card.Actions>
+                                    </Card>
+                                </CustomCallout>
+                            </Callout>
+                            </Marker>
+                        ))}
+                    </MapView>
                 </View>
                 <MyFooter type='classic' navigation={this.navigation}/>
             </SafeAreaView>
         )
     }
 }
+
+const sty = StyleSheet.create({
+    customView: {
+      width: 140,
+      height: 140,
+    },
+    calloutButton: {
+      width: 'auto',
+      backgroundColor: 'rgba(255,255,255,0.7)',
+      paddingHorizontal: 6,
+      paddingVertical: 6,
+      borderRadius: 12,
+      alignItems: 'center',
+      marginHorizontal: 10,
+      marginVertical: 10,
+    },
+  });

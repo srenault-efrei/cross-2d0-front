@@ -4,9 +4,7 @@ import { Icon } from 'react-native-elements'
 import { Footer, FooterTab, Button, } from 'native-base';
 import { Text } from 'react-native'
 import { View } from 'native-base'
-import styles from '../../../assets/css/footer'
 import PropTypes from 'prop-types'
-
 
 export default class MyFooter extends React.Component {
     constructor(props) {
@@ -20,7 +18,7 @@ export default class MyFooter extends React.Component {
         return (
             <Footer>
                 <FooterTab>
-                <Button onPress={() => this.navigation.navigate('Home')}>
+                <Button vertical onPress={() => this.navigation.navigate('Home')}>
                     <View style={{position: 'relative', bottom: 6}}>
                     <Icon
                     reverse
@@ -32,7 +30,7 @@ export default class MyFooter extends React.Component {
                     </View>
                     <Text style={{position: 'absolute', top:35, color: '#fff'}}>A proximité</Text>
                 </Button>
-                <Button vertical>
+                <Button vertical onPress={() => this.navigation.navigate('Add')}>
                     <View style={{position: 'relative', bottom: 4}}>
                     <Icon
                     reverse

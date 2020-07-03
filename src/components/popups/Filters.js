@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, FlatList, Text } from 'react-native'
-import Dialog, { SlideAnimation, ScaleAnimation, FadeAnimation, DialogContent, DialogTitle, DialogFooter, DialogButton } from 'react-native-popup-dialog'
+import Dialog, { ScaleAnimation, DialogContent, DialogTitle, DialogButton } from 'react-native-popup-dialog'
 import styles from '../../../assets/css/popups/filters'
 import PropTypes from 'prop-types'
 import { CheckBox } from 'react-native-elements'

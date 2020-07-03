@@ -1,10 +1,9 @@
 import React from 'react'
-import { View, SafeAreaView, FlatList, YellowBox } from 'react-native'
+import { View, SafeAreaView, FlatList, YellowBox, KeyboardAvoidingView } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import {CheckBox, Text, Slider } from 'react-native-elements'
 import styles from '../../assets/css/search.js'
-import global from '../../assets/css/global.js'
 import { TextInput, Button } from 'react-native-paper'
 import _ from 'lodash'
 import { Dropdown } from 'react-native-material-dropdown'
@@ -22,7 +21,7 @@ console.warn = message => {
 export default class Search extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { slider: 0}
+    this.state = { slider: 0, checked: false }
     this.navigation = this.props.navigation
     
   }
@@ -48,47 +47,108 @@ export default class Search extends React.Component {
       title: 'Dons association',
 
     },
-  ];
-
-
-  Dropdown = [
-    {
-      value: '',
-    },
-    {
-      value: 'Banana',
-    }, 
-    {
-      value: 'Mango',
-    }, 
-    {
-      value: 'Pear',
-    }
   ]
 
+  componentDidMount = async () => {
+    this.fetchCategories()
+  }
+
+  fetchCategories = async () => {
+    return fetch(`https://trocify.herokuapp.com/api/categories`, {
+      method: 'GET',
+      headers: 
+      new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      })
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        let categories = [ { value: '' } ]
+        const tab = json.data.category
+        tab.map(category => {
+          categories.push( { value: category.title } )
+        })
+        this.setState({ categories })
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
+  categoryHandler = (category) => {
+    switch (category){
+      case 'Alimentation':
+        this.setState({ category: 1 })
+      break
+
+      case 'Textile':
+        this.setState({ category: 2 })
+      break
+
+      case 'Jouet':
+        this.setState({ category: 3 })
+      break
+
+      case 'Informatique':
+        this.setState({ category: 4 })
+      break
+    }
+  }
+
+  reset = () => {
+    this.setState({
+        checked: false,
+        keyword: '',
+        category: '',
+        location: '',
+        slider: 0
+    })
+  }
+
+  search = () => {
+    const {keyword, location, category, isChecked, slider} = this.state
+    let search = {}
+
+    /* Search construct */
+    search.keyword = keyword
+    search.slider = slider
+    search.category = category
+    search.type = isChecked
+    search.location = location
+
+    /* Request */
+    this.navigation.navigate('Home', search)
+    this.reset()
+  }
 
   render() {
   return (
     <SafeAreaView style={styles.bdy}>
-      <MyHeader type='Profile' />
-      <View style={styles.container}>
+      <MyHeader type='backClassic' navigation={this.navigation}/>
+      <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
+              style={styles.bdy}
+      >
+        <View style={styles.container}>
         <TextInput
           mode='outlined'
           label='Mot clé'
-          value={this.state.text}
-          onChangeText={text => this.setState({ text })}
+          value={this.state.keyword}
+          onChangeText={keyword => this.setState({ keyword })}
         />
         <TextInput
           mode='outlined'
           label='Localisation'
-          value={this.state.text}
-          onChangeText={text => this.setState({ text })}
+          value={this.state.location}
+          onChangeText={location => this.setState({ location })}
           style={{marginTop:10}}
         />
         <Dropdown
           label='Catégorie'
-          data={this.Dropdown}
-          onChangeText={(item) => console.log(item)}
+          data={this.state.categories}
+          onChangeText={(category) => this.categoryHandler(category)}
+          value={this.state.category}
         />
         <View style={{marginTop:10}}>
           <FlatList
@@ -109,19 +169,25 @@ export default class Search extends React.Component {
               horizontal={false}
               numColumns={3}
           />
+          </View>
+          <View style={styles.distanceView}>
+            <Text>Distance</Text>
+            <Slider
+              thumbTintColor='rgb(63, 81, 181)'
+              value={this.state.slider}
+              onValueChange={(slider) => this.setState({ slider })}
+            />
+          </View>
+          <View style={styles.buttonsContainer}>
+              <Button icon="rotate-right" mode="contained" labelStyle={styles.resetLabel} style={styles.reset} onPress={() => this.reset()}>
+                  Réinitialiser
+              </Button>
+              <Button icon="magnify" mode="contained" style={styles.search} onPress={() => this.search()}>
+                  Rechercher
+              </Button>
+          </View>
         </View>
-        <View style={styles.distanceView}>
-          <Text>Distance</Text>
-          <Slider
-            thumbTintColor='rgb(63, 81, 181)'
-            value={this.state.slider}
-            onValueChange={(slider) => this.setState({ slider })}
-          />
-        </View>
-        <Button icon="camera" mode="contained" onPress={() => console.log('Pressed')} color='rgb(63, 81, 181)'>
-          Rechercher
-        </Button>
-      </View>
+      </KeyboardAvoidingView>
       <MyFooter type='classic' navigation={this.navigation}/>
     </SafeAreaView>
   )

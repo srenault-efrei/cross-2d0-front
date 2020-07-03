@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, FlatList } from 'react-native'
 import { List } from 'react-native-paper';
-import Dialog, { ScaleAnimation, DialogContent, DialogTitle, DialogFooter, DialogButton } from 'react-native-popup-dialog'
+import Dialog, { ScaleAnimation, DialogContent, DialogTitle, DialogButton } from 'react-native-popup-dialog'
 import styles from '../../../assets/css/popups/notifications'
 import PropTypes from 'prop-types'
 
