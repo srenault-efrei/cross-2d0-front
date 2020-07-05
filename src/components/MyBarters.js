@@ -75,7 +75,7 @@ async componentWillUnmount() {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => this.redirect('ProductDetails', { product: item })}>
+              <TouchableOpacity onPress={() => this.redirect('DetailTickets', { product: item })}>
                 <Card>
                   <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Image

@@ -4,7 +4,8 @@ import {
   View,
   TouchableOpacity,
   Image,
-  SafeAreaView
+  SafeAreaView,
+  AsyncStorage
 } from 'react-native'
 import styles from '../../assets/styles/profilCusto'
 import MyHeader from './headers/Header'
@@ -17,33 +18,44 @@ export default class Profil extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      typeUser: "customer",
       user: {},
       tickets: {},
       associations: {},
       histories: {},
       rank: {},
-      token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IlN0ZXZlbiIsImlhdCI6MTU5MjQxODAzOX0.lyTW0f0cJrMoiqc4yUn8xQe9Ap865_KMC_2CK-wDeoU"
+      token: "",
+      id: -1
     }
   }
 
   async componentDidMount() {
+    await this.setDataStorage()
+    this.fetchUser()
+    this.fetchAllAsso()
     this.unsubscribe()
-
   }
 
+  async setDataStorage() {
+    let data = await AsyncStorage.getItem('data')
+    data = JSON.parse(data)
+
+    this.setState({
+      token: data.meta.token,
+    })
+    data.customer ? this.setState({ typeUser: "customer",id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
+  }
 
   unsubscribe = () => {
-    this.props.navigation.addListener('focus', () => {
-      this.fetchUser();
+    this.props.navigation.addListener('focus',async () => {
+      await this.setDataStorage()
+      this.fetchUser()
       this.fetchAllAsso();
-
     })
   }
 
-
   async componentWillUnmount() {
     this.unsubscribe();
+
   }
 
   fetchUser = async () => {
@@ -57,10 +69,16 @@ export default class Profil extends Component {
     };
 
     try {
-      const response = await fetch("https://trocify.herokuapp.com/api/customers/1f38ec56-7757-42d7-8f13-cca1df2f780c", settings);
+      const response = await fetch(`https://trocify.herokuapp.com/api/${this.state.typeUser}s/${this.state.id}`, settings);
       const json = await response.json();
-      this.setState({ user: json.data.customer, tickets: json.data.customer["tickets"], rank: json.data.customer["rank"] })
-      // console.log(this.state.user)
+
+      if (this.state.typeUser === 'customer') {
+        this.setState({ tickets: json.data.customer["tickets"], user: json.data.customer, rank: json.data.customer["rank"] })
+
+      } else {
+        this.setState({ user: json.data.association })
+      }
+      // console.log(json)
     } catch (e) {
       console.log(e)
     }
@@ -90,9 +108,9 @@ export default class Profil extends Component {
 
   render() {
     const { navigation } = this.props
-    const { user, rank, associations, tickets, typeUser } = this.state
+    const { user, rank, associations, tickets, typeUser, token} = this.state
     let avatar = this.state.user.avatarFile === null ? "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg" : this.state.user.avatarFile
-    
+
     return (
       <SafeAreaView style={styles.safeArea}>
 
@@ -123,7 +141,7 @@ export default class Profil extends Component {
               <Text>4/5</Text> */}
             </View>
             : <View style={styles.infosProfile}>
-              <Text> {user.name} </Text>
+              <Text style={{ fontSize: 20 }} > {user.name} </Text>
               <Text></Text>
             </View>
           }
@@ -135,7 +153,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/yen.png')}
               />
               <TouchableOpacity
-                onPress={() => navigation.navigate('MyBarters', {tickets: tickets})}
+                onPress={() => navigation.navigate('MyBarters', { tickets: tickets })}
               >
                 <Text>MES TROCS</Text>
               </TouchableOpacity>
@@ -148,7 +166,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/gift.png')}
               />
               <TouchableOpacity
-               onPress={() => navigation.navigate('MyDonations', {tickets: tickets})}
+                onPress={() => navigation.navigate('MyDonations', { tickets: tickets })}
               >
                 <Text>MES DONS</Text>
               </TouchableOpacity>
@@ -161,7 +179,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/cup.png')}
               />
               <TouchableOpacity
-              onPress={() => navigation.navigate('Rank', { user: user})}
+                onPress={() => navigation.navigate('Rank', { user: user, token: token } )}
               >
                 <Text>MON RANK</Text>
               </TouchableOpacity>
@@ -174,7 +192,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/clock.png')}
               />
               <TouchableOpacity
-                onPress={() => navigation.navigate('History')}
+                onPress={() => navigation.navigate('History',{ tickets: tickets })}
               >
                 <Text>HISTORIQUE</Text>
               </TouchableOpacity>
@@ -184,7 +202,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/gift.png')}
               />
               <TouchableOpacity
-                onPress={() => navigation.navigate('History')}
+                onPress={() => navigation.navigate('History',{ tickets: tickets })}
               >
                 <Text>HISTORIQUE DONS</Text>
               </TouchableOpacity>
@@ -197,7 +215,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/relationship.png')}
               />
               <TouchableOpacity
-                onPress={() => navigation.navigate('Associations', { associations: associations })}
+                onPress={() => navigation.navigate('Associations', {associations: associations })}
               >
                 <Text>LES ASSOCIATIONS</Text>
               </TouchableOpacity>
@@ -215,7 +233,10 @@ export default class Profil extends Component {
         </View>
 
         {typeUser === 'customer' ?
-          <MyFooter type='classic' navigation={navigation} /> : <MyFooter type='Association' navigation={navigation} />
+          <MyFooter type='classic' navigation={navigation} /> : <View></View>
+        }
+          {typeUser === 'association' ?
+          <MyFooter type='association' navigation={navigation} /> : <View></View>
         }
       </SafeAreaView >
     )

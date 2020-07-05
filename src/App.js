@@ -20,6 +20,8 @@ import EditProfile from './components/EditProfil'
 import Rank from './components/Rank'
 import MyBarters from './components/MyBarters'
 import MyDonations from './components/MyDonations'
+import DetailTickets from './components/DetailTickets'
+import EditTickets from './components/EditTickets'
 
 
 const Drawer = createDrawerNavigator()
@@ -44,6 +46,8 @@ function App() {
         <Drawer.Screen name="Rank" component={Rank} />
         <Drawer.Screen name="MyBarters" component={MyBarters} />
         <Drawer.Screen name="MyDonations" component={MyDonations} />
+        <Drawer.Screen name="DetailTickets" component={DetailTickets} />
+        <Drawer.Screen name="EditTickets" component={EditTickets} />
 
 
 
