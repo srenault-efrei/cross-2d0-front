@@ -7,7 +7,7 @@ import global from '../../../assets/css/global'
 import PropTypes from 'prop-types'
 import Notifications from '../popups/Notifications'
 import Filters from '../popups/Filters'
-import { Searchbar } from 'react-native-paper'
+import { Searchbar, Button } from 'react-native-paper'
 
 export default class MyHeader extends React.Component {
     constructor(props) {
@@ -68,7 +68,7 @@ export default class MyHeader extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => this.navigation.navigate('Search')}
+              onPress={() => this.showSearchBar()}
             >
             <Icon
               reverse
@@ -104,7 +104,7 @@ export default class MyHeader extends React.Component {
           <View style={styles.horizontalList}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => this.navigation.navigate('Search')}
+              onPress={() => this.showFilters()}
             >
               <Icon
                 reverse
@@ -116,7 +116,7 @@ export default class MyHeader extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => this.navigation.navigate('Search')}
+              onPress={() => this.showSearchBar()}
             >
               <Icon
                 reverse
@@ -158,7 +158,7 @@ export default class MyHeader extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => this.navigation.navigate('Search')}
+              onPress={() => this.navigation.navigate('Map')}
             >
             <Icon
               reverse
@@ -295,6 +295,9 @@ export default class MyHeader extends React.Component {
           onChangeText={text => this.search(text)}
           clearIcon={() => <Icon name='ios-close' type='ionicon' onPress={() => console.log('clear')}/> }
         />
+          <Button icon="magnify" mode="contained" style={{backgroundColor: 'rgb(63, 81, 181)'}} onPress={() => this.navigation.navigate('Search')}>
+            Recherche avancée
+          </Button>
         </View>
       </View>
     )
@@ -442,4 +445,4 @@ export default class MyHeader extends React.Component {
     }
 }
 
-MyHeader.propTypes = { type: PropTypes.string.isRequired, navigation: PropTypes.object.isRequired }
+MyHeader.propTypes = { type: PropTypes.string.isRequired }

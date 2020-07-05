@@ -36,14 +36,29 @@ export default class Product extends React.Component {
         }
         this.navigation = this.props.navigation
     }
-
+    
     componentDidMount() {
         this.checkParams()
         this.getMoment()
     }
 
-    componentWillUnmount(){
-        this.setState({})
+    /*   async setDataStorage() {
+    let user = await AsyncStorage.getItem('user')
+    let token = await AsyncStorage.getItem('token')
+    if (!user) {
+      this.props.navigation.navigate("SignIn")
+    } 
+    else if (user && token) {
+        this.setState({ user, token })
+    }
+    } */
+
+    componentWillReceiveProps() {
+        if (this.props.route.params){
+            console.log(this.props.route.params)
+          } else {
+            console.log(this.props.route.params)
+        }
     }
 
     getMoment(){
@@ -107,6 +122,14 @@ export default class Product extends React.Component {
             visible: false
         }
     }
+
+    /*   footerType = () => {
+    if (this.state.user.type === 'customer') {
+      return <MyFooter type='classic' navigation={this.navigation}/>
+    } else {
+      return <MyFooter type='Association' navigation={this.navigation}/>
+    }
+    } */
 
     render() {
         const {product} = this.state

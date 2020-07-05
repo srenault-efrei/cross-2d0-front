@@ -23,7 +23,6 @@ import MyDonations from './components/MyDonations'
 import Add from './components/Add'
 import Product from './components/ProductDetails'
 import Map from './components/Map'
-import Callouts from './components/Callout'
 
 const Drawer = createDrawerNavigator()
 function App() {
@@ -50,7 +49,6 @@ function App() {
         <Drawer.Screen name="Add" component={Add} />
         <Drawer.Screen name="Map" component={Map} />
         <Drawer.Screen name="ProductDetails" component={Product} />
-        <Drawer.Screen name="Callout" component={Callouts} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

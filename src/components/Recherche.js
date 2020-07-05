@@ -53,6 +53,17 @@ export default class Search extends React.Component {
     this.fetchCategories()
   }
 
+  /*   async setDataStorage() {
+    let user = await AsyncStorage.getItem('user')
+    let token = await AsyncStorage.getItem('token')
+    if (!user) {
+      this.props.navigation.navigate("SignIn")
+    } 
+    else if (user && token) {
+        this.setState({ user, token })
+    }
+  } */
+
   fetchCategories = async () => {
     return fetch(`https://trocify.herokuapp.com/api/categories`, {
       method: 'GET',
@@ -118,9 +129,17 @@ export default class Search extends React.Component {
     search.location = location
 
     /* Request */
-    this.navigation.navigate('Home', search)
+    this.navigation.navigate('Home', {obj: search})
     this.reset()
   }
+
+  /*   footerType = () => {
+    if (this.state.user.type === 'customer') {
+      return <MyFooter type='classic' navigation={this.navigation}/>
+    } else {
+      return <MyFooter type='Association' navigation={this.navigation}/>
+    }
+  } */
 
   render() {
   return (

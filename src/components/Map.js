@@ -1,16 +1,19 @@
 import React from 'react'
-import { View, SafeAreaView, Text, Image, StyleSheet } from 'react-native'
+import { View, SafeAreaView, Image, YellowBox } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/map.js'
-import MapView, {
-    Marker,
-    Callout,
-    CalloutSubview,
-    ProviderPropType,
-  } from 'react-native-maps'
-import CustomCallout from './callout/CustomCallout'
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper'
+import MapView, { Marker, Callout } from 'react-native-maps'
+import { Card } from 'react-native-paper'
+import _ from 'lodash'
+
+YellowBox.ignoreWarnings(['componentWillReceiveProps'])
+const _console = _.clone(console)
+console.warn = message => {
+  if (message.indexOf('componentWillReceiveProps') <= -1) {
+  _console.warn(message);
+  } 
+}
 
 export default class Map extends React.Component {
     constructor(props) {
@@ -53,7 +56,8 @@ export default class Map extends React.Component {
                     description: 'En plein Paris.',
                     image: 'https://images-na.ssl-images-amazon.com/images/I/61jYuX2sokL._AC_SL1500_.jpg'
                 }
-            ]
+            ],
+            data: []
         }
         this.navigation = this.props.navigation
         
@@ -69,7 +73,7 @@ export default class Map extends React.Component {
         this.fetchTrocs()
       }
 
-    async setDataStorage() {
+/*     async setDataStorage() {
         let user = await AsyncStorage.getItem('user')
         let token = await AsyncStorage.getItem('token')
         if (!user) {
@@ -78,7 +82,7 @@ export default class Map extends React.Component {
         else if (user && token) {
             this.setState({ user, token })
         }
-    }
+    } */
 
     fetchTrocs = async () => {
         const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IkZhYmlhbiIsImlhdCI6MTU5Mjc2NTQ5NX0.PM01TGuPKYB3AW2mEJYRrjna9LhggRp1w-oZsLx-8ZA'
@@ -94,16 +98,14 @@ export default class Map extends React.Component {
           .then((response) => response.json())
           .then((json) => {
             this.setState({
-              trocs: json.data.ticket
+              data: json.data.ticket
             })
-            console.log(this.state.trocs)
           })
           .catch((error) => {
             console.error(error);
           });
       }
 
-    
     mapStyle=[
         {"elementType": "geometry", "stylers": [{"color": "#242f3e"}]},
         {"elementType": "labels.text.fill","stylers": [{"color": "#746855"}]},
@@ -123,9 +125,17 @@ export default class Map extends React.Component {
         {"featureType": "water","elementType": "geometry","stylers": [{"color": "#17263c"}]},
         {"featureType": "water","elementType": "labels.text.fill","stylers": [{"color": "#515c6d"}]},
         {"featureType": "water","elementType": "labels.text.stroke","stylers": [{"color": "#17263c"}]}]
-    
+
+    /*   footerType = () => {
+    if (this.state.user.type === 'customer') {
+      return <MyFooter type='classic' navigation={this.navigation}/>
+    } else {
+      return <MyFooter type='Association' navigation={this.navigation}/>
+    }
+    } */
 
     render() {
+        const {data} = this.state
         return (
             <SafeAreaView style={styles.bdy}>
                 <MyHeader type='back' navigation={this.navigation}/>
@@ -135,40 +145,31 @@ export default class Map extends React.Component {
                         region={this.state.region}
                         customMapStyle={this.mapStyle}
                     >
-                        {this.state.markers.map(marker => (
+                        {data.map(marker => (
                             <Marker
                             key={marker.id}
                             draggable
-                            coordinate={marker.latlng}
-                            onDragEnd={(e) => alert(JSON.stringify(e.nativeEvent.coordinate))}
+                            coordinate={
+                                {
+                                    latitude: marker.user.latitude,
+                                    longitude: marker.user.longitude
+                                }
+                            }
+                            onDragEnd={(e) => console.log('closed')}
                             title={marker.title}
                             description={marker.description}
                             >
                                 <View style={styles.markView}>
                                     <Image
                                         style={styles.tinyLogo}
-                                        source={{uri: marker.image}}
+                                        source={{uri: marker.imagesFiles[0]}}
                                     />
                                 </View>
-                            <Callout
-                            >
-                                <CustomCallout>
-                                    <Card>
-                                        <Card.Title title="Card Title" subtitle="Card Subtitle"/>
-                                        <Card.Content>
-                                        <Title>Card title</Title>
-                                        <Paragraph>Card content</Paragraph>
-                                        </Card.Content>
-                                        <Image
-                                        style={styles.tinyLogo}
-                                        source={{uri: marker.image}}
-                                    />
-                                        <Card.Actions>
-                                        <Button>Cancel</Button>
-                                        <Button>Ok</Button>
-                                        </Card.Actions>
-                                    </Card>
-                                </CustomCallout>
+                            <Callout style={{minWidth: 300, minHeight: 50}} onPress={() => this.navigation.navigate('ProductDetails', {product: marker})}>
+                                <Card>
+                                    <Card.Title title={marker.title} subtitle={marker.description} />
+                                    <Card.Cover style={{height: 100, margin: 5}} source={{ uri: marker.imagesFiles[0] }} />
+                                </Card>
                             </Callout>
                             </Marker>
                         ))}
@@ -179,20 +180,3 @@ export default class Map extends React.Component {
         )
     }
 }
-
-const sty = StyleSheet.create({
-    customView: {
-      width: 140,
-      height: 140,
-    },
-    calloutButton: {
-      width: 'auto',
-      backgroundColor: 'rgba(255,255,255,0.7)',
-      paddingHorizontal: 6,
-      paddingVertical: 6,
-      borderRadius: 12,
-      alignItems: 'center',
-      marginHorizontal: 10,
-      marginVertical: 10,
-    },
-  });

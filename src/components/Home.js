@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, YellowBox  } from 'react-native'
+import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, YellowBox, KeyboardAvoidingView } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/home.js'
@@ -40,11 +40,11 @@ export default class Home extends React.Component {
 
   /* Handlers */
   getTickets = () => {
-    if (this.props.route.params){
+    if (this.props.route){
       /* this.search(this.props.route.params) */
-      console.log(this.props.route.params)
+      console.log(this.props.route)
     } else {
-      console.log(this.props.route.params)
+      console.log('nothing')
     }
   }
 
@@ -61,7 +61,7 @@ export default class Home extends React.Component {
   }
   /*  */
 
-  async setDataStorage() {
+/*   async setDataStorage() {
     let user = await AsyncStorage.getItem('user')
     let token = await AsyncStorage.getItem('token')
     if (!user) {
@@ -70,7 +70,7 @@ export default class Home extends React.Component {
     else if (user && token) {
         this.setState({ user, token })
     }
-  }
+  } */
 
   redirect(page, data){
     if (data !=  ''){
@@ -120,10 +120,22 @@ export default class Home extends React.Component {
       });
   }
 
+/*   footerType = () => {
+    if (this.state.user.type === 'customer') {
+      return <MyFooter type='classic' navigation={this.navigation}/>
+    } else {
+      return <MyFooter type='Association' navigation={this.navigation}/>
+    }
+  } */
+
   render() {
   return (
     <SafeAreaView style={styles.bdy}>
       <MyHeader type='classic' navigation={this.navigation} search={this.searchHandler}/>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.bdy}
+      >
       <View style={styles.container}>
         <FlatList
           data={this.state.data}
@@ -148,6 +160,7 @@ export default class Home extends React.Component {
           numColumns={2}
         />
       </View>
+      </KeyboardAvoidingView>
       <MyFooter type='classic' navigation={this.navigation}/>
     </SafeAreaView>
   )
