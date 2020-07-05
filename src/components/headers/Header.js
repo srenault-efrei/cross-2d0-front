@@ -73,6 +73,24 @@ export default class MyHeader extends React.Component {
       </TouchableOpacity>
     </View>
 
+
+rightContentEditTicket =
+
+<View style={styles.horizontalList}>
+  <TouchableOpacity
+    style={styles.button}
+    onPress={() => this.navigation.navigate('EditTickets',{ ticket: this.props.data })}
+  >
+    <Icon
+      reverse
+      name='edit'
+      type='material'
+      color='rgb(63, 81, 181)'
+      size={25}
+    />
+  </TouchableOpacity>
+</View>
+
 rrightContentAsso =
 <View style={styles.horizontalList}>
 
@@ -158,6 +176,17 @@ leftAssoContent =
       />
     </View>
 
+profileModification =
+<View>
+  <Header
+    leftComponent={this.leftAssoContent}
+    rightComponent={this.rightContentEditTicket}
+    containerStyle={{
+      backgroundColor: 'rgb(63, 81, 181)',
+    }}
+  />
+</View>
+
 
 profileAssoHeader =
 <View>
@@ -193,6 +222,8 @@ profileAssoHeader =
       HeaderComponent = this.profileAssoHeader
     }else if ( type == 'Return'){
       HeaderComponent = this.returnHeader
+    }else if ( type == 'Return-Pencil'){
+      HeaderComponent = this.profileModification
     }
     return (
       HeaderComponent

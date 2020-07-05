@@ -141,7 +141,7 @@ export default class Profil extends Component {
               <Text>4/5</Text> */}
             </View>
             : <View style={styles.infosProfile}>
-              <Text> {user.name} </Text>
+              <Text style={{ fontSize: 20 }} > {user.name} </Text>
               <Text></Text>
             </View>
           }
@@ -192,7 +192,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/clock.png')}
               />
               <TouchableOpacity
-                onPress={() => navigation.navigate('History')}
+                onPress={() => navigation.navigate('History',{ tickets: tickets })}
               >
                 <Text>HISTORIQUE</Text>
               </TouchableOpacity>
@@ -202,7 +202,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/gift.png')}
               />
               <TouchableOpacity
-                onPress={() => navigation.navigate('History')}
+                onPress={() => navigation.navigate('History',{ tickets: tickets })}
               >
                 <Text>HISTORIQUE DONS</Text>
               </TouchableOpacity>

@@ -127,7 +127,7 @@ export default class Rank extends Component {
                                 </View>
 
                             </View>
-                            : <View></View>
+                            : <View key={idCusto}></View>
 
                     ))}
 
@@ -158,7 +158,7 @@ export default class Rank extends Component {
                                 </View>
 
                             </View>
-                            : <View></View>
+                            : <View key={idCustoEnd} ></View>
 
                     ))}
 

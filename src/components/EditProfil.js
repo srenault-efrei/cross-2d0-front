@@ -37,6 +37,7 @@ export default class EditProfile extends React.Component {
   async componentDidMount() {
     await this.setDataStorage()
     this.fetchUser();
+    this.unsubscribe()
 
   }
 
@@ -51,7 +52,8 @@ export default class EditProfile extends React.Component {
   }
 
   unsubscribe = () => {
-    this.props.navigation.addListener('focus', () => {
+    this.props.navigation.addListener('focus', async() => {
+      await this.setDataStorage()
       this.fetchUser()
     })
   }
@@ -285,9 +287,6 @@ export default class EditProfile extends React.Component {
         avatarFile: pickerResult.uri
       })
     }
-
-
-
   }
 
   render() {
