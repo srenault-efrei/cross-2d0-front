@@ -215,7 +215,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/relationship.png')}
               />
               <TouchableOpacity
-                onPress={() => navigation.navigate('Associations', { associations: associations })}
+                onPress={() => navigation.navigate('Associations', {associations: associations })}
               >
                 <Text>LES ASSOCIATIONS</Text>
               </TouchableOpacity>
