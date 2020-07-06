@@ -22,7 +22,7 @@ export default class SignUpAssociation extends Component {
             passwordConfirmation: '',
             longitude: 0,
             latitude: 0,
-            filename: '',
+            filePath: '',
             error: ''
         };
     }
@@ -55,7 +55,7 @@ export default class SignUpAssociation extends Component {
 
         if (!pickerResult.cancelled) {
             this.setState({
-                filename: pickerResult.uri
+                filePath: pickerResult.uri
             });
         } else return;
     }
@@ -74,6 +74,8 @@ export default class SignUpAssociation extends Component {
                     email: this.state.email.trim(),
                     password: this.state.password.trim(),
                     passwordConfirmation: this.state.passwordConfirmation.trim(),
+                    filePath: this.state.filePath,
+                    description: ' ',
                     longitude: this.state.longitude,
                     latitude: this.state.latitude
                 })
@@ -150,7 +152,7 @@ export default class SignUpAssociation extends Component {
                                 style={[styles.icon, { color: 'black', paddingHorizontal: 5 }]}
                             />
                             <Text style={styles.textImageButton} numberOfLines={1} onPress={() => this.uploadImage()}>{
-                                this.state.filename ? this.state.filename : 'Importer une image...'
+                                this.state.filePath ? this.state.filePath : 'Importer une image...'
                             }</Text>
                         </View>
                         <View style={styles.button}>
