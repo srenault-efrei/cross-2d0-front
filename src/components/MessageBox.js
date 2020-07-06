@@ -33,6 +33,7 @@ export default class MessageBox extends Component {
         if (this.props.route && this.props.route.params && this.props.route.params.interlocutor) {
             this.fetchConv(this.props.route.params.interlocutor)
         }
+        console.log(this.state.type)
     }
 
     componentDidUpdate() {
@@ -204,7 +205,7 @@ export default class MessageBox extends Component {
                         />
                     </TouchableOpacity>
                 </View>
-                <MyFooter type={this.state.type || 'classic' } navigation={navigation} />
+              <MyFooter type='association' navigation={navigation}  />
             </SafeAreaView>
         )
     }

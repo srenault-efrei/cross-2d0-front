@@ -254,7 +254,7 @@ export default class Product extends React.Component {
                 <View style={styles.container}>
                     <View style={styles.slider}>
                         <SliderBox
-                            images={this.state.images}
+                            images={ product.imagesFiles.length != 0 ? product.imagesFiles : this.state.images}
                             sliderBoxHeight={200}
                             onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
                             dotColor="#fff"

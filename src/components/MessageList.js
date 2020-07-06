@@ -159,7 +159,7 @@ export default class MessageList extends Component {
           
             {this.getRenderContent(messages)}
                 {/* Footer  */}
-                <MyFooter type='classic' navigation={navigation}/>
+                <MyFooter type='association' navigation={navigation}  />
 
             </SafeAreaView>
         )
