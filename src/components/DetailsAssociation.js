@@ -51,8 +51,8 @@ export default class DetailAssociation extends Component {
     }
 
     sendProposition = async () => {
-        console.log(this.state.token)
-        console.log(this.state.user.id)
+        // console.log(this.state.token)
+        // console.log(this.state.user.id)
         try {
             const response = await fetch(`https://trocify.herokuapp.com/api/users/${this.state.user.id}/messages`, {
 
@@ -69,9 +69,9 @@ export default class DetailAssociation extends Component {
 
             });
             const json = await response.json();
-            console.log(json)
+            // console.log(json)
             if (json.err === undefined) {
-                this.props.navigation.navigate("Profil")
+                this.props.navigation.navigate("Messages")
             }
         } catch (e) {
             console.log(e)

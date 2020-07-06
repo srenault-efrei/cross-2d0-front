@@ -72,7 +72,7 @@ export default class Home extends React.Component {
       let data = JSON.parse(user)
       this.setState({ user: data, token: data.meta.token, })
       data.customer ? this.setState({ typeUser: "customer",id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
-      console.log(this.state.user)
+      // console.log(this.state.user)
     }
   }
 

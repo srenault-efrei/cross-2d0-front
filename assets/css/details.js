@@ -58,4 +58,29 @@ export default StyleSheet.create({
         marginBottom: 20,
         marginHorizontal: 20
     },
+    tinyLogo: {
+        width: 40,
+        height: 40,
+        borderRadius: 100
+    },
+    markView: {
+        borderWidth: 3,
+        borderRadius: 100,
+        borderColor: '#fff'
+    },
+    calloutButton: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        width: 100,
+        height:40,
+        paddingHorizontal: 6,
+        paddingVertical: 6,
+        borderRadius: 12,
+        borderWidth: 0.2,
+        borderColor: 'rgb(63, 81, 181)',
+        alignItems: 'center',
+        margin: 5,
+        alignSelf: 'center'
+    },
   });

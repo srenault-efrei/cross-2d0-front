@@ -28,6 +28,7 @@ import Add from './components/Add'
 import Product from './components/ProductDetails'
 import Map from './components/Map'
 
+console.disableYellowBox = true;
 const Drawer = createDrawerNavigator()
 function App() {
   return (

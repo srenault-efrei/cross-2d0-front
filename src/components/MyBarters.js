@@ -85,7 +85,7 @@ export default class MyBarters extends React.Component {
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => this.redirect('ProductDetails', { product: item, isEdit:true })}>
-                {console.log(item)}
+                {/* {console.log(item)} */}
                 <Card>
                   <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Image

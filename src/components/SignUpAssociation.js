@@ -35,7 +35,7 @@ export default class SignUpAssociation extends Component {
         navigator.geolocation.getCurrentPosition(
             position => {
                 this.setState({ longitude: position.coords.longitude, latitude: position.coords.latitude });
-                console.log(`Geolocation data - longitude : ${position.coords.longitude}, latitude : ${position.coords.latitude}`);
+                // console.log(`Geolocation data - longitude : ${position.coords.longitude}, latitude : ${position.coords.latitude}`);
             },
             error => alert(error.message),
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
@@ -51,7 +51,7 @@ export default class SignUpAssociation extends Component {
         }
 
         const pickerResult = await ImagePicker.launchImageLibraryAsync();
-        console.log(pickerResult);
+        // console.log(pickerResult);
 
         if (!pickerResult.cancelled) {
             this.setState({
@@ -85,7 +85,7 @@ export default class SignUpAssociation extends Component {
                 if (json.err) {
                     this.setState({ error: json.err.description });
                 } else {
-                    console.log(json.data);
+                    // console.log(json.data);
                     await this._storeData(json.data);
                     this.props.navigation.navigate('Confidentiality');
                 }

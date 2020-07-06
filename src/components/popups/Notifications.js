@@ -59,7 +59,7 @@ export default class Notifications extends React.Component {
       style={{overflow: 'scroll'}}
       renderItem={({ item }) => (
         <List.Item 
-          onPress={() => console.log('item pressed!')}
+          // onPress={() => console.log('item pressed!')}
           title={item.sender.firstname + ' ' + item.sender.lastname}
           descriptionNumberOfLines={1}
           description={item.content}

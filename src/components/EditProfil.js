@@ -239,7 +239,7 @@ export default class EditProfile extends React.Component {
 
         });
         const json = await response.json();
-        console.log(json)
+        // console.log(json)
         if (json.err === undefined) {
           alert("Modification réussie.")
           this.props.navigation.navigate("Profil")

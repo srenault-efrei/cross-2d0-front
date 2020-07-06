@@ -185,7 +185,7 @@ export default class Map extends React.Component {
                                         longitude: marker.user.longitude
                                     }
                                 }
-                                onDragEnd={(e) => console.log('closed')}
+                                // onDragEnd={(e) => console.log('closed')}
                                 title={marker.title}
                                 description={marker.description}
                             >

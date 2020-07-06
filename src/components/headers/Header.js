@@ -310,7 +310,7 @@ export default class MyHeader extends React.Component {
         <Searchbar
           placeholder="Type Here..."
           onChangeText={text => this.search(text)}
-          clearIcon={() => <Icon name='ios-close' type='ionicon' onPress={() => console.log('clear')}/> }
+          clearIcon={() => <Icon name='ios-close' type='ionicon' /> }
         />
           <Button icon="magnify" mode="contained" style={{backgroundColor: 'rgb(63, 81, 181)'}} onPress={() => this.navigation.navigate('Search')}>
             Recherche avancée
