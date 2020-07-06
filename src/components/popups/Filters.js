@@ -11,10 +11,8 @@ export default class Filters extends React.Component {
     super(props)
     this.state = { 
       visible: false, 
-      tab: [{value: false}, {value: false}, {value: false}, {value: false}],
       id: 0,
-      checked: false,
-      name: '' 
+      filter: '' 
     }
     this.navigation = this.props.navigation
     this.handler = this.props.handler
@@ -54,7 +52,7 @@ export default class Filters extends React.Component {
 
     items[id-1] = check
 
-    this.setState({tab: items})
+    this.setState({tab: items, filter: item.name})
   }
 
   reset = () => {
@@ -74,7 +72,7 @@ export default class Filters extends React.Component {
                     checkedIcon='dot-circle-o'
                     uncheckedIcon='circle-o'
                     checked={this.state.id === item.id ? true : false}
-                    onPress={() => this.setState({id: item.id})}
+                    onPress={() => this.setState({id: item.id, filter: item.name})}
                 />
                 <Text style={styles.filterText}>{item.title}</Text>
             </View>
@@ -84,6 +82,10 @@ export default class Filters extends React.Component {
         numColumns={2}
     />
     )
+  }
+
+  search = (filter) => {
+    console.log(filter)
   }
 
   render() {
@@ -103,10 +105,14 @@ export default class Filters extends React.Component {
               useNativeDriver: true,
             })}
             footer={
-              <DialogContent>
+              <DialogContent style={{display: 'flex', flexDirection: 'row', justifyContent:'space-between'}}>
                 <DialogButton
                   text="RÉINITIALISER"
                   onPress={() => this.reset()}
+                />
+                <DialogButton
+                  text="APPLIQUER"
+                  onPress={() => this.search(this.state.filter)}
                 />
               </DialogContent>
             }
