@@ -87,7 +87,7 @@ export default class MyBarters extends React.Component {
               <TouchableOpacity onPress={() => this.redirect('ProductDetails', { product: item, isEdit:true })}>
                 {/* {console.log(item)} */}
                 <Card>
-                  <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: 100,maxHeight:110}}>
                     <Image
                       style={{ width: 100, height: 100, borderRadius: 50 }}
                       resizeMode="cover"

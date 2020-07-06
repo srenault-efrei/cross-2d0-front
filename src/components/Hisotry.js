@@ -103,7 +103,7 @@ export default class History extends React.Component {
             renderItem={({ item }) => (
               <TouchableOpacity>
                 <Card>
-                  <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', maxWidth: 100,maxHeight:110}}>
                     <Image
                       style={{ width: 100, height: 100, borderRadius: 50 }}
                       resizeMode="cover"
