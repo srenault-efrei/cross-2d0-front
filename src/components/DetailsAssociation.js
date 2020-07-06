@@ -4,8 +4,6 @@ import {
     View,
     TouchableOpacity,
     SafeAreaView
-
-
 } from 'react-native'
 import styles from '../../assets/styles/profilCusto'
 import MyHeader from './headers/Header'
@@ -34,7 +32,7 @@ export default class DetailAssociation extends Component {
     }
 
    async componentWillUnmount() {
-        this.unsubscribe();
+        this.unsubscribe()
       }
 
     render() {

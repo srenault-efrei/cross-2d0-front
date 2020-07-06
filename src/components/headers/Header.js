@@ -383,6 +383,9 @@ export default class MyHeader extends React.Component {
             height: 60
           }}
         />
+        <View style={global.hidden}>
+          <Notifications visible={this.state.isVisibleNotifs} handler={this.handlerNotifs.bind(this)} />
+        </View>
       </View>
     )
 
@@ -419,15 +422,20 @@ export default class MyHeader extends React.Component {
       let HeaderComponent
       if(type === 'classic'){
         HeaderComponent =  this.classicHeader()
-      } else if(type === 'backClassic'){
+      }
+      else if(type === 'backClassic'){
         HeaderComponent =  this.classicBackHeader()
-      } else if (type === 'bell') {
+      }
+      else if (type === 'bell') {
         HeaderComponent =  this.bellHeader()
-      } else if (type === 'back') {
+      }
+      else if (type === 'back') {
         HeaderComponent =  this.backHeader()
-      } else if (type === 'backBell') {
+      }
+      else if (type === 'backBell') {
         HeaderComponent =  this.backBellHeader()
-      } else if (type === 'add') {
+      }
+      else if (type === 'add') {
         HeaderComponent =  this.addHeader()
       }
       else if (type === 'Profile') {
