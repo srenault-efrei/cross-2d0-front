@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, YellowBox, KeyboardAvoidingView } from 'react-native'
+import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, YellowBox, KeyboardAvoidingView, AsyncStorage } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/home.js'
@@ -30,8 +30,8 @@ export default class Home extends React.Component {
     }
   }
 
-
-  async componentDidMount() {
+  componentDidMount = async () => {
+    await this.setDataStorage()
     this.fetchTrocs()
     this.unsubscribe()
 
@@ -62,16 +62,18 @@ export default class Home extends React.Component {
   }
   /*  */
 
-  /*   async setDataStorage() {
-      let user = await AsyncStorage.getItem('user')
-      let token = await AsyncStorage.getItem('token')
-      if (!user) {
-        this.props.navigation.navigate("SignIn")
-      } 
-      else if (user && token) {
-          this.setState({ user, token })
-      }
-    } */
+  async setDataStorage() {
+    let user = await AsyncStorage.getItem('data')
+    if (!user) {
+      this.props.navigation.navigate("SignIn")
+    } 
+    else {
+      let data = JSON.parse(user)
+      this.setState({ user: data, token: data.meta.token, })
+      data.customer ? this.setState({ typeUser: "customer",id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
+      console.log(this.state.user)
+    }
+  }
 
   redirect(page, data) {
     if (data != '') {
@@ -99,7 +101,7 @@ export default class Home extends React.Component {
   }
 
   fetchTrocs = async () => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IkZhYmlhbiIsImlhdCI6MTU5Mjc2NTQ5NX0.PM01TGuPKYB3AW2mEJYRrjna9LhggRp1w-oZsLx-8ZA'
+    const {token} = this.state
     return fetch(`https://trocify.herokuapp.com/api/tickets`, {
       method: 'GET',
       headers:
@@ -118,16 +120,16 @@ export default class Home extends React.Component {
       })
       .catch((error) => {
         console.error(error);
-      });
+      })
   }
 
-  /*   footerType = () => {
-      if (this.state.user.type === 'customer') {
-        return <MyFooter type='classic' navigation={this.navigation}/>
-      } else {
-        return <MyFooter type='Association' navigation={this.navigation}/>
-      }
-    } */
+  footerType = () => {
+    if (this.state.typeUser === 'customer') {
+      return <MyFooter type ='classic' navigation={this.navigation}/>
+    } else {
+      return <MyFooter type ='association' navigation={this.navigation}/>
+    }
+  }
 
   render() {
     return (
@@ -149,32 +151,32 @@ export default class Home extends React.Component {
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.bdy}
         >
-          <View style={styles.container}>
-            <FlatList
-              data={this.state.data}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => this.redirect('ProductDetails', { product: item, isEdit:false })}>
-                  <Card>
-                    <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                      <Image
-                        style={{ width: 100, height: 100, borderRadius: 50 }}
-                        resizeMode="cover"
-                        source={require('../../assets/img/logo.png')}
-                      />
-                      <Text>{item.title}</Text>
-                    </View>
-                  </Card>
+        <View style={styles.container}>
+          <FlatList
+            data={this.state.data}
+            showsVerticalScrollIndicator ={false}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => this.redirect('ProductDetails', {product: item, isEdit:false})}>
+                    <Card>
+                        <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+                            <Image
+                              style={{width: 100, height: 100, borderRadius: 50}}
+                              resizeMode="cover"
+                              source={require('../../assets/img/logo.png')}
+                            />
+                            <Text>{item.title}</Text>
+                        </View>
+                    </Card>
                 </TouchableOpacity>
-              )}
-              keyExtractor={item => item.id}
-              horizontal={false}
-              numColumns={2}
-            />
-          </View>
+            )}
+            keyExtractor={item => item.id}
+            horizontal={false}
+            numColumns={2}
+          />
+        </View>
         </KeyboardAvoidingView>
-        <MyFooter type='classic' navigation={this.navigation} />
+        {this.footerType()}
       </SafeAreaView>
     )
   }

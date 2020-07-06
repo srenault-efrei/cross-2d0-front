@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, SafeAreaView, YellowBox } from 'react-native'
+import { Text, View, SafeAreaView, YellowBox, AsyncStorage } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/details.js'
@@ -35,28 +35,40 @@ export default class Product extends React.Component {
             isVisibleNotifs: false,
             isVisibleFilters: false,
             product: this.props.route.params.product,
-            isEdit : this.props.route.params.isEdit
+            isEdit : this.props.route.params.isEdit,
+            iSent: false,
         }
         this.navigation = this.props.navigation
     }
 
-    /*   async setDataStorage() {
-    let user = await AsyncStorage.getItem('user')
-    let token = await AsyncStorage.getItem('token')
-    if (!user) {
-      this.props.navigation.navigate("SignIn")
-    } 
-    else if (user && token) {
-        this.setState({ user, token })
+    async setDataStorage() {
+        let user = await AsyncStorage.getItem('data')
+        if (!user) {
+          this.props.navigation.navigate("SignIn")
+        } 
+        else {
+          let data = JSON.parse(user)
+          this.setState({ user: data, token: data.meta.token, })
+          data.customer ? this.setState({ typeUser: "customer",id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
+        }
     }
-    } */
 
+    componentWillReceiveProps() {
+        this.init()
+    }
+
+    init = () => {
+        this.props.navigation.addListener('focus', () => {
+            this.setState({
+                product: this.props.route.params.product,
+                iSent: false,
+                isEdit: this.props.route.params.isEdit
+            })
+        })
+    }
 
   async componentDidMount() {
-    this.setState({
-        product: this.props.route.params.product,
-        isEdit: this.props.route.params.isEdit
-    })
+    await this.setDataStorage()
     this.checkParams()
     this.getMoment()
     this.unsubscribe()
@@ -66,10 +78,6 @@ export default class Product extends React.Component {
 
   unsubscribe = () => {
     this.props.navigation.addListener('focus', async() => {
-      this.setState({
-        product: this.props.route.params.product,
-        isEdit: this.props.route.params.isEdit
-      })
       this.checkParams()
       this.getMoment()
     })
@@ -143,13 +151,55 @@ export default class Product extends React.Component {
         }
     }
 
-    /*   footerType = () => {
-    if (this.state.user.type === 'customer') {
-      return <MyFooter type='classic' navigation={this.navigation}/>
-    } else {
-      return <MyFooter type='Association' navigation={this.navigation}/>
+    footerType = () => {
+        if (this.state.typeUser === 'customer') {
+          return <MyFooter type ='classic' navigation={this.navigation}/>
+        } else {
+          return <MyFooter type ='association' navigation={this.navigation}/>
+        }
     }
-    } */
+
+    askTicket =  () => {
+        const {token, id, product} = this.state
+        const obj = {
+            content: "Salut, je voudrais te proposer un échange :)",
+            recipient: product.user.id
+        }
+        return fetch(`https://trocify.herokuapp.com/api/users/${id}/messages`, {
+            method: 'POST',
+            headers: 
+            new Headers({
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+            }), 
+            body: JSON.stringify(obj)
+        })
+        .then((response) => response.json())
+        .then(() => {
+            this.setState({iSent: true})
+            console.log('Message sent !')
+        })
+        .catch((error) => {
+        console.error(error);
+        })
+    }
+
+    displayButton =  () => {
+        if (this.state.iSent === true) {
+            return (
+                <Button icon="check" mode="outlined" color='rgb(63, 81, 181)'>
+                Demande envoyée
+                </Button>
+            )
+        } else {
+            return (
+                <Button icon="autorenew" mode="outlined" onPress={() => this.askTicket()} color='rgb(63, 81, 181)'>
+                Proposer un échange
+                </Button>
+            )
+        }
+    }
 
     render() {
         const { product,isEdit } = this.state
@@ -213,14 +263,12 @@ export default class Product extends React.Component {
                         <MapView style={styles.mapStyle} />
                     </View>
 
-                    <View style={styles.buttonContainer}>
-                        <Button icon="autorenew" mode="outlined" onPress={() => console.log('Pressed')} color='rgb(63, 81, 181)'>
-                            Proposer un échange
-                    </Button>
-                    </View>
-
+                <View style={styles.buttonContainer}>
+                    {this.displayButton()}
                 </View>
-                <MyFooter type='classic' navigation={this.navigation} />
+
+            </View>
+            {this.footerType()}
             </SafeAreaView>
         )
     }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, SafeAreaView, Image, YellowBox } from 'react-native'
+import { View, SafeAreaView, Image, YellowBox, AsyncStorage } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/map.js'
@@ -20,12 +20,8 @@ export default class Map extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            region: {
-                latitude: 48.8566969,
-                longitude: 2.3514616,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-            },
+            latitude: 0,
+            longitude: 0,
             markers: [
                 {
                     id: 1,
@@ -61,7 +57,6 @@ export default class Map extends React.Component {
             data: []
         }
         this.navigation = this.props.navigation
-
     }
 
     static navigationOptions = {
@@ -71,22 +66,24 @@ export default class Map extends React.Component {
     }
 
     componentDidMount = async () => {
+        await this.setDataStorage()
         this.fetchTrocs()
     }
 
-    /*     async setDataStorage() {
-            let user = await AsyncStorage.getItem('user')
-            let token = await AsyncStorage.getItem('token')
-            if (!user) {
-              this.props.navigation.navigate("Connexion")
-            } 
-            else if (user && token) {
-                this.setState({ user, token })
-            }
-        } */
+    async setDataStorage() {
+        let user = await AsyncStorage.getItem('data')
+        if (!user) {
+          this.props.navigation.navigate("SignIn")
+        } 
+        else {
+          let data = JSON.parse(user)
+          this.setState({ user: data, token: data.meta.token, })
+          data.customer ? this.setState({ typeUser: "customer",id: data.customer.id, latitude: data.customer.latitude, longitude: data.customer.longitude }) : this.setState({ typeUser: "association", id: data.association.id, latitude: data.association.latitude, longitude: data.association.longitude })
+        }
+    }
 
     fetchTrocs = async () => {
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IkZhYmlhbiIsImlhdCI6MTU5Mjc2NTQ5NX0.PM01TGuPKYB3AW2mEJYRrjna9LhggRp1w-oZsLx-8ZA'
+        const {token} = this.state
         return fetch(`https://trocify.herokuapp.com/api/tickets`, {
             method: 'GET',
             headers:
@@ -127,13 +124,13 @@ export default class Map extends React.Component {
         { "featureType": "water", "elementType": "labels.text.fill", "stylers": [{ "color": "#515c6d" }] },
         { "featureType": "water", "elementType": "labels.text.stroke", "stylers": [{ "color": "#17263c" }] }]
 
-    /*   footerType = () => {
-    if (this.state.user.type === 'customer') {
-      return <MyFooter type='classic' navigation={this.navigation}/>
-    } else {
-      return <MyFooter type='Association' navigation={this.navigation}/>
+    footerType = () => {
+        if (this.state.typeUser === 'customer') {
+            return <MyFooter type ='classic' navigation={this.navigation}/>
+        } else {
+            return <MyFooter type ='association' navigation={this.navigation}/>
+        }
     }
-    } */
 
     render() {
         const { data } = this.state
@@ -152,9 +149,16 @@ export default class Map extends React.Component {
                     />
                 </View>
                 <View style={styles.container}>
-                    <MapView
-                        style={styles.mapStyle}
-                        region={this.state.region}
+                    <MapView 
+                        style={styles.mapStyle} 
+                        region={
+                            {
+                                latitude: this.state.latitude,
+                                longitude: this.state.longitude,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            }
+                        }
                         customMapStyle={this.mapStyle}
                     >
                         {data.map(marker => (
@@ -187,7 +191,7 @@ export default class Map extends React.Component {
                         ))}
                     </MapView>
                 </View>
-                <MyFooter type='classic' navigation={this.navigation} />
+                {this.footerType()}
             </SafeAreaView>
         )
     }

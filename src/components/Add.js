@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, SafeAreaView, YellowBox, TouchableOpacity, KeyboardAvoidingView, Image, ImageBackground } from 'react-native'
+import { View, SafeAreaView, YellowBox, TouchableOpacity, KeyboardAvoidingView, AsyncStorage, ImageBackground } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/add.js'
@@ -54,7 +54,7 @@ export default class Add extends React.Component {
     {
       value: 'Don'
     }
-   ]
+  ]
 
   Locations = [
     { value: '' },
@@ -68,19 +68,22 @@ export default class Add extends React.Component {
   ]
 
   componentDidMount = async () => {
+    await this.setDataStorage()
     this.fetchCategories()
   }
 
-/*   async setDataStorage() {
-    let user = await AsyncStorage.getItem('user')
-    let token = await AsyncStorage.getItem('token')
+  async setDataStorage() {
+    let user = await AsyncStorage.getItem('data')
     if (!user) {
       this.props.navigation.navigate("SignIn")
     } 
-    else if (user && token) {
-        this.setState({ user, token })
+    else {
+      let data = JSON.parse(user)
+      this.setState({ user: data, token: data.meta.token, })
+      data.customer ? this.setState({ typeUser: "customer",id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
+      console.log(this.state.user)
     }
-  } */
+  }
 
   fetchCategories = async () => {
     return fetch(`https://trocify.herokuapp.com/api/categories`, {
@@ -160,7 +163,7 @@ export default class Add extends React.Component {
     const state = this.state
     let obj = {}
     let images = []
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IkZhYmlhbiIsImlhdCI6MTU5Mzc5MDg4OH0.XlRGfdRjJdOQKk7iKPCcH9PwSPhMzh5q4MOwaDYMp3s'
+    const {token, id} = this.state
 
     if (state.filename != '') images.push(state.filename)
     if (state.filename2 != '') images.push(state.filename2)
@@ -175,7 +178,7 @@ export default class Add extends React.Component {
     obj.localisation = state.location
 
     /* Request */
-    return fetch(`https://trocify.herokuapp.com/api/customers/3f38ec56-7757-42d7-8f13-cca1df2f780c/tickets`, {
+    return fetch(`https://trocify.herokuapp.com/api/customers/${id}/tickets`, {
       method: 'POST',
       headers: 
       new Headers({
@@ -242,18 +245,18 @@ export default class Add extends React.Component {
     }
   }
 
-  /*   footerType = () => {
-    if (this.state.user.type === 'customer') {
-      return <MyFooter type='classic' navigation={this.navigation}/>
+  footerType = () => {
+    if (this.state.typeUser === 'customer') {
+      return <MyFooter type ='classic' navigation={this.navigation}/>
     } else {
-      return <MyFooter type='Association' navigation={this.navigation}/>
+      return <MyFooter type ='association' navigation={this.navigation}/>
     }
-  } */
+  }
 
   render() {
     return (
         <SafeAreaView style={styles.bdy}>
-            <MyHeader type='add' />
+            <MyHeader type='add' navigation={this.navigation} />
             <KeyboardAvoidingView
               behavior={Platform.OS == "ios" ? "padding" : "height"}
               style={styles.bdy}
@@ -331,7 +334,7 @@ export default class Add extends React.Component {
                 </View>
               </View>
             </KeyboardAvoidingView>
-            <MyFooter type='classic' navigation={this.navigation}/>
+            {this.footerType()}
         </SafeAreaView>
     )
   }
