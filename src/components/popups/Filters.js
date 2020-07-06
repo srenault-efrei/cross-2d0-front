@@ -11,13 +11,12 @@ export default class Filters extends React.Component {
     super(props)
     this.state = { 
       visible: false, 
+      tab: [{value: false}, {value: false}, {value: false}, {value: false}],
       name: '' 
     }
     this.navigation = this.props.navigation
     this.handler = this.props.handler
   }
-
-  tab = [false, false, false, false]
 
   DATA = [
     {
@@ -44,7 +43,16 @@ export default class Filters extends React.Component {
 
   handleChange = (item) => {
     const id = item.id
-    this.tab[id-1] = !this.tab[id-1]
+
+    let items = [...this.state.tab]
+
+    let check = {...items[id-1]}
+
+    check.value = !check.value
+
+    items[id-1] = check
+
+    this.setState({tab: items})
   }
 
   renderRow () {
@@ -57,7 +65,7 @@ export default class Filters extends React.Component {
                     center
                     checkedIcon='dot-circle-o'
                     uncheckedIcon='circle-o'
-                    checked={this.tab[item.id-1]}
+                    checked={this.state.tab[item.id-1].value}
                     onPress={() => this.handleChange(item)}
                 />
                 <Text style={styles.filterText}>{item.title}</Text>
