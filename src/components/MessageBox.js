@@ -40,7 +40,7 @@ export default class MessageBox extends Component {
             this.fetchConv(this.props.route.params.interlocutor)
         }
     }
-    
+
 
 
     async fetchUser() {
@@ -126,9 +126,9 @@ export default class MessageBox extends Component {
     getContentBox(item) {
         if (item.sender.id == this.state.user.id) {
             return (
-                <View  style={{ flex: 1, flexDirection: 'row',alignItems:"center",alignSelf: "flex-end"}}>
-                
-                    <View style={{ width: '70%', padding: 10,  borderWidth: 1, borderRadius: 15, marginBottom: 10, marginHorizontal: 5 }} >
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: "center", alignSelf: "flex-end" }}>
+
+                    <View style={{ width: '70%', padding: 10, borderWidth: 1, borderRadius: 15, marginBottom: 10, marginHorizontal: 5 }} >
 
                         <View style={{ flex: 1, color: 'gray' }}>
                             <Text style={{ fontSize: 15, color: 'gray' }} >{item.content} </Text >
@@ -143,19 +143,19 @@ export default class MessageBox extends Component {
             )
         }
         return (
-            <View  style={{ flex: 1, flexDirection: 'row',alignItems:"center"}}>
-                      <Image
-                style={styles.cardLogo}
-                source={require('../../assets/img/yen.png')}
-            />
-            <View style={{ width: '70%', padding: 10,  borderWidth: 1,backgroundColor:'lightgray', borderRadius: 15, marginBottom: 10, marginHorizontal: 5 }} >
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: "center" }}>
+                <Image
+                    style={styles.cardLogo}
+                    source={require('../../assets/img/yen.png')}
+                />
+                <View style={{ width: '70%', padding: 10, borderWidth: 1, backgroundColor: 'lightgray', borderRadius: 15, marginBottom: 10, marginHorizontal: 5 }} >
 
-                <View style={{ flex: 1, color: 'gray' }}>
-                    <Text style={{ fontSize: 15, color: 'gray' }} >{item.content} </Text >
+                    <View style={{ flex: 1, color: 'gray' }}>
+                        <Text style={{ fontSize: 15, color: 'gray' }} >{item.content} </Text >
+                    </View>
                 </View>
+
             </View>
-      
-        </View>
         )
 
 
@@ -165,7 +165,7 @@ export default class MessageBox extends Component {
     render() {
 
         const { navigation } = this.props
-        const {messages} = this.state;
+        const { messages } = this.state;
         return (
             <SafeAreaView style={styles.safeArea}>
 
@@ -185,7 +185,7 @@ export default class MessageBox extends Component {
                     </SafeAreaView>
                 }
 
-                <View style={{ position: 'relative', bottom: 4, height: 40, flexDirection: 'row',alignItems: 'center'  }}>
+                <View style={{ position: 'relative', bottom: 4, height: 40, flexDirection: 'row', alignItems: 'center' }}>
                     <View style={{ width: '85%', height: 40 }} >
                         <TextInput
                             style={{ height: '100%', borderColor: 'gray', borderWidth: 1 }}
@@ -195,18 +195,16 @@ export default class MessageBox extends Component {
                         />
                     </View>
                     <TouchableOpacity onPress={(T) => this.sendMessage()} style={{ width: '15%', }}>
-                    <Icon
+                        <Icon
                             name="send"
                             size={20}
                             type='material'
                             color="green"
-                            
+
                         />
                     </TouchableOpacity>
                 </View>
-                {/* Footer  */}
-                <MyFooter type='classic' navigation={navigation} />
-
+                <MyFooter type={this.state.type || 'classic' } navigation={navigation} />
             </SafeAreaView>
         )
     }

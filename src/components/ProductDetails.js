@@ -26,100 +26,98 @@ export default class Product extends React.Component {
         super(props)
         this.state = {
             images: [
-                "https://source.unsplash.com/1024x768/?nature",
-                "https://source.unsplash.com/1024x768/?water",
-                "https://source.unsplash.com/1024x768/?girl",
-                "https://source.unsplash.com/1024x768/?tree", // Network image
-                // Local image = require('file')
+                "https://www.fri.ch/site_2015/wp-content/plugins/ajax-search-pro/img/default.jpg"
             ],
             isVisibleNotifs: false,
             isVisibleFilters: false,
             product: this.props.route.params.product,
-            isEdit : this.props.route.params.isEdit,
+            isEdit: '',
             iSent: false,
-            latitude: this.props.route.params.product.user.latitude,
-            longitude: this.props.route.params.product.user.longitude
+            latitude: 48.8582602,
+            longitude: 2.2944991
         }
         this.navigation = this.props.navigation
     }
 
-    mapStyle=[
-        {"elementType": "geometry", "stylers": [{"color": "#242f3e"}]},
-        {"elementType": "labels.text.fill","stylers": [{"color": "#746855"}]},
-        {"elementType": "labels.text.stroke","stylers": [{"color": "#242f3e"}]},
-        {"featureType": "administrative.locality","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},
-        {"featureType": "poi","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},
-        {"featureType": "poi.park","elementType": "geometry","stylers": [{"color": "#263c3f"}]},
-        {"featureType": "poi.park","elementType": "labels.text.fill","stylers": [{"color": "#6b9a76"}]},
-        {"featureType": "road","elementType": "geometry","stylers": [{"color": "#38414e"}]},
-        {"featureType": "road","elementType": "geometry.stroke","stylers": [{"color": "#212a37"}]},
-        {"featureType": "road","elementType": "labels.text.fill","stylers": [{"color": "#9ca5b3"}]},
-        {"featureType": "road.highway","elementType": "geometry","stylers": [{"color": "#746855"}]},
-        {"featureType": "road.highway","elementType": "geometry.stroke","stylers": [{"color": "#1f2835"}]},
-        {"featureType": "road.highway","elementType": "labels.text.fill","stylers": [{"color": "#f3d19c"}]},
-        {"featureType": "transit","elementType": "geometry","stylers": [{"color": "#2f3948"}]},
-        {"featureType": "transit.station","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},
-        {"featureType": "water","elementType": "geometry","stylers": [{"color": "#17263c"}]},
-        {"featureType": "water","elementType": "labels.text.fill","stylers": [{"color": "#515c6d"}]},
-        {"featureType": "water","elementType": "labels.text.stroke","stylers": [{"color": "#17263c"}]}
+    mapStyle = [
+        { "elementType": "geometry", "stylers": [{ "color": "#242f3e" }] },
+        { "elementType": "labels.text.fill", "stylers": [{ "color": "#746855" }] },
+        { "elementType": "labels.text.stroke", "stylers": [{ "color": "#242f3e" }] },
+        { "featureType": "administrative.locality", "elementType": "labels.text.fill", "stylers": [{ "color": "#d59563" }] },
+        { "featureType": "poi", "elementType": "labels.text.fill", "stylers": [{ "color": "#d59563" }] },
+        { "featureType": "poi.park", "elementType": "geometry", "stylers": [{ "color": "#263c3f" }] },
+        { "featureType": "poi.park", "elementType": "labels.text.fill", "stylers": [{ "color": "#6b9a76" }] },
+        { "featureType": "road", "elementType": "geometry", "stylers": [{ "color": "#38414e" }] },
+        { "featureType": "road", "elementType": "geometry.stroke", "stylers": [{ "color": "#212a37" }] },
+        { "featureType": "road", "elementType": "labels.text.fill", "stylers": [{ "color": "#9ca5b3" }] },
+        { "featureType": "road.highway", "elementType": "geometry", "stylers": [{ "color": "#746855" }] },
+        { "featureType": "road.highway", "elementType": "geometry.stroke", "stylers": [{ "color": "#1f2835" }] },
+        { "featureType": "road.highway", "elementType": "labels.text.fill", "stylers": [{ "color": "#f3d19c" }] },
+        { "featureType": "transit", "elementType": "geometry", "stylers": [{ "color": "#2f3948" }] },
+        { "featureType": "transit.station", "elementType": "labels.text.fill", "stylers": [{ "color": "#d59563" }] },
+        { "featureType": "water", "elementType": "geometry", "stylers": [{ "color": "#17263c" }] },
+        { "featureType": "water", "elementType": "labels.text.fill", "stylers": [{ "color": "#515c6d" }] },
+        { "featureType": "water", "elementType": "labels.text.stroke", "stylers": [{ "color": "#17263c" }] }
     ]
-    
-    async componentDidMount() {
-        await this.setDataStorage()
-        this.checkParams()
-        this.getMoment()
-    }
+
+
 
     async setDataStorage() {
         let user = await AsyncStorage.getItem('data')
         if (!user) {
-          this.props.navigation.navigate("SignIn")
-        } 
+            this.props.navigation.navigate("SignIn")
+        }
         else {
-          let data = JSON.parse(user)
-          this.setState({ user: data, token: data.meta.token, })
-          data.customer ? this.setState({ typeUser: "customer",id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
+            let data = JSON.parse(user)
+            this.setState({ user: data, token: data.meta.token, })
+            data.customer ? this.setState({ typeUser: "customer", id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
         }
     }
 
-    componentWillReceiveProps() {
-        this.init()
-        console.log(this.props.route.params.product)
-    }
 
-    init = () => {
-        this.props.navigation.addListener('focus', async() => {
-            await this.setDataStorage()
+    async componentDidMount() {
+
+        await this.setDataStorage()
+        this.setState({
+            isEdit: this.props.route.params.isEdit,
+        })
+
+        if (this.props.route.params.product.user.latitude && this.props.route.params.product.user.longitude) {
             this.setState({
-                product: this.props.route.params.product,
                 latitude: this.props.route.params.product.user.latitude,
                 longitude: this.props.route.params.product.user.longitude,
-                iSent: false,
-                isEdit: this.props.route.params.isEdit
             })
+        }
+        this.checkParams()
+        this.getMoment()
+        this.unsubscribe()
+        console.log(this.props.route.params.isEdit)
+    }
+
+
+    unsubscribe = () => {
+        this.props.navigation.addListener('focus', async () => {
+            await this.setDataStorage()
+            this.setState({
+                isEdit: this.props.route.params.isEdit,
+                product: this.props.route.params.product,
+                iSent: false,
+            })
+            if (this.props.route.params.product.user.latitude && this.props.route.params.product.user.longitude) {
+                this.setState({
+                    latitude: this.props.route.params.product.user.latitude,
+                    longitude: this.props.route.params.product.user.longitude,
+                })
+            }
+            this.checkParams()
+            this.getMoment()
         })
     }
 
-  async componentDidMount() {
-    await this.setDataStorage()
-    this.checkParams()
-    this.getMoment()
-    this.unsubscribe()
+    async componentWillUnmount() {
+        this.unsubscribe();
 
-  }
-
-
-  unsubscribe = () => {
-    this.props.navigation.addListener('focus', async() => {
-      this.checkParams()
-      this.getMoment()
-    })
-  }
-
-  async componentWillUnmount() {
-    this.unsubscribe();
-
-  }
+    }
 
 
     getMoment() {
@@ -186,60 +184,60 @@ export default class Product extends React.Component {
 
     footerType = () => {
         if (this.state.typeUser === 'customer') {
-          return <MyFooter type ='classic' navigation={this.navigation}/>
+            return <MyFooter type='classic' navigation={this.navigation} />
         } else {
-          return <MyFooter type ='association' navigation={this.navigation}/>
+            return <MyFooter type='association' navigation={this.navigation} />
         }
     }
 
-    askTicket =  () => {
-        const {token, id, product} = this.state
+    askTicket = () => {
+        const { token, id, product } = this.state
         const obj = {
             content: "Salut, je voudrais te proposer un échange :)",
             recipient: product.user.id
         }
         return fetch(`https://trocify.herokuapp.com/api/users/${id}/messages`, {
             method: 'POST',
-            headers: 
-            new Headers({
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-            }), 
+            headers:
+                new Headers({
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                }),
             body: JSON.stringify(obj)
         })
-        .then((response) => response.json())
-        .then(() => {
-            this.setState({iSent: true})
-            // console.log('Message sent !')
-        })
-        .catch((error) => {
-        console.error(error);
-        })
+            .then((response) => response.json())
+            .then(() => {
+                this.setState({ iSent: true })
+                // console.log('Message sent !')
+            })
+            .catch((error) => {
+                console.error(error);
+            })
     }
 
-    displayButton =  () => {
+    displayButton = () => {
         if (this.state.iSent === true) {
             return (
                 <Button icon="check" mode="outlined" color='rgb(63, 81, 181)'>
-                Demande envoyée
+                    Demande envoyée
                 </Button>
             )
         } else {
             return (
                 <Button icon="autorenew" mode="outlined" onPress={() => this.askTicket()} color='rgb(63, 81, 181)'>
-                Proposer un échange
+                    Proposer un échange
                 </Button>
             )
         }
     }
 
     render() {
-        const { product,isEdit } = this.state
+        const { product, isEdit } = this.state
         return (
             <SafeAreaView style={styles.bdy}>
                 {isEdit === true ? <MyHeader type='EditTicket' data={this.props.route.params.product} navigation={this.navigation} /> : <MyHeader type='back' navigation={this.navigation} />
- } 
+                }
 
                 <View style={{ alignItems: "center", top: 40, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center' }}>
                     <Avatar
@@ -292,53 +290,53 @@ export default class Product extends React.Component {
                         </View>
                     </View>
 
-                <View style={styles.mapContainer}>
-                <MapView 
-                        style={styles.mapStyle} 
-                        region={
-                            {
-                                latitude: this.state.latitude,
-                                longitude: this.state.longitude,
-                                latitudeDelta: 0.0922,
-                                longitudeDelta: 0.0421,
-                            }
-                        }
-                        customMapStyle={this.mapStyle}
-                    >
-                        <Marker
-                            draggable
-                            coordinate={
+                    <View style={styles.mapContainer}>
+                        <MapView
+                            style={styles.mapStyle}
+                            region={
                                 {
-                                    latitude: 48.8582602,
-                                    longitude: 2.2944991
+                                    latitude: this.state.latitude,
+                                    longitude: this.state.longitude,
+                                    latitudeDelta: 0.0922,
+                                    longitudeDelta: 0.0421,
                                 }
                             }
-                            // onDragEnd={() => console.log('closed')}
-                            title={product.title}
-                            description={product.description}
+                            customMapStyle={this.mapStyle}
                         >
-                            <View style={styles.markView}>
-                                <Image
-                                    style={styles.tinyLogo}
-                                    source={{uri: product.imagesFiles[0]}}
-                                />
-                            </View>
-                        <Callout style={{minWidth: 300, minHeight: 50}}>
-                            <Card>
-                                <Card.Title title={product.title} subtitle={product.description} />
-                                <Card.Cover style={{height: 100, margin: 5}} source={{ uri: product.imagesFiles[0] }} />
-                            </Card>
-                        </Callout>
-                        </Marker>
-                    </MapView>
-                </View>
+                            <Marker
+                                draggable
+                                coordinate={
+                                    {
+                                        latitude: this.state.latitude,
+                                        longitude: this.state.longitude
+                                    }
+                                }
+                                // onDragEnd={() => console.log('closed')}
+                                title={product.title}
+                                description={product.description}
+                            >
+                                <View style={styles.markView}>
+                                    <Image
+                                        style={styles.tinyLogo}
+                                        source={{ uri: product.imagesFiles.length != 0 ? product.imagesFiles[0] : 'https://www.fri.ch/site_2015/wp-content/plugins/ajax-search-pro/img/default.jpg' }}
+                                    />
+                                </View>
+                                <Callout style={{ minWidth: 300, minHeight: 50 }}>
+                                    <Card>
+                                        <Card.Title title={product.title} subtitle={product.description} />
+                                        <Card.Cover style={{ height: 100, margin: 5 }} source={{ uri: product.imagesFiles[0] }} />
+                                    </Card>
+                                </Callout>
+                            </Marker>
+                        </MapView>
+                    </View>
 
-                <View style={styles.buttonContainer}>
-                    {this.displayButton()}
-                </View>
+                    <View style={styles.buttonContainer}>
+                        {this.displayButton()}
+                    </View>
 
-            </View>
-            {this.footerType()}
+                </View>
+                {this.footerType()}
             </SafeAreaView>
         )
     }

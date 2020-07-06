@@ -64,7 +64,7 @@ export default class MyFooter extends React.Component {
         return (
             <Footer style={{ backgroundColor: 'rgb(63, 81, 181)'}}>
                 <FooterTab>
-                <Button vertical>
+                <Button vertical onPress={() => this.navigation.navigate('Home')}>
                     <View style={{position: 'relative', bottom: 6}}>
                     <Icon
                     reverse

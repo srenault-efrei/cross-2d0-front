@@ -94,6 +94,7 @@ export default class Notifications extends React.Component {
         <Dialog
             width={300}
             height={300}
+            containerStyle={{display: 'flex', justifyContent: 'center', alignItems:'center'}}
             visible={this.props.visible}
             dialogTitle={
               <View style={styles.dialogHead}>
@@ -105,11 +106,6 @@ export default class Notifications extends React.Component {
               initialValue: 0,
               useNativeDriver: true,
             })}
-            footer={
-              <DialogContent>
-                <DialogButton text="FERMER" onPress={() => this.handler()} />
-              </DialogContent>
-            }
             onTouchOutside={() => this.handler()}
         >
             <DialogContent>

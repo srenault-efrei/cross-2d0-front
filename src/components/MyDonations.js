@@ -89,8 +89,8 @@ export default class MydDonations extends React.Component {
                     <Image
                       style={{ width: 100, height: 100, borderRadius: 50 }}
                       resizeMode="cover"
-                      source={require('../../assets/img/logo.png')}
-                    />
+                      source={{uri: item.imagesFiles.length != 0 ? item.imagesFiles[0] : 'https://www.fri.ch/site_2015/wp-content/plugins/ajax-search-pro/img/default.jpg'}}
+                      />
                     <Text>{item.title}</Text>
                   </View>
                 </Card>

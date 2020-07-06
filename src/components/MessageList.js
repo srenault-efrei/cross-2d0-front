@@ -11,7 +11,7 @@ import {
 import styles from '../../assets/styles/messages'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
-const moment = require('moment')
+import global from '../../assets/css/global.js'
 
 
 export default class MessageList extends Component {
@@ -89,13 +89,6 @@ export default class MessageList extends Component {
         }
     }
 
-       
-    formatTime(date){
-     
-        return "envoyé le "+moment(date).format('DD/MM/YYYY');
-        
-    }
-
 
     getRenderContent(msgs){
         if(msgs != null && this.state.user!=null){
@@ -115,7 +108,8 @@ export default class MessageList extends Component {
                     }   
             )
         
-         
+            
+            
             
 
             return(
@@ -132,7 +126,7 @@ export default class MessageList extends Component {
                             <Text style={{ fontSize: 15,color:'gray'}} >{item.content.slice(0,25)}... </Text >
                         </View>
                         <View style={{flex:1,alignItems:'flex-end',color:'gray'}}>
-                            <Text style={{ fontSize: 15,color:'gray'}} >{this.formatTime(item.createdAt)} </Text >
+                            <Text style={{ fontSize: 15,color:'gray'}} >{item.createdAt.slice(0,25)}... </Text >
                         </View>
                     </View>     
                     </TouchableOpacity>
@@ -144,7 +138,6 @@ export default class MessageList extends Component {
             );
             
         }
-        
     }
 
     getUserConv(item){

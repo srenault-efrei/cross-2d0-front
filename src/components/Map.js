@@ -192,7 +192,7 @@ export default class Map extends React.Component {
                                 <View style={styles.markView}>
                                     <Image
                                         style={styles.tinyLogo}
-                                        source={{ uri: marker.imagesFiles[0] }}
+                                        source={{uri: marker.imagesFiles.length != 0 ? marker.imagesFiles[0] : 'https://www.fri.ch/site_2015/wp-content/plugins/ajax-search-pro/img/default.jpg'}}
                                     />
                                 </View>
                                 <Callout style={{ minWidth: 300, minHeight: 50 }} onPress={() => this.navigation.navigate('ProductDetails', { product: marker })}>

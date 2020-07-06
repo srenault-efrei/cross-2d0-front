@@ -107,8 +107,8 @@ export default class History extends React.Component {
                     <Image
                       style={{ width: 100, height: 100, borderRadius: 50 }}
                       resizeMode="cover"
-                      source={require('../../assets/img/logo.png')}
-                    />
+                      source={{uri: item.imagesFiles.length != 0 ? item.imagesFiles[0] : 'https://www.fri.ch/site_2015/wp-content/plugins/ajax-search-pro/img/default.jpg'}}
+                      />
                     <Text>{item.title}</Text>
                   </View>
                 </Card>
@@ -119,7 +119,12 @@ export default class History extends React.Component {
             numColumns={2}
           />
         </View>
-        <MyFooter type='classic' navigation={this.navigation} />
+        {this.state.typeUser === 'customer' ?
+          <MyFooter type='classic' navigation={this.navigation} /> : <View></View>
+        }
+          {this.state.typeUser === 'association' ?
+          <MyFooter type='association' navigation={this.navigation} /> : <View></View>
+        }
       </SafeAreaView>
     )
   }

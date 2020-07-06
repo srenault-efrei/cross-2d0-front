@@ -153,7 +153,7 @@ export default class Profil extends Component {
                 source={require('../../assets/img/yen.png')}
               />
               <TouchableOpacity
-                onPress={() => navigation.navigate('MyBarters', { tickets: tickets })}
+                onPress={() => navigation.navigate('MyBarters', { tickets: tickets, longitude: user.longitude, latitude: user.latitude })}
               >
                 <Text>MES TROCS</Text>
               </TouchableOpacity>

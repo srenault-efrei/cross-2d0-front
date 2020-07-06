@@ -92,7 +92,7 @@ export default class Paremeter extends Component {
                 </View>
 
                 {/* Footer  */}
-                <MyFooter type='classic' navigation={navigation} />
+                <MyFooter type='association' navigation={navigation} />
 
             </SafeAreaView>
         )
