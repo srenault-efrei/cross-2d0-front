@@ -57,6 +57,12 @@ export default class Filters extends React.Component {
     this.setState({tab: items})
   }
 
+  reset = () => {
+    this.setState({
+      id: 0
+    })
+  }
+
   renderRow () {
     return (
     <FlatList
@@ -100,7 +106,7 @@ export default class Filters extends React.Component {
               <DialogContent>
                 <DialogButton
                   text="RÉINITIALISER"
-                  onPress={() => this.handler()}
+                  onPress={() => this.reset()}
                 />
               </DialogContent>
             }
