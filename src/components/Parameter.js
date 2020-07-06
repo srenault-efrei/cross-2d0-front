@@ -3,16 +3,32 @@ import {
     Text,
     View,
     TouchableOpacity,
-    SafeAreaView
+    SafeAreaView,
+    AsyncStorage
 
 } from 'react-native'
 import styles from '../../assets/styles/profilCusto'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import global from '../../assets/css/global.js'
+import {Avatar } from 'react-native-elements'
+
+
+
 
 export default class Paremeter extends Component {
 
+    logout = async () => {
+        try {
+            const keys = await AsyncStorage.getAllKeys()
+            await AsyncStorage.multiRemove(keys)
+        }
+        catch (err) {
+            console.log('deconnexion erreur :', err);
+
+        }
+        this.props.navigation.navigate('SignIn')
+    }
 
     render() {
         const { navigation } = this.props
@@ -21,15 +37,19 @@ export default class Paremeter extends Component {
             <SafeAreaView style={styles.safeArea}>
 
                 {/* Header */}
-                <MyHeader type='Return' navigation={navigation} />
-                <View style={global.circle}>
-                    <TouchableOpacity
-                        onPress={() =>  navigation.navigate("Profil")} >
-                        <Text>IMG</Text>
-                        <Text>Profile</Text>
-                    </TouchableOpacity>
-                </View>
+                <MyHeader type='back' navigation={navigation} />
 
+                <View style={{ alignItems: "center", top: 40, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center' }}>
+                    <Avatar
+                        rounded
+                        size={100}
+                        onPress={(() => this.props.navigation.navigate("Profil"))}
+                        source={{
+                            uri:
+                                "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
+                        }}
+                    />
+                </View>
 
                 <View style={styles.view}>
                     <View style={styles.card}>
@@ -55,7 +75,7 @@ export default class Paremeter extends Component {
                 <View style={styles.viewEnd}>
                     <View style={styles.endRow}>
                         <TouchableOpacity
-                        onPress={() =>  navigation.navigate("SignIn")}
+                            onPress={() => this.logout()}
                         >
                             <Text>DECONNEXION</Text>
                         </TouchableOpacity>
@@ -63,7 +83,7 @@ export default class Paremeter extends Component {
 
                     <View style={styles.endRow}>
                         <TouchableOpacity
-                        onPress={() =>  navigation.navigate("SignIn")}
+                            onPress={() => navigation.navigate("SignIn")}
                         >
                             <Text>SUPPRIMER MON COMPTE</Text>
                         </TouchableOpacity>
@@ -72,7 +92,7 @@ export default class Paremeter extends Component {
                 </View>
 
                 {/* Footer  */}
-                <MyFooter type='classic'navigation={navigation} />
+                <MyFooter type='classic' navigation={navigation} />
 
             </SafeAreaView>
         )

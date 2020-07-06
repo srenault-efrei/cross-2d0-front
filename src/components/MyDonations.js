@@ -4,7 +4,7 @@ import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/home.js'
 import stylesProfile from '../../assets/styles/profilCusto'
-import { Card } from 'react-native-elements'
+import { Card, Avatar } from 'react-native-elements'
 
 export default class MydDonations extends React.Component {
   constructor(props) {
@@ -37,11 +37,11 @@ export default class MydDonations extends React.Component {
 
   unsubscribe = () => {
     this.props.navigation.addListener('focus', () => {
-       this.mydDonations()
+      this.mydDonations()
     })
-}
+  }
 
-async componentWillUnmount() {
+  async componentWillUnmount() {
     this.unsubscribe();
   }
 
@@ -59,23 +59,31 @@ async componentWillUnmount() {
       <SafeAreaView style={styles.bdy}>
         <MyHeader type='Return' navigation={this.navigation} />
 
+        <View style={{ alignItems: "center", top: 40, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center' }}>
+          <Avatar
+            rounded
+            size={100}
+            onPress={(() => this.props.navigation.navigate("Profil"))}
+            source={{
+              uri:
+                "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
+            }}
+          />
+        </View>
 
         <View style={styles.container}>
-
           <View >
             <View style={stylesProfile.lineRank}></View>
             <Text> MES DONS </Text>
             <View style={stylesProfile.lineRank}></View>
-
           </View>
-
 
           <FlatList
             data={this.state.trocs}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => this.redirect('ProductDetails', { product: item })}>
+              <TouchableOpacity onPress={() => this.redirect('ProductDetails', { product: item, isEdit:true })}>
                 <Card>
                   <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                     <Image

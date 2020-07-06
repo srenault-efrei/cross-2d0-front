@@ -3,15 +3,15 @@ import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, YellowBox,
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/home.js'
-import {Card} from 'react-native-elements'
+import { Card, Avatar } from 'react-native-elements'
 import _ from 'lodash'
 
 YellowBox.ignoreWarnings(['componentWillReceiveProps'])
 const _console = _.clone(console)
 console.warn = message => {
   if (message.indexOf('componentWillReceiveProps') <= -1) {
-  _console.warn(message);
-  } 
+    _console.warn(message);
+  }
 }
 
 export default class Home extends React.Component {
@@ -34,11 +34,17 @@ export default class Home extends React.Component {
     await this.setDataStorage()
     this.init()
     this.fetchTrocs()
+    this.unsubscribe()
+
   }
 
   componentWillReceiveProps() {
     this.init()
     this.getTickets()
+  }
+
+  async componentWillUnmount() {
+    this.unsubscribe()
   }
 
   /* Handlers */
@@ -57,6 +63,7 @@ export default class Home extends React.Component {
       }
     })
   }
+
 
   searchHandler(text) {
     const newData = this.dataSave.filter(item => {
@@ -80,12 +87,12 @@ export default class Home extends React.Component {
       let data = JSON.parse(user)
       this.setState({ user: data, token: data.meta.token, })
       data.customer ? this.setState({ typeUser: "customer",id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
-      console.log(this.state.user)
+      // console.log(this.state.user)
     }
   }
 
-  redirect(page, data){
-    if (data !=  ''){
+  redirect(page, data) {
+    if (data != '') {
       this.navigation.navigate(page, data)
     } else {
       this.navigation.navigate(page)
@@ -99,7 +106,7 @@ export default class Home extends React.Component {
       const itemType = item.type.toLowerCase()
       const itemLocation = item.localisation.toLowerCase()
       const textData = text.toLowerCase()
-      if (itemTitle.indexOf(data.keyword.toLowerCase()) || itemCategory === data.category.id || itemType === data.type.toLowerCase() || itemLocation === data.location.toLowerCase()){
+      if (itemTitle.indexOf(data.keyword.toLowerCase()) || itemCategory === data.category.id || itemType === data.type.toLowerCase() || itemLocation === data.location.toLowerCase()) {
         return item
       }
     })
@@ -113,12 +120,12 @@ export default class Home extends React.Component {
     const {token} = this.state
     return fetch(`https://trocify.herokuapp.com/api/tickets`, {
       method: 'GET',
-      headers: 
-      new Headers({
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      })
+      headers:
+        new Headers({
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        })
     })
       .then((response) => response.json())
       .then((json) => {
@@ -136,14 +143,26 @@ export default class Home extends React.Component {
     if (this.state.typeUser === 'customer') {
       return <MyFooter type ='classic' navigation={this.navigation}/>
     } else {
-      return <MyFooter type ='Association' navigation={this.navigation}/>
+      return <MyFooter type ='association' navigation={this.navigation}/>
     }
   }
 
   render() {
     return (
       <SafeAreaView style={styles.bdy}>
-        <MyHeader type='classic' navigation={this.navigation} search={this.searchHandler}/>
+        <MyHeader type='classic' navigation={this.navigation} search={this.searchHandler} />
+        <View style={{ alignItems: "center", top: 40, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center' }}>
+          <Avatar
+            rounded
+            size={100}
+            onPress={(() => this.props.navigation.navigate("Profil"))}
+            source={{
+              uri:
+                "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
+            }}
+
+          />
+        </View>
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
           style={styles.bdy}
@@ -154,7 +173,7 @@ export default class Home extends React.Component {
             showsVerticalScrollIndicator ={false}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => this.redirect('ProductDetails', {product: item})}>
+                <TouchableOpacity onPress={() => this.redirect('ProductDetails', {product: item, isEdit:false})}>
                     <Card>
                         <View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
                             <Image

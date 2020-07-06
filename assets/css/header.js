@@ -4,12 +4,12 @@ export default StyleSheet.create({
     horizontalList:{  
         flex:1,
         flexDirection: 'row',
-        alignItems: 'center',
-        width: '170%',
+        // alignItems: 'center',
+        width: '150%',
         justifyContent: 'center',
-        marginBottom:20,
-        position: 'relative',
-        left: 10,
+        marginBottom:110,
+        // position: 'relative',
+        // left: 10,
     },
     button: {
         marginLeft: -15
@@ -44,10 +44,11 @@ export default StyleSheet.create({
         fontWeight: '900',
         fontSize: 15,
     },
+    
     titleContainer:{
-        flex:1,
-        borderBottomWidth: 1,
         borderColor: '#fff',
-        marginBottom: 10
+        top:-20,
+        justifyContent:"center",
+        alignItems:"center"
     }
   });

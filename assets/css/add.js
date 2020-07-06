@@ -21,6 +21,16 @@ export default StyleSheet.create({
         borderWidth: 0.8,
         borderRadius: 5,
     },
+    img:{
+        width:18,
+        height:18
+    },
+    
+    imgTicket:{
+        width:80,
+        height:80
+    },
+    
     imgView:{
         minWidth: 80,
         minHeight: 80,

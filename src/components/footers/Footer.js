@@ -16,7 +16,7 @@ export default class MyFooter extends React.Component {
 
     classicFooter = () => {
         return (
-            <Footer>
+            <Footer style={{ backgroundColor: 'rgb(63, 81, 181)'}}>
                 <FooterTab>
                     <Button vertical onPress={() => this.navigation.navigate('Home')}>
                         <View style={{position: 'relative', bottom: 6}}>
@@ -42,7 +42,7 @@ export default class MyFooter extends React.Component {
                         </View>
                         <Text style={{position: 'absolute', top:38, color: '#fff'}}>Ajouter</Text>
                     </Button>
-                    <Button vertical>
+                    <Button vertical onPress={() => this.navigation.navigate("Messages")}>
                         <View style={{position: 'relative', bottom: 5}}>
                         <Icon
                         reverse
@@ -62,7 +62,7 @@ export default class MyFooter extends React.Component {
     // classic footer without center content
     organizationFooter = () => {
         return (
-            <Footer>
+            <Footer style={{ backgroundColor: 'rgb(63, 81, 181)'}}>
                 <FooterTab>
                 <Button vertical>
                     <View style={{position: 'relative', bottom: 6}}>
@@ -79,7 +79,7 @@ export default class MyFooter extends React.Component {
                 <Button vertical>
 
                 </Button>
-                <Button vertical>
+                <Button vertical onPress={() => this.navigation.navigate("Messages")}>
                     <View style={{position: 'relative', bottom: 5}}>
                     <Icon
                     reverse
@@ -100,7 +100,7 @@ export default class MyFooter extends React.Component {
     render() {
         const type = this.props.type
         let FooterComponent
-        if(type === 'Association'){
+        if(type === 'association'){
             FooterComponent =  this.organizationFooter()
         } else if(type === 'classic') {
             FooterComponent =  this.classicFooter()

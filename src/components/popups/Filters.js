@@ -85,7 +85,7 @@ export default class Filters extends React.Component {
   }
 
   search = (filter) => {
-    console.log(filter)
+    // console.log(filter)
   }
 
   render() {

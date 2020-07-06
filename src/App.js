@@ -13,6 +13,7 @@ import SignUpIndividual from './components/SignUpIndividual';
 import SignUpAssociation from './components/SignUpAssociation';
 import ForgotPassword from './components/ForgotPassword';
 import Preference from './components/Preference';
+import Confidentiality from './components/Confidentiality';
 import Home from './components/Home';
 import Search from './components/Recherche';
 import Header from './components/headers/Header';
@@ -20,10 +21,16 @@ import EditProfile from './components/EditProfil'
 import Rank from './components/Rank'
 import MyBarters from './components/MyBarters'
 import MyDonations from './components/MyDonations'
+import DetailTickets from './components/DetailTickets'
+import EditTickets from './components/EditTickets'
+
 import Add from './components/Add'
 import Product from './components/ProductDetails'
 import Map from './components/Map'
+import MessageList from './components/MessageList'
+import MessageBox from './components/MessageBox'
 
+console.disableYellowBox = true;
 const Drawer = createDrawerNavigator()
 function App() {
   return (
@@ -37,6 +44,7 @@ function App() {
         <Drawer.Screen name="SignUpAssociation" component={SignUpAssociation} />
         <Drawer.Screen name="ForgotPassword" component={ForgotPassword} />
         <Drawer.Screen name="Preference" component={Preference} />
+        <Drawer.Screen name="Confidentiality" component={Confidentiality} />
         <Drawer.Screen name="Profil" component={ProfilCusto} />
         <Drawer.Screen name="Associations" component={Associations} />
         <Drawer.Screen name="DetailsAssociation" component={DetailsAssociation} />
@@ -49,6 +57,11 @@ function App() {
         <Drawer.Screen name="Add" component={Add} />
         <Drawer.Screen name="Map" component={Map} />
         <Drawer.Screen name="ProductDetails" component={Product} />
+        <Drawer.Screen name="EditTickets" component={EditTickets} />
+        <Drawer.Screen name="DetailTickets" component={DetailTickets} />
+        <Drawer.Screen name="Messages" component={MessageList} />
+        <Drawer.Screen name="Messages Box" component={MessageBox} />
+
       </Drawer.Navigator>
     </NavigationContainer>
   );

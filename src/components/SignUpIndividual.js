@@ -26,10 +26,15 @@ export default class SignUpIndividual extends Component {
         };
     }
 
+    componentDidMount() {
+        this.getLocation();
+    }
+
     getLocation() {
         navigator.geolocation.getCurrentPosition(
             position => {
-                this.setState({ longitude: position.coords.longitude, latitude: position.coords.latitude })
+                this.setState({ longitude: position.coords.longitude, latitude: position.coords.latitude });
+                // console.log(`Geolocation data - longitude : ${position.coords.longitude}, latitude : ${position.coords.latitude}`);
             },
             error => alert(error.message),
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
@@ -39,7 +44,7 @@ export default class SignUpIndividual extends Component {
     async signUp() {
         if (this.isSamePasswords(this.state.password, this.state.passwordConfirmation)) {
 
-            const req = await fetch('https://trocify.herokuapp.com/api/authenticate/signup', {
+            const req = await fetch('https://trocify.herokuapp.com/api/authenticate/signup/customers', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -51,8 +56,8 @@ export default class SignUpIndividual extends Component {
                     email: this.state.email.trim(),
                     password: this.state.password.trim(),
                     passwordConfirmation: this.state.passwordConfirmation.trim(),
-                    longitude: this.state.longitude.trim(),
-                    latitude: this.state.latitude.trim()
+                    longitude: this.state.longitude,
+                    latitude: this.state.latitude
                 })
             })
             try {
@@ -60,9 +65,9 @@ export default class SignUpIndividual extends Component {
                 if (json.err) {
                     this.setState({ error: json.err.description });
                 } else {
-                    console.log(json.data);
+                    // console.log(json.data);
                     await this._storeData(json.data);
-                    this.props.navigation.navigate('Home');
+                    this.props.navigation.navigate('Confidentiality');
                 }
             } catch (error) {
                 console.error(error);
@@ -90,7 +95,7 @@ export default class SignUpIndividual extends Component {
 
         return (
             <SafeAreaView style={styles.safeArea}>
-                <View style={styles.topView}>
+                <View style={styles.titleView}>
                     <Text style={styles.title}>TROCIFY</Text>
                 </View>
                 <View style={styles.loginView}>

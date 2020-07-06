@@ -1,63 +1,126 @@
-import React, { Component } from 'react'
-import {
-    Text,
-    View,
-    TouchableOpacity,
-    SafeAreaView,
-    ScrollView,
-
-
-} from 'react-native'
-import styles from '../../assets/styles/profilCusto'
+import React from 'react'
+import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, AsyncStorage } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
-import global from '../../assets/css/global.js'
+import styles from '../../assets/css/home.js'
+import { Card,Avatar } from 'react-native-elements'
 
-export default class History extends Component {
-    constructor(props) {
-        super(props)
+export default class History extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      trocs: {},
+      tickets: [],
+      token: "",
+      typeUser: ""
     }
-
-    render() {
-        const { navigation } = this.props
-        return (
-            <SafeAreaView style={styles.safeArea}>
-
-                {/* Header */}
-                <MyHeader type='Return' navigation={navigation} />
-                <View style={global.circle}>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate("Profil")} >
-                        <Text>IMG</Text>
-                        <Text>Profile</Text>
-                    </TouchableOpacity>
-                </View>
+    this.navigation = this.props.navigation
+  }
 
 
-                <SafeAreaView style={styles.container}>
-                    {/* View */}
-                    <View style={{ height: "90%" }} >
-                        <ScrollView contentContainerStyle={styles.content}>
-                            <View style={styles.historyCard}>
-                                <View style={styles.cercle}>
-                                    <Text>Image produit</Text>
-                                </View>
-                                <TouchableOpacity>
-                                    <Text>TABLE EN BOIS</Text>
-                                </TouchableOpacity>
-                            </View>
+  componentDidMount = async () => {
+    await this.setDataStorage()
+    if (this.state.typeUser === 'association') { this.fetchTicket() }
+    this.unsubscribe()
+  }
 
-                        </ScrollView>
-                    </View>
 
-                </SafeAreaView>
 
-                {/* Footer  */}
-                <MyFooter type='classic' navigation={navigation} />
+  async setDataStorage() {
+    let data = await AsyncStorage.getItem('data')
+    data = JSON.parse(data)
 
-            </SafeAreaView>
-        )
+    this.setState({
+      token: data.meta.token,
+    })
+    data.customer ? this.setState({ typeUser: "customer", tickets: this.props.route.params.tickets }) : this.setState({ typeUser: "association" })
+  }
+
+
+  unsubscribe = () => {
+    this.props.navigation.addListener('focus', async () => {
+      await this.setDataStorage()
+      if (this.state.typeUser === 'association') { this.fetchTicket() }
+    })
+  }
+
+  async componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+
+  fetchTicket = async () => {
+
+    const settings = {
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + this.state.token,
+        'Content-Type': 'application/json',
+      }
+    };
+
+    try {
+      const response = await fetch(`https://trocify.herokuapp.com/api/tickets`, settings);
+      const json = await response.json();
+      const tickets = json.data.ticket
+
+      let tab = []
+      for (const t of tickets) {
+        if (t.type === 'donation') {
+          tab.push(t)
+        }
+      }
+      this.setState({ tickets: tab })
+    } catch (e) {
+      console.log(e)
     }
+  }
+
+
+  render() {
+    return (
+      <SafeAreaView style={styles.bdy}>
+        <MyHeader type='Return' navigation={this.navigation} />
+
+        <View style={{ alignItems: "center", top: 40, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center' }}>
+          <Avatar
+            rounded
+            size={100}
+            onPress={(() => this.props.navigation.navigate("Profil"))}
+            source={{
+              uri:
+                "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
+            }}
+
+          />
+        </View>
+        <View style={styles.container}>
+
+          <FlatList
+            data={this.state.tickets}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <TouchableOpacity>
+                <Card>
+                  <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <Image
+                      style={{ width: 100, height: 100, borderRadius: 50 }}
+                      resizeMode="cover"
+                      source={require('../../assets/img/logo.png')}
+                    />
+                    <Text>{item.title}</Text>
+                  </View>
+                </Card>
+              </TouchableOpacity>
+            )}
+            keyExtractor={item => item.id}
+            horizontal={false}
+            numColumns={2}
+          />
+        </View>
+        <MyFooter type='classic' navigation={this.navigation} />
+      </SafeAreaView>
+    )
+  }
 }
-
-

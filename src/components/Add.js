@@ -81,7 +81,7 @@ export default class Add extends React.Component {
       let data = JSON.parse(user)
       this.setState({ user: data, token: data.meta.token, })
       data.customer ? this.setState({ typeUser: "customer",id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
-      console.log(this.state.user)
+      // console.log(this.state.user)
     }
   }
 
@@ -190,8 +190,8 @@ export default class Add extends React.Component {
     })
       .then((response) => response.json())
       .then((json) => {
-        /* navigate to home */
-        console.log(json)
+        this.props.navigation.navigate("Home")
+        // console.log(json)
         this.reset()
       })
       .catch((error) => {
@@ -249,7 +249,7 @@ export default class Add extends React.Component {
     if (this.state.typeUser === 'customer') {
       return <MyFooter type ='classic' navigation={this.navigation}/>
     } else {
-      return <MyFooter type ='Association' navigation={this.navigation}/>
+      return <MyFooter type ='association' navigation={this.navigation}/>
     }
   }
 

@@ -98,6 +98,23 @@ export default class MyHeader extends React.Component {
           </TouchableOpacity>
         </View>
         )
+      } else if (content == 'rightEditTicket'){
+        return (
+          <View style={styles.horizontalList}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.navigation.navigate('EditTickets', {ticket: this.props.data})}
+          >
+            <Icon
+              reverse
+              name='edit'
+              type='material'
+              color='rgb(63, 81, 181)'
+              size={25}
+            />
+          </TouchableOpacity>
+        </View>
+        )
       }
       else if (content == 'rightAsso'){
         return (
@@ -181,21 +198,21 @@ export default class MyHeader extends React.Component {
           </View>
         )
       }
-      else {
-        return (
-          <TouchableOpacity style={this.state.profile} onPress={() => this.navigation.navigate('Profil')}>
-            <Text>IMG</Text>
-            <Text>Profile</Text>
-          </TouchableOpacity>
-        )
-      }
+      // else {
+      //   return (
+      //     <TouchableOpacity style={this.state.profile} onPress={() => this.navigation.navigate('Profil')}>
+      //       <Text>IMG</Text>
+      //       <Text>Profile</Text>
+      //     </TouchableOpacity>
+      //   )
+      // }
     }
 
     leftContent = (icon) => {
       if (icon == 'bell') {
         // return bell icon
         return (
-          <View style={{marginBottom:20}}>
+          <View style={{marginBottom:"60%"}}>
             <Icon
               onPress={() => this.showNotifs()}
               reverse
@@ -210,7 +227,7 @@ export default class MyHeader extends React.Component {
       else if (icon == 'back'){
         // return back icon
           return (
-            <View style={{marginBottom:20}}>
+            <View style={{marginBottom:"60%"}}>
               <Icon
                 onPress={() => this.navigation.goBack()}
                 reverse
@@ -224,7 +241,7 @@ export default class MyHeader extends React.Component {
       } 
       else if (icon == 'leftAsso'){
         return (
-          <View style={{ marginBottom: 20 }}>
+          <View style={{marginBottom:"60%"}}>
             <TouchableOpacity
               style={styles.button}
               onPress={() => this.navigation.goBack()}
@@ -293,7 +310,7 @@ export default class MyHeader extends React.Component {
         <Searchbar
           placeholder="Type Here..."
           onChangeText={text => this.search(text)}
-          clearIcon={() => <Icon name='ios-close' type='ionicon' onPress={() => console.log('clear')}/> }
+          clearIcon={() => <Icon name='ios-close' type='ionicon' /> }
         />
           <Button icon="magnify" mode="contained" style={{backgroundColor: 'rgb(63, 81, 181)'}} onPress={() => this.navigation.navigate('Search')}>
             Recherche avancée
@@ -392,7 +409,7 @@ export default class MyHeader extends React.Component {
     rightContentProfile = () => (
       <View>
         <Header
-          leftComponent={this.leftContent()}
+          leftComponent={this.leftContent("back")}
           rightComponent={this.rightContent('rightProfile')}
           centerComponent={this.centerContent()}
           containerStyle={{
@@ -402,6 +419,21 @@ export default class MyHeader extends React.Component {
         />
       </View>
     )
+
+    rightContentEditTicket = () => (
+      <View>
+        <Header
+          leftComponent={this.leftContent("back")}
+          rightComponent={this.rightContent('rightEditTicket')}
+          centerComponent={this.centerContent()}
+          containerStyle={{
+            backgroundColor: 'rgb(63, 81, 181)',
+            height: 60
+          }}
+        />
+      </View>
+    )
+
 
     contentAsso = () => (
       <View>
@@ -440,6 +472,9 @@ export default class MyHeader extends React.Component {
       }
       else if (type === 'Profile') {
         HeaderComponent =  this.rightContentProfile()
+      }
+      else if (type === 'EditTicket') {
+        HeaderComponent =  this.rightContentEditTicket()
       }
       else if (type === 'Association') {
         HeaderComponent =  this.contentAsso()

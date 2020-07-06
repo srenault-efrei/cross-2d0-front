@@ -7,6 +7,8 @@ import { SliderBox } from "react-native-image-slider-box"
 import MapView, { Marker, Callout } from 'react-native-maps'
 import { Button, Card } from 'react-native-paper'
 import PropTypes from 'prop-types'
+import { Avatar } from 'react-native-elements'
+
 const moment = require('moment')
 const now = moment().format('YYYY-MM-DD hh:mm:ss')
 import _ from 'lodash'
@@ -14,21 +16,22 @@ import _ from 'lodash'
 YellowBox.ignoreWarnings(['componentWillReceiveProps'])
 const _console = _.clone(console)
 console.warn = message => {
-  if (message.indexOf('componentWillReceiveProps') <= -1) {
-  _console.warn(message);
-  } 
+    if (message.indexOf('componentWillReceiveProps') <= -1) {
+        _console.warn(message);
+    }
 }
 
 export default class Product extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { 
+        this.state = {
             images: [
                 "https://www.fri.ch/site_2015/wp-content/plugins/ajax-search-pro/img/default.jpg"
             ],
-            isVisibleNotifs: false, 
+            isVisibleNotifs: false,
             isVisibleFilters: false,
             product: this.props.route.params.product,
+            isEdit : this.props.route.params.isEdit,
             iSent: false,
             latitude: this.props.route.params.product.user.latitude,
             longitude: this.props.route.params.product.user.longitude
@@ -81,69 +84,93 @@ export default class Product extends React.Component {
     }
 
     init = () => {
-        this.props.navigation.addListener('focus', () => {
+        this.props.navigation.addListener('focus', async() => {
+            await this.setDataStorage()
             this.setState({
                 product: this.props.route.params.product,
                 latitude: this.props.route.params.product.user.latitude,
                 longitude: this.props.route.params.product.user.longitude,
                 iSent: false,
+                isEdit: this.props.route.params.isEdit
             })
         })
     }
 
-    getMoment(){
-        const {product} = this.state
+  async componentDidMount() {
+    await this.setDataStorage()
+    this.checkParams()
+    this.getMoment()
+    this.unsubscribe()
+
+  }
+
+
+  unsubscribe = () => {
+    this.props.navigation.addListener('focus', async() => {
+      this.checkParams()
+      this.getMoment()
+    })
+  }
+
+  async componentWillUnmount() {
+    this.unsubscribe();
+
+  }
+
+
+    getMoment() {
+        const { product } = this.state
         const date = product.createdAt
         const newDate = date.replace('T', ' ').split('.')[0]
-        const ms = moment(now,"YYYY-MM-DD HH:mm:ss").diff(moment(newDate,"YYYY-MM-DD HH:mm:ss"))
+        const ms = moment(now, "YYYY-MM-DD HH:mm:ss").diff(moment(newDate, "YYYY-MM-DD HH:mm:ss"))
         const d = moment.duration(ms)
-        
-        if (d.days() != 0){
-            if (Math.abs(d.days()) > 1){
+
+        if (d.days() != 0) {
+            if (Math.abs(d.days()) > 1) {
                 this.setState({ time: Math.abs(d.days()) + ' jours' })
             } else {
                 this.setState({ time: Math.abs(d.days()) + ' jour' })
             }
-        } 
-        else if (d.hours() != 0){
-            if (Math.abs(d.hours()) > 1){
+        }
+        else if (d.hours() != 0) {
+            if (Math.abs(d.hours()) > 1) {
                 this.setState({ time: Math.abs(d.hours()) + ' heures' })
             } else {
                 this.setState({ time: Math.abs(d.hours()) + ' heure' })
             }
-        } 
-        else if (d.minutes() != 0){
-            if (Math.abs(d.minutes()) > 1){
+        }
+        else if (d.minutes() != 0) {
+            if (Math.abs(d.minutes()) > 1) {
                 this.setState({ time: Math.abs(d.minutes()) + ' minutes' })
             } else {
                 this.setState({ time: Math.abs(d.minutes()) + ' minute' })
             }
-        } 
-        else if (d.seconds() != 0){
-            if (Math.abs(d.seconds()) > 1){
+        }
+        else if (d.seconds() != 0) {
+            if (Math.abs(d.seconds()) > 1) {
                 this.setState({ time: Math.abs(d.seconds()) + ' secondes' })
             } else {
                 this.setState({ time: Math.abs(d.seconds()) + ' seconde' })
             }
         }
-        else if (d.months() != 0){
+        else if (d.months() != 0) {
             this.setState({ time: Math.abs(d.months()) + ' mois' })
-        }  
-        else if (d.years() != 0){
-            if (Math.abs(d.years()) > 1){
+        }
+        else if (d.years() != 0) {
+            if (Math.abs(d.years()) > 1) {
                 this.setState({ time: Math.abs(d.years()) + ' ans' })
             } else {
                 this.setState({ time: Math.abs(d.years()) + ' an' })
             }
-        }  
+        }
         else {
             this.setState({ time: 'à l\'instant' })
         }
     }
 
-    checkParams(){
+    checkParams() {
         if (this.props.route.params.product == undefined || this.props.route.params.product == '') {
-        this.navigation.goBack()
+            this.navigation.goBack()
         }
     }
 
@@ -157,7 +184,7 @@ export default class Product extends React.Component {
         if (this.state.typeUser === 'customer') {
           return <MyFooter type ='classic' navigation={this.navigation}/>
         } else {
-          return <MyFooter type ='Association' navigation={this.navigation}/>
+          return <MyFooter type ='association' navigation={this.navigation}/>
         }
     }
 
@@ -180,7 +207,7 @@ export default class Product extends React.Component {
         .then((response) => response.json())
         .then(() => {
             this.setState({iSent: true})
-            console.log('Message sent !')
+            // console.log('Message sent !')
         })
         .catch((error) => {
         console.error(error);
@@ -204,48 +231,62 @@ export default class Product extends React.Component {
     }
 
     render() {
-        const {product} = this.state
+        const { product,isEdit } = this.state
         return (
             <SafeAreaView style={styles.bdy}>
-            <MyHeader type='back' navigation={this.navigation}/>
-            <View style={styles.container}>
-                <View style={styles.slider}>
-                    <SliderBox
-                        images={ product.imagesFiles.length != 0 ? product.imagesFiles : this.state.images}
-                        sliderBoxHeight={200}
-                        onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
-                        dotColor="#fff"
-                        inactiveDotColor="#90A4AE"
-                        autoplay
-                        dotStyle={{
-                            width: 10,
-                            height: 10,
-                            borderRadius: 15,
-                            marginHorizontal: 10,
-                            padding: 0,
-                            margin: 0,
+                {isEdit === true ? <MyHeader type='EditTicket' data={this.props.route.params.product} navigation={this.navigation} /> : <MyHeader type='back' navigation={this.navigation} />
+ } 
+
+                <View style={{ alignItems: "center", top: 40, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center' }}>
+                    <Avatar
+                        rounded
+                        size={100}
+                        onPress={(() => this.props.navigation.navigate("Profil"))}
+                        source={{
+                            uri:
+                                "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
                         }}
+
                     />
                 </View>
-                    
-                <View>
-                    <View style={styles.detailsContainer}>
-                        <View style={styles.headerContainer}>
-                            <Text style={styles.italic}>Posté par <Text style={styles.bold}>{product.user.firstname}</Text></Text>
-                            <Text style={styles.italic}>{this.state.time}</Text>
-                        </View>
-
-                        <View style={styles.titleContainer}>
-                            <Text style={styles.title}>{product.title}</Text>
-                            <Text>{product.category.title}</Text>
-                        </View>
-
-                        <View style={styles.descContainer}>
-                            <Text style={styles.italic}>"{product.description}"</Text>
-                        </View>
-
+                <View style={styles.container}>
+                    <View style={styles.slider}>
+                        <SliderBox
+                            images={this.state.images}
+                            sliderBoxHeight={200}
+                            onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
+                            dotColor="#fff"
+                            inactiveDotColor="#90A4AE"
+                            autoplay
+                            dotStyle={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: 15,
+                                marginHorizontal: 10,
+                                padding: 0,
+                                margin: 0,
+                            }}
+                        />
                     </View>
-                </View>
+
+                    <View>
+                        <View style={styles.detailsContainer}>
+                            <View style={styles.headerContainer}>
+                                {/* <Text style={styles.italic}>Posté par <Text style={styles.bold}>{product.customer.firstname}</Text></Text> */}
+                                <Text style={styles.italic}>{this.state.time}</Text>
+                            </View>
+
+                            <View style={styles.titleContainer}>
+                                <Text style={styles.title}>{product.title}</Text>
+                                {/* <Text>{product.category.title}</Text> */}
+                            </View>
+
+                            <View style={styles.descContainer}>
+                                <Text style={styles.italic}>"{product.description}"</Text>
+                            </View>
+
+                        </View>
+                    </View>
 
                 <View style={styles.mapContainer}>
                 <MapView 
@@ -264,11 +305,11 @@ export default class Product extends React.Component {
                             draggable
                             coordinate={
                                 {
-                                    latitude: 48.8582602,
-                                    longitude: 2.2944991
+                                    latitude: this.state.latitude,
+                                    longitude: this.state.longitude
                                 }
                             }
-                            onDragEnd={() => console.log('closed')}
+                            // onDragEnd={() => console.log('closed')}
                             title={product.title}
                             description={product.description}
                         >

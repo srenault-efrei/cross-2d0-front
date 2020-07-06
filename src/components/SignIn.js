@@ -40,11 +40,11 @@ export default class Signin extends Component {
             if (json.err) {
                 this.setState({ error: json.err.description });
             } else {
-                console.log(json.data);
+                // console.log(json.data);
                 await this._storeData(json.data);
                 if (json.data.customer || json.data.association) {
                     this.props.navigation.navigate('Home');
-                    console.log("Log succesfully : ", json.data.customer ? UserType.CUSTOMER : UserType.ASSOCIATION);
+                    // console.log("Log succesfully : ", json.data.customer ? UserType.CUSTOMER : UserType.ASSOCIATION);
                 } else {
                     console.log('Error: no user type');
                 }
@@ -67,7 +67,7 @@ export default class Signin extends Component {
 
         return (
             <SafeAreaView style={styles.safeArea}>
-                <View style={styles.topView}>
+                <View style={styles.titleView}>
                     <Text style={styles.title}>TROCIFY</Text>
                 </View>
                 <View style={styles.loginView}>

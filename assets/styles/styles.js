@@ -13,12 +13,18 @@ export default StyleSheet.create({
     alignItems: "center"
   },
 
-  topView: {
+  titleView: {
     justifyContent: "center",
     alignItems: "center",
     alignContent: "space-between",
     paddingVertical: 10,
     flexDirection: "row"
+  },
+  topView: {
+    paddingHorizontal: '10%',
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10
   },
   loginView: {
     flex: 1,
@@ -41,6 +47,7 @@ export default StyleSheet.create({
     width: '95%',
     height: 1,
     borderBottomWidth: 1,
+    marginTop: 10,
     marginBottom: 15
   },
   bottomView: {
@@ -55,7 +62,21 @@ export default StyleSheet.create({
   },
   title: {
     fontSize: 40,
-    color: "#000"
+    color: "#000",
+    textAlign: 'center'
+  },
+  mediumTitle: {
+    fontSize: 25,
+    color: "#000",
+    textAlign: 'center'
+  },
+  smallTitle: {
+    fontSize: 16,
+    color: "#000",
+    textAlign: 'center',
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 5
   },
   button: {
     height: 40,
@@ -66,6 +87,17 @@ export default StyleSheet.create({
     backgroundColor: colors.customLightGreen,
     borderRadius: 45,
     marginTop: 10
+  },
+  imageButton: {
+    height: 35,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 10,
+    paddingHorizontal: 20
   },
   halfButton: {
     height: 40,
@@ -80,6 +112,11 @@ export default StyleSheet.create({
     color: "white",
     width: "100%",
     textAlign: 'center'
+  },
+  textImageButton: {
+    color: "black",
+    width: "100%",
+    textAlign: 'left'
   },
   input: {
     width: "100%",
