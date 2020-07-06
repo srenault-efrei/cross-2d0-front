@@ -20,7 +20,8 @@ import EditProfile from './components/EditProfil'
 import Rank from './components/Rank'
 import MyBarters from './components/MyBarters'
 import MyDonations from './components/MyDonations'
-
+import MessageList from './components/MessageList'
+import MessageBox from './components/MessageBox'
 
 const Drawer = createDrawerNavigator()
 function App() {
@@ -44,6 +45,9 @@ function App() {
         <Drawer.Screen name="Rank" component={Rank} />
         <Drawer.Screen name="MyBarters" component={MyBarters} />
         <Drawer.Screen name="MyDonations" component={MyDonations} />
+        <Drawer.Screen name="Messages" component={MessageList} />
+        <Drawer.Screen name="Messages Box" component={MessageBox} />
+        
 
 
 

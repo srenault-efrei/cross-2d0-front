@@ -43,7 +43,7 @@ export default class MyFooter extends React.Component {
                     </View>
                     <Text style={styles.blankText, { position: 'absolute', top: 38, color: 'white' }}>Ajouter</Text>
                 </Button>
-                <Button vertical>
+                <Button vertical onPress={() => this.navigation.navigate("Messages")}>
                     <View style={{ position: 'relative', bottom: 5 }}>
                         <Icon
                             reverse
@@ -76,7 +76,9 @@ export default class MyFooter extends React.Component {
                     </View>
                     <Text style={styles.blankText, { position: 'absolute', top: 35, color: 'white' }}>A proximité</Text>
                 </Button>
-                <Button vertical>
+                <Button vertical
+                    onPress={() => this.navigation.navigate("Messages")}
+                >
                     <View style={{ position: 'relative', bottom: 5 }}>
                         <Icon
                             reverse

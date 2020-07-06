@@ -57,15 +57,14 @@ export default StyleSheet.create({
     flexDirection: "row",
   },
 
-  historyCard: {
+  messageCard: {
+    flex:1,
     width: "95%",
     height: "20%",
     backgroundColor: "#f2f2f2",
-    borderRadius: 5,
-    marginBottom: "3%",
     // justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+    alignItems: "flex-start",
+    flexDirection: "row"
   },
 
 
@@ -100,7 +99,11 @@ export default StyleSheet.create({
   cardLogo: {
     width: 30,
     height: 30,
-    right: "220%"
+    borderRadius:45,
+    borderWidth:1,
+    borderColor:'black',
+    marginHorizontal:5
+    
 
   },
 
@@ -124,9 +127,8 @@ export default StyleSheet.create({
   },
 
   contentContainer: {
-    flexGrow: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    marginTop:1,
+    flexGrow: 1
 
   },
 
@@ -178,6 +180,25 @@ export default StyleSheet.create({
     marginRight: 10,
     justifyContent: "center",
     alignItems: "center",
-  	}
+    },
+    
+    button: {
+      height: 20,
+      width: "10%",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "row",
+      backgroundColor: "green",
+      borderRadius: 45,
+      marginTop: 10
+    },
+    textButton: {
+      color: "green",
+      width: "100%",
+      textAlign: 'center',
+      alignItems:'center',
+      justifyContent:"center",
+      alignContent:"center",
+    }
 
 });
