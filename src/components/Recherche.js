@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, SafeAreaView, FlatList, YellowBox, KeyboardAvoidingView } from 'react-native'
+import { View, SafeAreaView, FlatList, YellowBox, KeyboardAvoidingView, AsyncStorage } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import { CheckBox, Text, Slider,Avatar } from 'react-native-elements'
@@ -51,6 +51,18 @@ export default class Search extends React.Component {
 
   componentDidMount = async () => {
     this.fetchCategories()
+  }
+
+  async setDataStorage() {
+    let user = await AsyncStorage.getItem('data')
+    if (!user) {
+      this.props.navigation.navigate("SignIn")
+    } 
+    else {
+      let data = JSON.parse(user)
+      this.setState({ user: data, token: data.meta.token, })
+      data.customer ? this.setState({ typeUser: "customer",id: data.customer.id }) : this.setState({ typeUser: "association", id: data.association.id })
+    }
   }
 
   fetchCategories = async () => {
@@ -122,13 +134,13 @@ export default class Search extends React.Component {
     this.reset()
   }
 
-  /*   footerType = () => {
-    if (this.state.user.type === 'customer') {
-      return <MyFooter type='classic' navigation={this.navigation}/>
+  footerType = () => {
+    if (this.state.typeUser === 'customer') {
+      return <MyFooter type ='classic' navigation={this.navigation}/>
     } else {
-      return <MyFooter type='Association' navigation={this.navigation}/>
+      return <MyFooter type ='Association' navigation={this.navigation}/>
     }
-  } */
+  }
 
   render() {
     return (
@@ -207,9 +219,9 @@ export default class Search extends React.Component {
               </Button>
             </View>
           </View>
-        </KeyboardAvoidingView>
-        <MyFooter type='classic' navigation={this.navigation} />
-      </SafeAreaView>
-    )
+      </KeyboardAvoidingView>
+      {this.footerType()}
+    </SafeAreaView>
+  )
   }
 }

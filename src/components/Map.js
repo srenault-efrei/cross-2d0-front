@@ -68,7 +68,9 @@ export default class Map extends React.Component {
     componentDidMount = async () => {
         await this.setDataStorage()
         this.fetchTrocs()
-    }
+        this.unsubscribe()
+    
+      }
 
     async setDataStorage() {
         let user = await AsyncStorage.getItem('data')
@@ -81,6 +83,18 @@ export default class Map extends React.Component {
           data.customer ? this.setState({ typeUser: "customer",id: data.customer.id, latitude: data.customer.latitude, longitude: data.customer.longitude }) : this.setState({ typeUser: "association", id: data.association.id, latitude: data.association.latitude, longitude: data.association.longitude })
         }
     }
+    
+      unsubscribe = () => {
+        this.props.navigation.addListener('focus', async() => {
+          await this.setDataStorage()
+          this.fetchTrocs()
+        })
+      }
+    
+      async componentWillUnmount() {
+        this.unsubscribe();
+      }
+
 
     fetchTrocs = async () => {
         const {token} = this.state

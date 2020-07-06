@@ -58,7 +58,8 @@ export default class Product extends React.Component {
     }
 
     init = () => {
-        this.props.navigation.addListener('focus', () => {
+        this.props.navigation.addListener('focus', async() => {
+            await this.setDataStorage()
             this.setState({
                 product: this.props.route.params.product,
                 iSent: false,

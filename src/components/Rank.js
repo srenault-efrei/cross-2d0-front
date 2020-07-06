@@ -25,6 +25,10 @@ export default class Rank extends Component {
 
 
     async componentDidMount() {
+        this.setState({
+            user: this.props.route.params.user,
+        })
+        this.fetchCustomers()
         this.unsubscribe()
 
     }

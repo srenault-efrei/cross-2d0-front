@@ -39,6 +39,7 @@ export default class Home extends React.Component {
 
   unsubscribe = () => {
     this.props.navigation.addListener('focus', async() => {
+      await this.setDataStorage()
       this.fetchTrocs()
     })
   }
