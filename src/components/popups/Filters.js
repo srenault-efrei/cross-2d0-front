@@ -12,6 +12,8 @@ export default class Filters extends React.Component {
     this.state = { 
       visible: false, 
       tab: [{value: false}, {value: false}, {value: false}, {value: false}],
+      id: 0,
+      checked: false,
       name: '' 
     }
     this.navigation = this.props.navigation
@@ -65,8 +67,8 @@ export default class Filters extends React.Component {
                     center
                     checkedIcon='dot-circle-o'
                     uncheckedIcon='circle-o'
-                    checked={this.state.tab[item.id-1].value}
-                    onPress={() => this.handleChange(item)}
+                    checked={this.state.id === item.id ? true : false}
+                    onPress={() => this.setState({id: item.id})}
                 />
                 <Text style={styles.filterText}>{item.title}</Text>
             </View>
