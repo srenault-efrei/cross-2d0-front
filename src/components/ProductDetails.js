@@ -37,8 +37,8 @@ export default class Product extends React.Component {
             product: this.props.route.params.product,
             isEdit : this.props.route.params.isEdit,
             iSent: false,
-            latitude: 0,
-            longitude: 0
+            latitude: this.props.route.params.product.user.latitude,
+            longitude: this.props.route.params.product.user.longitude
         }
         this.navigation = this.props.navigation
     }
@@ -84,6 +84,7 @@ export default class Product extends React.Component {
 
     componentWillReceiveProps() {
         this.init()
+        console.log(this.props.route.params.product)
     }
 
     init = () => {
@@ -91,6 +92,8 @@ export default class Product extends React.Component {
             await this.setDataStorage()
             this.setState({
                 product: this.props.route.params.product,
+                latitude: this.props.route.params.product.user.latitude,
+                longitude: this.props.route.params.product.user.longitude,
                 iSent: false,
                 isEdit: this.props.route.params.isEdit
             })
@@ -306,8 +309,8 @@ export default class Product extends React.Component {
                             draggable
                             coordinate={
                                 {
-                                    latitude: this.state.latitude,
-                                    longitude: this.state.longitude
+                                    latitude: 48.8582602,
+                                    longitude: 2.2944991
                                 }
                             }
                             // onDragEnd={() => console.log('closed')}

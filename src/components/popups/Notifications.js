@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, FlatList, YellowBox } from 'react-native'
+import { View, FlatList, YellowBox, AsyncStorage } from 'react-native'
 import { List } from 'react-native-paper'
 import { Icon } from 'react-native-elements'
 import Dialog, { ScaleAnimation, DialogContent, DialogTitle, DialogButton } from 'react-native-popup-dialog'
@@ -24,11 +24,24 @@ export default class Notifications extends React.Component {
   }
 
   componentWillMount = async () => {
+    await this.setDataStorage()
     this.fetchMsg()
   }
 
+  async setDataStorage() {
+    let user = await AsyncStorage.getItem('data')
+    if (!user) {
+      this.props.navigation.navigate("SignIn")
+    } 
+    else {
+      let data = JSON.parse(user)
+      this.setState({ user: data, token: data.meta.token, })
+      data.customer ? this.setState({ typeUser: "customer",id: data.customer.id, latitude: data.customer.latitude, longitude: data.customer.longitude }) : this.setState({ typeUser: "association", id: data.association.id, latitude: data.association.latitude, longitude: data.association.longitude })
+    }
+  }
+
   fetchMsg = async () => {
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmMzhlYzU2LTc3NTctNDJkNy04ZjEzLWNjYTFkZjJmNzgwYyIsImZpcnN0bmFtZSI6IkZhYmlhbiIsImlhdCI6MTU5NDAyMzExOH0.qUS1FNiIgxjIRPTMJ5Bt2n7RwOJxH99llO_hG7mm9wg'
+    const {token} = this.state
     return fetch(`https://trocify.herokuapp.com/api/users/3f38ec56-7757-42d7-8f13-cca1df2f780c/messages`, {
       method: 'GET',
       headers: 
