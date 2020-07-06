@@ -21,6 +21,3 @@ mdp: 123456
 
 email: maxime_trocify@yopmail.com<br />
 mdp: 123456
-
-email: steven_trocify@yopmail.com<br />
-mdp: 123456
