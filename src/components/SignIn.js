@@ -67,7 +67,7 @@ export default class Signin extends Component {
 
         return (
             <SafeAreaView style={styles.safeArea}>
-                <View style={styles.topView}>
+                <View style={styles.titleView}>
                     <Text style={styles.title}>TROCIFY</Text>
                 </View>
                 <View style={styles.loginView}>

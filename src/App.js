@@ -13,6 +13,7 @@ import SignUpIndividual from './components/SignUpIndividual';
 import SignUpAssociation from './components/SignUpAssociation';
 import ForgotPassword from './components/ForgotPassword';
 import Preference from './components/Preference';
+import Confidentiality from './components/Confidentiality';
 import Home from './components/Home';
 import Search from './components/Recherche';
 import Header from './components/headers/Header';
@@ -40,6 +41,7 @@ function App() {
         <Drawer.Screen name="SignUpAssociation" component={SignUpAssociation} />
         <Drawer.Screen name="ForgotPassword" component={ForgotPassword} />
         <Drawer.Screen name="Preference" component={Preference} />
+        <Drawer.Screen name="Confidentiality" component={Confidentiality} />
         <Drawer.Screen name="Profil" component={ProfilCusto} />
         <Drawer.Screen name="Associations" component={Associations} />
         <Drawer.Screen name="DetailsAssociation" component={DetailsAssociation} />
