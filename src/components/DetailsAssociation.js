@@ -9,7 +9,7 @@ import {
 import styles from '../../assets/styles/profilCusto'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
-import global from '../../assets/css/global.js'
+import {Avatar } from 'react-native-elements'
 
 export default class DetailAssociation extends Component {
 
@@ -96,12 +96,16 @@ export default class DetailAssociation extends Component {
 
                 {/* Header */}
                 <MyHeader type='Return' navigation={navigation} />
-                <View style={global.circle}>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate("Profil")} >
-                        <Text>IMG</Text>
-                        <Text>Profile</Text>
-                    </TouchableOpacity>
+                <View style={{ alignItems: "center", top: 40, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center' }}>
+                    <Avatar
+                        rounded
+                        size={100}
+                        onPress={(() => this.props.navigation.navigate("Profil"))}
+                        source={{
+                            uri:
+                                "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
+                        }}
+                    />
                 </View>
 
 
@@ -116,7 +120,7 @@ export default class DetailAssociation extends Component {
                 <View style={styles.viewEnd}>
                     <View style={styles.end}>
                         <TouchableOpacity
-                        onPress={() => this.sendProposition()}
+                            onPress={() => this.sendProposition()}
                         >
                             <Text>PROPOSER UN DON</Text>
                         </TouchableOpacity>

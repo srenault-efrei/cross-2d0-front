@@ -208,7 +208,7 @@ export default class EditProfile extends React.Component {
           gender: this.state.gender,
           geolocalisation: true,
           rank: this.state.user.rank.id,
-          // filename: this.state.filename,
+          // filename: __dirname+this.state.filename,
           // key: `profil_${this.state.user.id}.png`
 
         }
@@ -221,7 +221,7 @@ export default class EditProfile extends React.Component {
           geolocalisation: true,
           rank: this.state.user.rank.id,
           password: this.state.password,
-          // filename: this.state.filename,
+          // filename: __dirname+this.state.filename,
           // key: `profil_${this.state.user.id}.png`
 
         }
@@ -239,7 +239,7 @@ export default class EditProfile extends React.Component {
 
         });
         const json = await response.json();
-        // console.log(json)
+        console.log(json)
         if (json.err === undefined) {
           alert("Modification réussie.")
           this.props.navigation.navigate("Profil")
@@ -297,7 +297,7 @@ export default class EditProfile extends React.Component {
 
     return (
       <SafeAreaView style={styles.bdy}>
-        <MyHeader type='Profile' />
+        <MyHeader type='back' navigation={navigation} />
         <View style={{ alignItems: "center", top: 30, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
           <Avatar
             rounded

@@ -91,7 +91,7 @@ export default StyleSheet.create({
   },
 
   infosProfile: {
-    marginBottom: "10%",
+    marginBottom: "7%",
     justifyContent: "center",
     alignItems: "center"
   },
@@ -107,6 +107,13 @@ export default StyleSheet.create({
     width: 30,
     height: 30,
     right: "210%"
+
+  },
+
+  cardLogoClockAsso: {
+    width: 30,
+    height: 30,
+    right: "180%"
 
   },
 

@@ -40,7 +40,7 @@ export default class Signin extends Component {
             if (json.err) {
                 this.setState({ error: json.err.description });
             } else {
-                console.log(json.data);
+                // console.log(json.data);
                 await this._storeData(json.data);
                 if (json.data.customer || json.data.association) {
                     this.props.navigation.navigate('Home');

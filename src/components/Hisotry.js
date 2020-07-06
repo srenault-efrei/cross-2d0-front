@@ -3,8 +3,7 @@ import { Text, View, SafeAreaView, TouchableOpacity, FlatList, Image, AsyncStora
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/home.js'
-import stylesProfile from '../../assets/styles/profilCusto'
-import { Card } from 'react-native-elements'
+import { Card,Avatar } from 'react-native-elements'
 
 export default class History extends React.Component {
   constructor(props) {
@@ -83,7 +82,18 @@ export default class History extends React.Component {
       <SafeAreaView style={styles.bdy}>
         <MyHeader type='Return' navigation={this.navigation} />
 
+        <View style={{ alignItems: "center", top: 40, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center' }}>
+          <Avatar
+            rounded
+            size={100}
+            onPress={(() => this.props.navigation.navigate("Profil"))}
+            source={{
+              uri:
+                "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
+            }}
 
+          />
+        </View>
         <View style={styles.container}>
 
           <FlatList

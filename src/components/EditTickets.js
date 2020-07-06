@@ -246,10 +246,11 @@ export default class Add extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props
     const { ticket, dropdown, category, title, description, localisation, imagesFiles } = this.state
     return (
       <SafeAreaView style={styles.bdy}>
-        <MyHeader type='Return' />
+        <MyHeader type='Return' navigation={navigation} />
         <View style={styles.container}>
 
           <View style={styles.imgContainer}>

@@ -9,7 +9,7 @@ import {
 import styles from '../../assets/styles/profilCusto'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
-import global from '../../assets/css/global.js'
+import { Avatar } from 'react-native-elements'
 
 
 export default class Associations extends Component {
@@ -34,23 +34,28 @@ export default class Associations extends Component {
 
     async componentWillUnmount() {
         this.unsubscribe();
-      }
+    }
 
     render() {
-       
+
         const { navigation } = this.props
         const { associations } = this.state
         return (
             <SafeAreaView style={styles.safeArea}>
 
                 {/* Header */}
-                <MyHeader type='Association' navigation={navigation} />
-                <View style={global.circle}>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate("Profil")} >
-                        <Text>IMG</Text>
-                        <Text>Profile</Text>
-                    </TouchableOpacity>
+                <MyHeader type='back' navigation={navigation} />
+                <View style={{ alignItems: "center", top: 40, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center' }}>
+                    <Avatar
+                        rounded
+                        size={100}
+                        onPress={(() => this.props.navigation.navigate("Profil"))}
+                        source={{
+                            uri:
+                                "https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg",
+                        }}
+
+                    />
                 </View>
 
                 <SafeAreaView style={styles.container}>
@@ -61,7 +66,7 @@ export default class Associations extends Component {
 
                                 <View key={idAsso} style={styles.card}>
                                     <TouchableOpacity
-                                        onPress={() => navigation.navigate('DetailsAssociation', {asso} )}
+                                        onPress={() => navigation.navigate('DetailsAssociation', { asso })}
                                     >
                                         <Text>{asso.name}</Text>
                                     </TouchableOpacity>
@@ -74,7 +79,7 @@ export default class Associations extends Component {
                 </SafeAreaView>
 
                 {/* Footer  */}
-                <MyFooter type='classic' navigation={navigation}/>
+                <MyFooter type='classic' navigation={navigation} />
 
             </SafeAreaView>
         )

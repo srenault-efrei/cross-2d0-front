@@ -118,7 +118,7 @@ export default class Profil extends Component {
         <MyHeader type='Profile' navigation={navigation} />
 
 
-        <View style={{ alignItems: "center", top: 30, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ alignItems: "center", top: 40, position: 'absolute', zIndex: 1, alignSelf: 'center', justifyContent: 'center', alignItems: 'center' }}>
           <Avatar
             rounded
             size={100}
@@ -198,7 +198,7 @@ export default class Profil extends Component {
               </TouchableOpacity>
             </View> : <View style={styles.cardAsso}>
               <Image
-                style={styles.cardLogoClock}
+                style={styles.cardLogoClockAsso}
                 source={require('../../assets/img/gift.png')}
               />
               <TouchableOpacity

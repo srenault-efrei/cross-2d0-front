@@ -2,9 +2,9 @@
 import React from 'react'
 import { Icon } from 'react-native-elements'
 import { Footer, FooterTab, Button, } from 'native-base';
-import { TouchableOpacity, Text } from 'react-native'
+import { Text } from 'react-native'
 import { View } from 'native-base'
-import styles from '../../../assets/css/header.js'
+import PropTypes from 'prop-types'
 
 export default class MyFooter extends React.Component {
     constructor(props) {
@@ -14,95 +14,101 @@ export default class MyFooter extends React.Component {
         this.navigation = this.props.navigation
     }
 
-    classicFooter =
-        <Footer style={{ backgroundColor: 'rgb(63, 81, 181)'}}>
-            <FooterTab>
-                <Button vertical
-                    onPress={() => this.navigation.navigate("Home")}
-                >
-                    <View style={{ position: 'relative', bottom: 6 }}>
-                        <Icon
-                            reverse
-                            name='ios-funnel'
-                            type='ionicon'
-                            size={20}
-                            color='none'
-                        />
+    classicFooter = () => {
+        return (
+            <Footer style={{ backgroundColor: 'rgb(63, 81, 181)'}}>
+                <FooterTab>
+                <Button vertical onPress={() => this.navigation.navigate('Home')}>
+                    <View style={{position: 'relative', bottom: 6}}>
+                    <Icon
+                    reverse
+                    name='ios-funnel'
+                    type='ionicon'
+                    size={20}
+                    color='transparent'
+                    />
                     </View>
-                    <Text style={styles.blankText, { position: 'absolute', top: 35, color: 'white' }}>A proximité</Text>
+                    <Text style={{position: 'absolute', top:35, color: '#fff'}}>A proximité</Text>
+                </Button>
+                <Button vertical onPress={() => this.navigation.navigate('Add')}>
+                    <View style={{position: 'relative', bottom: 4}}>
+                    <Icon
+                    reverse
+                    name='ios-add-circle'
+                    type='ionicon'
+                    size={25}
+                    color='transparent'
+                    />
+                    </View>
+                    <Text style={{position: 'absolute', top:38, color: '#fff'}}>Ajouter</Text>
                 </Button>
                 <Button vertical>
-                    <View style={{ position: 'relative', bottom: 4 }}>
-                        <Icon
-                            reverse
-                            name='ios-add-circle'
-                            type='ionicon'
-                            size={25}
-                            color='none'
-                        />
+                    <View style={{position: 'relative', bottom: 5}}>
+                    <Icon
+                    reverse
+                    name='comment'
+                    type='octicon'
+                    size={20}
+                    color='transparent'
+                    />
                     </View>
-                    <Text style={styles.blankText, { position: 'absolute', top: 38, color: 'white' }}>Ajouter</Text>
+                    <Text style={{position: 'absolute', top:35, color: '#fff'}}>Messages</Text>
                 </Button>
-                <Button vertical>
-                    <View style={{ position: 'relative', bottom: 5 }}>
-                        <Icon
-                            reverse
-                            name='comment'
-                            type='octicon'
-                            size={20}
-                            color='none'
-                        />
-                    </View>
-                    <Text style={styles.blankText, { position: 'absolute', top: 35, color: 'white' }}>Message</Text>
-                </Button>
-            </FooterTab>
-        </Footer>
+                </FooterTab>
+            </Footer>
+        )
+    }
 
-
-    associationFooter =
-        <Footer style={{ backgroundColor: 'rgb(63, 81, 181)' }}>
-            <FooterTab>
-                <Button vertical
-                    onPress={() => this.navigation.navigate("Home")}
-                >
-                    <View style={{ position: 'relative', bottom: 6 }}>
-                        <Icon
-                            reverse
-                            name='ios-funnel'
-                            type='ionicon'
-                            size={20}
-                            color='none'
-                        />
+    // classic footer without center content
+    organizationFooter = () => {
+        return (
+            <Footer style={{ backgroundColor: 'rgb(63, 81, 181)'}}>
+                <FooterTab>
+                <Button vertical>
+                    <View style={{position: 'relative', bottom: 6}}>
+                    <Icon
+                    reverse
+                    name='ios-funnel'
+                    type='ionicon'
+                    size={20}
+                    color='transparent'
+                    />
                     </View>
-                    <Text style={styles.blankText, { position: 'absolute', top: 35, color: 'white' }}>A proximité</Text>
+                    <Text style={{position: 'absolute', top:35, color: '#fff'}}>A proximité</Text>
                 </Button>
                 <Button vertical>
-                    <View style={{ position: 'relative', bottom: 5 }}>
-                        <Icon
-                            reverse
-                            name='comment'
-                            type='octicon'
-                            size={20}
-                            color='none'
-                        />
-                    </View>
-                    <Text style={styles.blankText, { position: 'absolute', top: 35, color: 'white' }}>Message</Text>
+
                 </Button>
-            </FooterTab>
-        </Footer>
+                <Button vertical>
+                    <View style={{position: 'relative', bottom: 5}}>
+                    <Icon
+                    reverse
+                    name='comment'
+                    type='octicon'
+                    size={20}
+                    color='transparent'
+                    />
+                    </View>
+                    <Text style={{position: 'absolute', top:35, color: '#fff'}}>Messages</Text>
+                </Button>
+                </FooterTab>
+            </Footer>
+        )
+    }
 
 
     render() {
-        const type = this.type
+        const type = this.props.type
         let FooterComponent
-        if (type === 'classic') {
-            FooterComponent = this.classicFooter
-        } else if (type == "association") {
-            FooterComponent = this.associationFooter
-
+        if(type === 'association'){
+            FooterComponent =  this.organizationFooter()
+        } else if(type === 'classic') {
+            FooterComponent =  this.classicFooter()
         }
         return (
             FooterComponent
         )
     }
 }
+
+MyFooter.propTypes = { type: PropTypes.string.isRequired, navigation: PropTypes.object.isRequired }
