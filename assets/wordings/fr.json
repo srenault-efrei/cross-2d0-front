@@ -1,0 +1,20 @@
+{
+    "confidentiality": [
+        {
+            "title": "Règles de confidentialité",
+            "text": "Trocify est éditée par Troc-moé-ço Industry, Société par Actions Simplifiée au capital de 1.000.000 d’Euro – Immeuble Éron, 42 avenue Jean Calis – Montréal, Québec. Le terme Application s’applique à l’application pour mobile ou tablette Android et IOS nommée « Trocify ».Le terme Serveur Trocify s’applique au composant logiciel de la Suite Trocify avec lequel communique l’Application. Nos règles de confidentialité expliquent quelles données nous collectons depuis l’Application et les raisons de cette collecte, comment nous utilisons / traitons ces informations et à quels tiers nous pourrions éventuellement les divulguer."
+        },
+        {
+            "title": "Données personnelles",
+            "text": "Depuis notre Application, nous collectons à des fins privées mais ne divulguons aucune donnée personnelle (par exemple: les noms, les adresses, les numéros de téléphone, les adresses de courrier électronique ou les adresses IP complètes)."
+        },
+        {
+            "title": "Données relatives à la communication",
+            "text": "Lorsque vous utilisez notre Application via les services de télécommunications pour communiquer avec un Serveur Trocify, des données relatives à la communication (par exemple, l’adresse IP) sont automatiquement générées. Le Serveur Trocify ne conserve pas ces données, elles sont utilisées uniquement pour l’établissement d’une communication entre l’Application et un Serveur Trocify."
+        },
+        {
+            "title": "Permissions demandées par l’Application",
+            "text": "Position : Votre position approximative (réseau) ou précise (GPS et réseau) est transmise de façon ponctuelle au Serveur Trocify. Cette position est conservée dans le cadre de l'utilisation de l'application Trocify mais n'est pas transmise à des tiers."
+        }
+    ]
+}

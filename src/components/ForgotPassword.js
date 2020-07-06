@@ -7,6 +7,7 @@ import {
     Image
 } from 'react-native';
 import styles from '../../assets/styles/styles';
+import email from 'react-native-email';
 
 export const UserType = {
     PROVIDER: "provider",
@@ -25,27 +26,20 @@ export default class ForgotPassword extends Component {
         };
     }
 
-    async signIn() {
-        const req = await fetch('', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email: this.state.email.trim(), password: this.state.password.trim() })
-        })
-        const json = await req.json()
-        if (json.err) {
-            this.setState({ error: json.err.description })
-        } else {
-
-        }
+    handleEmail() {
+        email(this.state.email.trim() || 'maxime_trocify@yopmail.com', {
+            // Optional additional arguments
+            cc: ['contact@trocify.com'], // string or array of email addresses
+            bcc: 'contact_trocify@yopmail.com', // string or array of email addresses
+            subject: 'Mot de passe oublié',
+            body: 'Some body right here'
+        }).catch(console.error)
     }
 
     render() {
         return (
             <SafeAreaView style={styles.safeArea}>
-                <View style={styles.topView}>
+                <View style={styles.titleView}>
                     <Text style={styles.title}>{"MOT DE PASSE\nOUBLIÉ"}</Text>
                 </View>
                 <View style={styles.loginView}>
@@ -57,7 +51,7 @@ export default class ForgotPassword extends Component {
                         onChangeText={email => this.setState({ email })}
                     />
                     <View style={styles.button}>
-                        <Text style={styles.textButton} onPress={() => this.signIn()}>Envoyé</Text>
+                        <Text style={styles.textButton} onPress={() => this.handleEmail()}>Envoyer</Text>
                     </View>
                 </View>
                 <Text style={styles.error}>{this.state.error}</Text>
