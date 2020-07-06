@@ -79,7 +79,7 @@ export default class MyFooter extends React.Component {
                 <Button vertical>
 
                 </Button>
-                <Button vertical>
+                <Button vertical onPress={() => this.navigation.navigate("Messages")}>
                     <View style={{position: 'relative', bottom: 5}}>
                     <Icon
                     reverse
