@@ -34,8 +34,8 @@ export default class Product extends React.Component {
             isVisibleFilters: false,
             product: this.props.route.params.product,
             iSent: false,
-            latitude: 0,
-            longitude: 0
+            latitude: this.props.route.params.product.user.latitude,
+            longitude: this.props.route.params.product.user.longitude
         }
         this.navigation = this.props.navigation
     }
