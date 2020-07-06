@@ -36,10 +36,11 @@ export default class MessageBox extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.route && this.props.route.params && this.props.route.params.interlocutor) {
+        if (this.props.navigation.isFocused() && this.props.route && this.props.route.params && this.props.route.params.interlocutor) {
             this.fetchConv(this.props.route.params.interlocutor)
         }
     }
+    
 
 
     async fetchUser() {
@@ -164,7 +165,7 @@ export default class MessageBox extends Component {
     render() {
 
         const { navigation } = this.props
-        const messages = this.state.messages
+        const {messages} = this.state;
         return (
             <SafeAreaView style={styles.safeArea}>
 
