@@ -1,11 +1,11 @@
 import React from 'react'
-import { Text, View, SafeAreaView, YellowBox, AsyncStorage } from 'react-native'
+import { Text, View, SafeAreaView, YellowBox, AsyncStorage, Image } from 'react-native'
 import MyHeader from './headers/Header'
 import MyFooter from './footers/Footer'
 import styles from '../../assets/css/details.js'
 import { SliderBox } from "react-native-image-slider-box"
-import MapView from 'react-native-maps'
-import { Button } from 'react-native-paper'
+import MapView, { Marker, Callout } from 'react-native-maps'
+import { Button, Card } from 'react-native-paper'
 import PropTypes from 'prop-types'
 const moment = require('moment')
 const now = moment().format('YYYY-MM-DD hh:mm:ss')
@@ -34,9 +34,32 @@ export default class Product extends React.Component {
             isVisibleFilters: false,
             product: this.props.route.params.product,
             iSent: false,
+            latitude: 0,
+            longitude: 0
         }
         this.navigation = this.props.navigation
     }
+
+    mapStyle=[
+        {"elementType": "geometry", "stylers": [{"color": "#242f3e"}]},
+        {"elementType": "labels.text.fill","stylers": [{"color": "#746855"}]},
+        {"elementType": "labels.text.stroke","stylers": [{"color": "#242f3e"}]},
+        {"featureType": "administrative.locality","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},
+        {"featureType": "poi","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},
+        {"featureType": "poi.park","elementType": "geometry","stylers": [{"color": "#263c3f"}]},
+        {"featureType": "poi.park","elementType": "labels.text.fill","stylers": [{"color": "#6b9a76"}]},
+        {"featureType": "road","elementType": "geometry","stylers": [{"color": "#38414e"}]},
+        {"featureType": "road","elementType": "geometry.stroke","stylers": [{"color": "#212a37"}]},
+        {"featureType": "road","elementType": "labels.text.fill","stylers": [{"color": "#9ca5b3"}]},
+        {"featureType": "road.highway","elementType": "geometry","stylers": [{"color": "#746855"}]},
+        {"featureType": "road.highway","elementType": "geometry.stroke","stylers": [{"color": "#1f2835"}]},
+        {"featureType": "road.highway","elementType": "labels.text.fill","stylers": [{"color": "#f3d19c"}]},
+        {"featureType": "transit","elementType": "geometry","stylers": [{"color": "#2f3948"}]},
+        {"featureType": "transit.station","elementType": "labels.text.fill","stylers": [{"color": "#d59563"}]},
+        {"featureType": "water","elementType": "geometry","stylers": [{"color": "#17263c"}]},
+        {"featureType": "water","elementType": "labels.text.fill","stylers": [{"color": "#515c6d"}]},
+        {"featureType": "water","elementType": "labels.text.stroke","stylers": [{"color": "#17263c"}]}
+    ]
     
     async componentDidMount() {
         await this.setDataStorage()
@@ -226,7 +249,44 @@ export default class Product extends React.Component {
                 </View>
 
                 <View style={styles.mapContainer}>
-                    <MapView style={styles.mapStyle} />
+                <MapView 
+                        style={styles.mapStyle} 
+                        region={
+                            {
+                                latitude: this.state.latitude,
+                                longitude: this.state.longitude,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            }
+                        }
+                        customMapStyle={this.mapStyle}
+                    >
+                        <Marker
+                            draggable
+                            coordinate={
+                                {
+                                    latitude: this.state.latitude,
+                                    longitude: this.state.longitude
+                                }
+                            }
+                            onDragEnd={() => console.log('closed')}
+                            title={product.title}
+                            description={product.description}
+                        >
+                            <View style={styles.markView}>
+                                <Image
+                                    style={styles.tinyLogo}
+                                    source={{uri: product.imagesFiles[0]}}
+                                />
+                            </View>
+                        <Callout style={{minWidth: 300, minHeight: 50}}>
+                            <Card>
+                                <Card.Title title={product.title} subtitle={product.description} />
+                                <Card.Cover style={{height: 100, margin: 5}} source={{ uri: product.imagesFiles[0] }} />
+                            </Card>
+                        </Callout>
+                        </Marker>
+                    </MapView>
                 </View>
 
                 <View style={styles.buttonContainer}>
