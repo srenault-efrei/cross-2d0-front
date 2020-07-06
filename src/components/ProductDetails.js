@@ -81,12 +81,15 @@ export default class Product extends React.Component {
 
     componentWillReceiveProps() {
         this.init()
+        console.log(this.props.route.params.product)
     }
 
     init = () => {
         this.props.navigation.addListener('focus', () => {
             this.setState({
                 product: this.props.route.params.product,
+                latitude: this.props.route.params.product.user.latitude,
+                longitude: this.props.route.params.product.user.longitude,
                 iSent: false,
             })
         })
@@ -265,8 +268,8 @@ export default class Product extends React.Component {
                             draggable
                             coordinate={
                                 {
-                                    latitude: this.state.latitude,
-                                    longitude: this.state.longitude
+                                    latitude: 48.8582602,
+                                    longitude: 2.2944991
                                 }
                             }
                             onDragEnd={() => console.log('closed')}
