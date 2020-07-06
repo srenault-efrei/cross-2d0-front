@@ -30,7 +30,7 @@ import Map from './components/Map'
 import MessageList from './components/MessageList'
 import MessageBox from './components/MessageBox'
 
-// console.disableYellowBox = true;
+console.disableYellowBox = true;
 const Drawer = createDrawerNavigator()
 function App() {
   return (
