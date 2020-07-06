@@ -42,7 +42,7 @@ export default class MyFooter extends React.Component {
                         </View>
                         <Text style={{position: 'absolute', top:38, color: '#fff'}}>Ajouter</Text>
                     </Button>
-                    <Button vertical>
+                    <Button vertical onPress={() => this.navigation.navigate("Messages")}>
                         <View style={{position: 'relative', bottom: 5}}>
                         <Icon
                         reverse

@@ -27,8 +27,10 @@ import EditTickets from './components/EditTickets'
 import Add from './components/Add'
 import Product from './components/ProductDetails'
 import Map from './components/Map'
+import MessageList from './components/MessageList'
+import MessageBox from './components/MessageBox'
 
-console.disableYellowBox = true;
+// console.disableYellowBox = true;
 const Drawer = createDrawerNavigator()
 function App() {
   return (
@@ -57,6 +59,8 @@ function App() {
         <Drawer.Screen name="ProductDetails" component={Product} />
         <Drawer.Screen name="EditTickets" component={EditTickets} />
         <Drawer.Screen name="DetailTickets" component={DetailTickets} />
+        <Drawer.Screen name="Messages" component={MessageList} />
+        <Drawer.Screen name="Messages Box" component={MessageBox} />
 
       </Drawer.Navigator>
     </NavigationContainer>
