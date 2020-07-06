@@ -32,21 +32,30 @@ export default class Home extends React.Component {
 
   componentDidMount = async () => {
     await this.setDataStorage()
+    this.init()
     this.fetchTrocs()
   }
 
   componentWillReceiveProps() {
+    this.init()
     this.getTickets()
   }
 
   /* Handlers */
   getTickets = () => {
-    if (this.props.route){
-      /* this.search(this.props.route.params) */
-      console.log(this.props.route)
-    } else {
-      console.log('nothing')
-    }
+    console.log(this.state.obj)
+  }
+
+  init = () => {
+    this.props.navigation.addListener('focus', () => {
+      if (this.props.route.params != undefined) {
+        this.setState({
+          obj: this.props.route.params.obj
+        })
+      } else {
+        console.log('PROPS: ' + this.props.route.params)
+      }
+    })
   }
 
   searchHandler(text) {
@@ -151,7 +160,7 @@ export default class Home extends React.Component {
                             <Image
                               style={{width: 100, height: 100, borderRadius: 50}}
                               resizeMode="cover"
-                              source={require('../../assets/img/logo.png')}
+                              source={{uri: item.imagesFiles.length != 0 ? item.imagesFiles[0] : 'https://www.fri.ch/site_2015/wp-content/plugins/ajax-search-pro/img/default.jpg'}}
                             />
                             <Text>{item.title}</Text>
                         </View>

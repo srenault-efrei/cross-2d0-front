@@ -24,11 +24,7 @@ export default class Product extends React.Component {
         super(props)
         this.state = { 
             images: [
-                "https://source.unsplash.com/1024x768/?nature",
-                "https://source.unsplash.com/1024x768/?water",
-                "https://source.unsplash.com/1024x768/?girl",
-                "https://source.unsplash.com/1024x768/?tree", // Network image
-                // Local image = require('file')
+                "https://www.fri.ch/site_2015/wp-content/plugins/ajax-search-pro/img/default.jpg"
             ],
             isVisibleNotifs: false, 
             isVisibleFilters: false,
@@ -215,7 +211,7 @@ export default class Product extends React.Component {
             <View style={styles.container}>
                 <View style={styles.slider}>
                     <SliderBox
-                        images={this.state.images}
+                        images={ product.imagesFiles.length != 0 ? product.imagesFiles : this.state.images}
                         sliderBoxHeight={200}
                         onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
                         dotColor="#fff"
@@ -279,7 +275,7 @@ export default class Product extends React.Component {
                             <View style={styles.markView}>
                                 <Image
                                     style={styles.tinyLogo}
-                                    source={{uri: product.imagesFiles[0]}}
+                                    source={{uri: product.imagesFiles.length != 0 ? product.imagesFiles[0] : 'https://www.fri.ch/site_2015/wp-content/plugins/ajax-search-pro/img/default.jpg'}}
                                 />
                             </View>
                         <Callout style={{minWidth: 300, minHeight: 50}}>
