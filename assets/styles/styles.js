@@ -1,16 +1,16 @@
-import { StyleSheet, Platform } from 'react-native';
-import { colors } from './colors';
+import { StyleSheet, Platform } from "react-native";
+import { colors } from "./colors";
 
 export default StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: "#FFF",
-    paddingTop: Platform.OS === 'android' ? 40 : 0
+    paddingTop: Platform.OS === "android" ? 40 : 0,
   },
   view: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
 
   titleView: {
@@ -18,65 +18,70 @@ export default StyleSheet.create({
     alignItems: "center",
     alignContent: "space-between",
     paddingVertical: 10,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   topView: {
-    paddingHorizontal: '10%',
+    paddingHorizontal: "10%",
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   loginView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 30
+    marginHorizontal: 30,
+  },
+  taskView: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 30,
   },
   inputView: {
-    width: '95%',
+    width: "95%",
     padding: 20,
     borderWidth: 1,
-    borderRadius: 15
+    borderRadius: 15,
   },
   lowLoginView: {
     marginTop: 40,
-    width: '100%',
-    alignItems: "center"
+    width: "100%",
+    alignItems: "center",
   },
   splitter: {
-    width: '95%',
+    width: "95%",
     height: 1,
     borderBottomWidth: 1,
     marginTop: 10,
-    marginBottom: 15
+    marginBottom: 15,
   },
   bottomView: {
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   textInput: {
     width: "100%",
     marginVertical: 5,
-    alignItems: 'center'
+    alignItems: "center",
   },
   title: {
     fontSize: 40,
     color: "#000",
-    textAlign: 'center'
+    textAlign: "center",
   },
   mediumTitle: {
     fontSize: 25,
     color: "#000",
-    textAlign: 'center'
+    textAlign: "center",
   },
   smallTitle: {
     fontSize: 16,
     color: "#000",
-    textAlign: 'center',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontWeight: "bold",
     marginTop: 20,
-    marginBottom: 5
+    marginBottom: 5,
   },
   button: {
     height: 40,
@@ -86,7 +91,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     backgroundColor: colors.customLightGreen,
     borderRadius: 45,
-    marginTop: 10
+    marginTop: 10,
   },
   imageButton: {
     height: 35,
@@ -97,7 +102,7 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     marginTop: 10,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   halfButton: {
     height: 40,
@@ -106,17 +111,17 @@ export default StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.customLightGreen,
     borderRadius: 10,
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   textButton: {
     color: "white",
     width: "100%",
-    textAlign: 'center'
+    textAlign: "center",
   },
   textImageButton: {
     color: "black",
     width: "100%",
-    textAlign: 'left'
+    textAlign: "left",
   },
   input: {
     width: "100%",
@@ -124,46 +129,46 @@ export default StyleSheet.create({
     marginBottom: 5,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
-    paddingHorizontal: 0
+    paddingHorizontal: 0,
   },
   inputRow: {
     width: "100%",
-    flexDirection: 'row',
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   icon: {
-    textAlign: 'left',
+    textAlign: "left",
     paddingHorizontal: 15,
-    color: 'white'
+    color: "white",
   },
   error: {
-    height: 'auto',
+    height: "auto",
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
     color: "red",
     textAlign: "center",
-    fontSize: 16
+    fontSize: 16,
   },
   card: {
-    width: '90%',
-    alignItems: 'center',
-    borderColor: 'black',
-    justifyContent: 'space-around',
+    width: "90%",
+    alignItems: "center",
+    borderColor: "black",
+    justifyContent: "space-around",
     borderBottomWidth: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   dateIcon: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
-    marginLeft: 0
+    marginLeft: 0,
   },
   dateInput: {
-    position: 'absolute',
+    position: "absolute",
     marginLeft: 36,
     borderWidth: 0,
-    left: 0
+    left: 0,
   },
   buttonPassword: {
     height: 40,
@@ -172,24 +177,44 @@ export default StyleSheet.create({
     alignItems: "center",
     backgroundColor: "grey",
     borderRadius: 10,
-    marginTop: 10
+    marginTop: 10,
   },
   logo: {
-    width: '80%',
-    height: 140
+    width: "80%",
+    height: 140,
   },
   headerLogo: {
-    width: '60%',
-    height: 120
+    width: "60%",
+    height: 120,
   },
+
+  inputTask: {
+    width: "80%",
+    height: 40,
+    marginTop: 100,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    paddingHorizontal: 0,
+  },
+  buttonTask: {
+    height: 40,
+    width: "30%",
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    backgroundColor: colors.customLightGreen,
+    borderRadius: 45,
+    marginTop: 10,
+  },
+
   header: {
     backgroundColor: colors.customDarkGreen,
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
     paddingTop: 0,
     marginBottom: "auto",
     height: Platform.select({
       android: 56,
-      default: 44
-    })
-  }
+      default: 44,
+    }),
+  },
 });
